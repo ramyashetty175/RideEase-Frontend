@@ -49,7 +49,7 @@ export default function Users() {
                   <th>Username</th>
                   <th>Email</th>
                   <th>Role</th>
-                  <th>Actions</th>
+                  { (user?.role == "admin") && <th>Actions</th>}
                   </tr>
                </thead>
                <tbody>
@@ -58,6 +58,7 @@ export default function Users() {
                         <td>{ele.username}</td>
                         <td>{ele.email}</td>
                         <td>{ele.role}</td>
+                        {(user?.role == "admin") && <td>{user._id != ele._id && <button onClick={() => {handleRemove(ele._id, ele.email)}}>Remove</button>}</td>}
                       </tr>                      
                    ))}
                </tbody>

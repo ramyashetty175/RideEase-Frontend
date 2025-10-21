@@ -7,22 +7,32 @@ import Users from "./pages/UsersList";
 import Account from './pages/Account';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import { useContext } from "react";
+import UserContext from "./context/UserContext";
 import './App.css'
 
 function App() {
+  const { isLoggedIn, handleLogout } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   return(
     <div>
       <h1>RideEase</h1>
       <ul>
-        <nav>
           <li><Link to="/">Home</Link></li>
-          <li><Link to="/register">Register</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/account">Account</Link></li>
-          <li><Link to="/dashboard">Dashboard</Link></li>
-          <li><Link to="/users">Users</Link></li>
-          <li><Link>Logout</Link></li>
-        </nav>
+          {isLoggedIn && (
+            <>
+              <li><Link to="/dashboard">Dashboard</Link></li>
+              <li><Link to="/account">Account</Link></li>
+              { (user?.role == "admin" || user?.role == "owner") && <li><Link to="/users">Users</Link></li>}
+              <li><Link to="/" onClick={handleLogout}>Logout</Link></li>
+            </>
+          )}
+          {!isLoggedIn && (
+            <>
+              <li><Link to="/register">Register</Link></li>
+              <li><Link to="/login">Login</Link></li>
+            </>
+          )}
       </ul>
       <Routes>
         <Route path="/" element={<Home />} />

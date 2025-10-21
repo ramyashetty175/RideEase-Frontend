@@ -1,10 +1,9 @@
-import { useState } from 'react'
 import { Route, Routes, Link } from "react-router-dom";
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Users from "./pages/Users";
+import Users from "./pages/UsersList";
 import Account from './pages/Account';
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'

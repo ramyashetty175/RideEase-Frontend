@@ -1,15 +1,17 @@
 import { useFormik } from "formik";
+import { useContext } from "react";
+import UserContext from "../context/UserContext";
 
 export default function Login() {
+    const { handleLogin } = useContext(UserContext);
     const formik = useFormik({
         initialValues: {
-           username: "",
            email: "",
            password: ""
         }, 
         onSubmit: (values, {resetForm}) => {
             console.log(values);
-            handleLogin();
+            handleLogin(values, resetForm);
         }
     })
 

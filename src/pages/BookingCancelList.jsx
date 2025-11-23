@@ -1,4 +1,4 @@
-export default function BookingCancelShow() {
+export default function BookingCancelList() {
     return(
         <div>
             

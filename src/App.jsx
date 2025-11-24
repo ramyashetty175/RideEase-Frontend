@@ -19,7 +19,7 @@ function App() {
       <h1>RideEase</h1>
       <ul>
           <li><Link to="/">Home</Link></li>
-          {isLoggedIn && (
+          {( isLoggedIn || localStorage.getItem('token')) && (
             <>
               <li><Link to="/dashboard">Dashboard</Link></li>
               <li><Link to="/account">Account</Link></li>
@@ -27,7 +27,7 @@ function App() {
               <li><Link to="/" onClick={handleLogout}>Logout</Link></li>
             </>
           )}
-          {!isLoggedIn && (
+          {( !isLoggedIn || localStorage.getItem('token')) && (
             <>
               <li><Link to="/register">Register</Link></li>
               <li><Link to="/login">Login</Link></li>

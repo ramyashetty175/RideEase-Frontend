@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useContext } from 'react';
-import UserContext from '../context/UserContext';
+import UserContext from '../../context/UserContext';
 
 export default function PrivateRoute({ allowedRoles, children }) {
     console.log(allowedRoles);

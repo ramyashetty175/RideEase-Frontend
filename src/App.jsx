@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Users from "./pages/UsersList";
 import Account from './pages/Account';
 import LandingPage from "./pages/LandingPage";
+import PrivateRoute from "./components/ui/PrivateRoute";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { useContext } from "react";
@@ -22,6 +23,8 @@ function App() {
           {( isLoggedIn || localStorage.getItem('token')) && (
             <>
               <li><Link to="/home">Home</Link></li>
+              <li><Link to="/vehiclelist">List Vehicles</Link></li>
+              <li><Link to="/bookings">Bookings</Link></li>
               <li><Link to="/dashboard">Dashboard</Link></li>
               <li><Link to="/account">Account</Link></li>
               { (user?.role == "admin" || user?.role == "owner") && <li><Link to="/users">Users</Link></li> }
@@ -31,19 +34,23 @@ function App() {
           {( !isLoggedIn || !localStorage.getItem('token')) && (
             <>
               <li><Link to="/">LandingPage</Link></li>
-              <li><Link to="/register">Register</Link></li>
+              {/* <li><Link to="/register">Register</Link></li> */}
               <li><Link to="/login">Login</Link></li>
+              <li><Link to="/vehicles">Vehicles</Link></li>
             </>
           )}
       </ul>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Home />}/>
-        <Route path="/register" element={<Register />} />
+        {/* <Route path="/register" element={<Register />} /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/vehicles" element={<Vehicles />} />
+        <Route path="/account" element={<PrivateRoute allowedRoles={['admin', 'user']}><Account /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute allowedRoles={['admin', 'user']}><Dashboard /></PrivateRoute>} />
+        <Route path="/users" element={<PrivateRoute allowedRoles={['admin', 'user']}><Users /></PrivateRoute>} />
+        <Route path="/vehiclelist" element={<PrivateRoute allowedRoles={['admin', 'user']}><Users /></PrivateRoute>} />
+        <Route path="/bookings" element={<PrivateRoute allowedRoles={['admin', 'user']}><Users /></PrivateRoute>} />
       </Routes>
     </div>
   )

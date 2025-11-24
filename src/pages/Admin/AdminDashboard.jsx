@@ -3,6 +3,7 @@ import Vehicle from "../Vehicle";
 import Bookings from "../Bookings";
 import OwnerList from "./OwnerList";
 import UsersList from "./UsersList";
+import BookingCancel from "../BookingCancel";
 
 export default function AdminDashboard() {
     return(
@@ -12,6 +13,7 @@ export default function AdminDashboard() {
             <Vehicle />
             <OwnerList />
             <UsersList />
+            <BookingCancel />
         </div>
     )
 }

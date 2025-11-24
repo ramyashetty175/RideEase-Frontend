@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
+import { Link } from "react-router-dom";
 
 export default function Register() {
     const { handleRegister } = useContext(UserContext);
@@ -8,7 +9,8 @@ export default function Register() {
         initialValues: {
             username: "",
             email: "",
-            password: ""
+            password: "",
+            confirmPassword: ""
         },
         onSubmit:(values, {resetForm}) => {
             console.log(values);
@@ -20,33 +22,44 @@ export default function Register() {
             <h2>Register with us!</h2>
             <form onSubmit={formik.handleSubmit}>
                 <div>
+                   <label>Full Name</label><br />
                    <input type="text"
-                          id="username"
+                          name="username"
                           placeholder="Enter Username"
                           value={formik.values.username}
                           onChange={formik.handleChange}
                     />
                 </div>
                 <div>
+                   <label>Email</label><br />
                    <input type="email"
-                          id="email"
+                          name="email"
                           placeholder="Enter Email"
                           value={formik.values.email}
                           onChange={formik.handleChange}
                    />
                 </div>
                 <div>
+                   <label>Password</label><br />
                    <input type="password"
-                          id="password"
-                          placeholder="Enter Password"
+                          name="password"
                           value={formik.values.password}
                           onChange={formik.handleChange}
                    />
                 </div>
                 <div>
-                    <input type="Submit" />
+                    <label>Confirm Password</label><br />
+                    <input type="password"
+                          name="confirmPassword"
+                          value={formik.values.confirmPassword}
+                          onChange={formik.handleChange}
+                    />
+                </div>
+                <div>
+                    <input type="submit" value="Create Account"/>
                 </div>
             </form>
+            <p>Already have an account? <Link to="/login">Sign in</Link></p>
         </div>
     )
 }

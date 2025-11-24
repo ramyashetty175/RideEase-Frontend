@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
 
 export default function Login() {
@@ -20,6 +21,7 @@ export default function Login() {
             <h2>Login with us!</h2>
             <form onSubmit={formik.handleSubmit}>
                 <div>
+                <label>Email</label> <br />
                 <input type="email"
                         id="email"
                         placeholder="Enter Email"
@@ -28,6 +30,7 @@ export default function Login() {
                 />
                 </div>
                 <div>
+                <label>Password</label><Link to="/forgotpassword">forgotpassword</Link> <br />
                 <input  type="password"
                         id="password"
                         placeholder="Enter Password"
@@ -36,9 +39,10 @@ export default function Login() {
                 />
                 </div>
                 <div>
-                  <input type="Submit" />
+                  <input type="submit" value="Login" />
                 </div>
             </form>
+            <p>Don't have an account? <Link to="/register">Sign up</Link></p>
         </div>
     )
 }

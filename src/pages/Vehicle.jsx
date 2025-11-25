@@ -4,7 +4,7 @@ import VehicleShow from "./VehicleShow";
 export default function Vehicle() {
     return(
         <div>
-            <h2>Total Vehicle - {} </h2>
+            <h2>Available Vehicles</h2> 
             <VehicleList />
             <VehicleShow />
         </div>

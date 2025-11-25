@@ -65,7 +65,7 @@ export default function AuthProvider(props) {
             resetForm();
             alert('logged in successfully');
             dispatch({ type: "LOGIN", payload: userResponse.data });
-            navigate('/dashboard');
+            navigate('/home');
         } catch(err) {
             console.log(err);
             dispatch({ type: 'SET_SERVER_ERROR', payload: err.response.data.error });
@@ -75,6 +75,7 @@ export default function AuthProvider(props) {
     const handleLogout = () => {
         localStorage.removeItem('token');
         dispatch({ type: "LOGOUT" });
+        navigate('/login');
     }
 
     return(

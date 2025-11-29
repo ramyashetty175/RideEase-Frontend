@@ -31,29 +31,36 @@ export default function Login() {
 
     return(
         <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Login to your account</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-        <CardAction>
-          <Button variant="link">Sign Up</Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-            <form onSubmit={formik.handleSubmit}>
-                <div>
-                <label>Email</label> <br />
-                <input type="email"
+            <CardHeader>
+               <CardTitle>Login to your account</CardTitle>
+                <CardDescription>
+                   Enter your email below to login to your account
+                </CardDescription>
+                <CardAction>
+                   <Button variant="link">Sign Up</Button>
+                </CardAction>
+            </CardHeader>
+            <CardContent>
+            <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label> 
+                <Input type="email"
                         id="email"
                         placeholder="Enter Email"
                         value={formik.values.email}
                         onChange={formik.handleChange}
                 />
                 </div>
-                <div>
-                <label>Password</label><Link to="/forgotpassword">forgotpassword</Link> <br />
-                <input  type="password"
+                <div className="grid gap-2">
+                <div className="flex items-center"></div>
+                <Label htmlFor="password">Password</Label>
+                <a
+                  href="#"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                >
+                  Forgot your password?
+                </a>
+                <Input  type="password"
                         id="password"
                         placeholder="Enter Password"
                         value={formik.values.password}
@@ -61,12 +68,12 @@ export default function Login() {
                 />
                 </div>
                 <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
+                   <Button type="submit" className="w-full">
+                    Login
+                  </Button>
         </CardFooter>
-            </form>
-            </CardContent>
+        </form>
+        </CardContent>
             <p>Don't have an account? <Link to="/register">Sign up</Link></p>
         </Card>
     )

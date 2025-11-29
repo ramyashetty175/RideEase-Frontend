@@ -37,9 +37,6 @@ export default function Register() {
                     <CardDescription>
                         Enter your email below to login to your account
                     </CardDescription>
-                    <CardAction>
-                       <Button variant="link">Sign Up</Button>
-                    </CardAction>
                </CardHeader>
                <CardContent>
                 <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
@@ -83,7 +80,9 @@ export default function Register() {
                     <Button type="submit" className="w-full">
                        Login
                     </Button>
-                    <p>Already have an account? <Link to="/login">Sign in</Link></p>
+                    <CardAction>
+                       <Button variant="link">Sign Up</Button>
+                    </CardAction>
                 </CardFooter>
         </Card>
     )

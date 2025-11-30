@@ -60,8 +60,6 @@ function App() {
           {( !isLoggedIn || !localStorage.getItem('token')) && (
             <>
               { (user?.role == 'admin' || user?.role == 'owner' || user?.role == 'user') && <li><Link to="/vehicles">Vehicles</Link></li> }
-              <li><Link to="/"><button>Get Started</button></Link></li> 
-              <li><Link to="/login">Sign In</Link></li>
             </>
           )}
       </ul>

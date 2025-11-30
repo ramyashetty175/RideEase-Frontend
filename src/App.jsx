@@ -19,13 +19,10 @@ import UserContext from "./context/UserContext";
 import './App.css'
 
 function App() {
-  const { isLoggedIn, handleLogout } = useContext(UserContext);
-  const { user } = useContext(UserContext);
-  const [showMenu, setShowMenu] = useState(false);
+  const { isLoggedIn, handleLogout, user } = useContext(UserContext);
 
   return(
     <div>
-      <h1>RideEase</h1>
       <ul>
           {( isLoggedIn || localStorage.getItem('token')) && (
             <>
@@ -34,27 +31,7 @@ function App() {
               { (user?.role == 'admin' || user?.role == 'owner' || user?.role == 'user') && <li><Link to="/bookings">Bookings</Link></li> }
               { (user?.role == 'admin' || user?.role == 'owner') && <li><Link to="/users">Users</Link></li> }
               { (user?.role == 'admin' || user?.role == 'owner' || user?.role == 'user') && <li><Link to="/search">Search</Link></li> }
-              <ul>
-      <li>
-        <Link to="#" onClick={(e) => {
-        e.preventDefault();
-        setShowMenu(!showMenu);
-      }}>
-          Account 
-        </Link>
-
-        {showMenu && (
-          <ul>
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/login" onClick={handleLogout}>Logout</Link>
-            </li>
-          </ul>
-        )}
-      </li>
-    </ul>
+     
             </>
           )}
           {( !isLoggedIn || !localStorage.getItem('token')) && (

@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import { Link } from "react-router-dom";
+import { Navbar } from "@/components/ui/Navbar";
 
 export default function Register() {
     const { handleRegister } = useContext(UserContext);
@@ -31,11 +32,14 @@ export default function Register() {
         }
     })
     return(
+        <div>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center">
             <Card className="w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle>Login to your account</CardTitle>
+                    <CardTitle>Create your account</CardTitle>
                     <CardDescription>
-                        Enter your email below to login to your account
+                        Start your journey with easy and reliable vehicle rentals.
                     </CardDescription>
                </CardHeader>
                <CardContent>
@@ -58,6 +62,7 @@ export default function Register() {
                           onChange={formik.handleChange}
                         />
                     </div>
+                    <div className="flex gap-4">
                    <div className="grid gap-2">
                    <Label htmlFor="password">Password</Label>
                        <Input type="password"
@@ -74,114 +79,19 @@ export default function Register() {
                           onChange={formik.handleChange}
                         />
                     </div>
+                    </div>
                     </form>
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
                     <Button type="submit" className="w-full">
-                       Login
+                       Create Account
                     </Button>
-                    <CardAction>
-                       <Button variant="link">Sign Up</Button>
-                    </CardAction>
+                    <CardDescription>
+          Already have an account? <Link to="/login"className="underline">Sign in</Link>
+        </CardDescription>
                 </CardFooter>
         </Card>
+        </div>
+        </div>
     )
 }
-
-
-// export default function Register() {
-//   const { handleRegister } = useContext(UserContext);
-
-//   const formik = useFormik({
-//     initialValues: {
-//       username: "",
-//       email: "",
-//       password: "",
-//       confirmPassword: "",
-//     },
-//     onSubmit: (values, { resetForm }) => {
-//       console.log(values);
-//       handleRegister(values, resetForm);
-//     },
-//   });
-
-//   return (
-//     <Card className="w-full max-w-sm mx-auto mt-10">
-//       <CardHeader>
-//         <CardTitle>Create your account</CardTitle>
-//         <CardDescription>
-//           Fill in the details below to register
-//         </CardDescription>
-//         <CardAction>
-//           <Link to="/login">
-//             <Button variant="link">Sign in</Button>
-//           </Link>
-//         </CardAction>
-//       </CardHeader>
-
-//       <CardContent>
-//         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
-//           <div className="grid gap-2">
-//             <Label htmlFor="username">Full Name</Label>
-//             <Input
-//               id="username"
-//               name="username"
-//               placeholder="Enter username"
-//               value={formik.values.username}
-//               onChange={formik.handleChange}
-//               required
-//             />
-//           </div>
-
-//           <div className="grid gap-2">
-//             <Label htmlFor="email">Email</Label>
-//             <Input
-//               id="email"
-//               name="email"
-//               type="email"
-//               placeholder="Enter email"
-//               value={formik.values.email}
-//               onChange={formik.handleChange}
-//               required
-//             />
-//           </div>
-
-//           <div className="grid gap-2">
-//             <Label htmlFor="password">Password</Label>
-//             <Input
-//               id="password"
-//               name="password"
-//               type="password"
-//               placeholder="Enter password"
-//               value={formik.values.password}
-//               onChange={formik.handleChange}
-//               required
-//             />
-//           </div>
-
-//           <div className="grid gap-2">
-//             <Label htmlFor="confirmPassword">Confirm Password</Label>
-//             <Input
-//               id="confirmPassword"
-//               name="confirmPassword"
-//               type="password"
-//               placeholder="Confirm password"
-//               value={formik.values.confirmPassword}
-//               onChange={formik.handleChange}
-//               required
-//             />
-//           </div>
-//         </form>
-//       </CardContent>
-
-//       <CardFooter className="flex-col gap-2">
-//         <Button type="submit" className="w-full" onClick={formik.handleSubmit}>
-//           Create Account
-//         </Button>
-//         <Button variant="outline" className="w-full">
-//           Sign up with Google
-//         </Button>
-//       </CardFooter>
-//     </Card>
-//   );
-// }

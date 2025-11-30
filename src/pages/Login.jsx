@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
+import { Navbar } from "@/components/ui/Navbar";
 
 export default function Login() {
     const { handleLogin } = useContext(UserContext);
@@ -30,15 +31,15 @@ export default function Login() {
     })
 
     return(
+      <div>
+        <Navbar/>
+      <div className="min-h-screen flex items-center justify-center">
         <Card className="w-full max-w-sm">
             <CardHeader>
-               <CardTitle>Login to your account</CardTitle>
+               <CardTitle>Welcome back</CardTitle>
                 <CardDescription>
-                   Enter your email below to login to your account
+                  Login with your Email and Password
                 </CardDescription>
-                <CardAction>
-                   <Button variant="link">Sign Up</Button>
-                </CardAction>
             </CardHeader>
             <CardContent>
             <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
@@ -74,7 +75,11 @@ export default function Login() {
         </CardFooter>
         </form>
         </CardContent>
-            <p>Don't have an account? <Link to="/register">Sign up</Link></p>
+        <CardDescription>
+          Don't have an account? <Link to="/register"className="underline">Sign up</Link>
+        </CardDescription>
         </Card>
+        </div>
+        </div>
     )
 }

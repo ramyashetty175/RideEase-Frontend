@@ -32,8 +32,6 @@ export default function Register() {
         }
     })
     return(
-        <div>
-        <Navbar />
         <div className="min-h-screen flex items-center justify-center">
             <Card className="w-full max-w-sm">
                 <CardHeader>
@@ -91,7 +89,6 @@ export default function Register() {
         </CardDescription>
                 </CardFooter>
         </Card>
-        </div>
         </div>
     )
 }

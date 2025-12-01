@@ -22,22 +22,25 @@ function App() {
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
 
   return(
-    <div>
+     <div>
       <ul>
           {( isLoggedIn || localStorage.getItem('token')) && (
-            <>
-              <li><Link to="/home">Home</Link></li>
+            <> 
+              {/* <li><Link to="/home">Home</Link></li>
               <li><Link to="/vehiclelist">List Vehicles</Link></li>
               { (user?.role == 'admin' || user?.role == 'owner' || user?.role == 'user') && <li><Link to="/bookings">Bookings</Link></li> }
               { (user?.role == 'admin' || user?.role == 'owner') && <li><Link to="/users">Users</Link></li> }
               { (user?.role == 'admin' || user?.role == 'owner' || user?.role == 'user') && <li><Link to="/search">Search</Link></li> }
-     
-            </>
+              <li>
+              <button onClick={handleLogout}>Logout</button>
+              </li> */}
+      </>
           )}
-          {( !isLoggedIn || !localStorage.getItem('token')) && (
-            <>
-              { (user?.role == 'admin' || user?.role == 'owner' || user?.role == 'user') && <li><Link to="/vehicles">Vehicles</Link></li> }
-            </>
+          {(!isLoggedIn && !localStorage.getItem('token')) && (
+             <> 
+              <button><Link to="/login">Sign In</Link></button>
+              <button><Link to="/register">Get Started</Link></button>
+             </>
           )}
       </ul>
 

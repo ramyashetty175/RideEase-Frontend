@@ -49,3 +49,24 @@ li {
   display: inline;
   margin-right: 10px;
 }
+
+.landing-buttons {
+  display: flex;
+  gap: 10px; /* space between buttons */
+  margin-top: 20px;
+  justify-content: center; /* center buttons */
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  background-color: #007bff; /* simple blue */
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background-color: #0056b3; /* slightly darker on hover */
+}

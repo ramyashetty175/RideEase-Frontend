@@ -31,8 +31,6 @@ export default function Login() {
     })
 
     return(
-      <div>
-        <Navbar/>
       <div className="min-h-screen flex items-center justify-center">
         <Card className="w-full max-w-sm">
             <CardHeader>
@@ -79,7 +77,6 @@ export default function Login() {
           Don't have an account? <Link to="/register"className="underline">Sign up</Link>
         </CardDescription>
         </Card>
-        </div>
         </div>
     )
 }

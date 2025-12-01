@@ -9,7 +9,7 @@ export default function LandingPage() {
     <div className="min-h-screen flex flex-col font-inter bg-[#fafafa]">
 
       {/* Navbar */}
-      <Navbar />
+    
 
       {/* Simple Separator */}
       <Separator />

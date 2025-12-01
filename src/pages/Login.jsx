@@ -15,7 +15,6 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
-import { Navbar } from "@/components/ui/Navbar";
 
 export default function Login() {
     const { handleLogin } = useContext(UserContext);

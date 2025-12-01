@@ -15,7 +15,6 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import { Link } from "react-router-dom";
-import { Navbar } from "@/components/ui/Navbar";
 
 export default function Register() {
     const { handleRegister } = useContext(UserContext);

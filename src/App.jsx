@@ -8,7 +8,7 @@ import Account from './pages/Account';
 import ForgotPassword from "./pages/ForgotPassword";
 import LandingPage from "./pages/LandingPage";
 import SearchPage from "./pages/SearchPage";
-import PrivateRoute from "./components/ui/PrivateRoute";
+import PrivateRoute from "./components/PrivateRoute";
 import Vehicle from "./pages/Vehicle";
 import VehicleList from "./pages/VehicleList";
 import BookingList from "./pages/BookingList";
@@ -16,7 +16,9 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { useContext, useState } from "react";
 import UserContext from "./context/UserContext";
-import './App.css'
+import './App.css';
+import Navbar from "./components/Navbar";
+import NavMain from "./components/nav-main";
 
 function App() {
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
@@ -34,13 +36,15 @@ function App() {
               <li>
               <button onClick={handleLogout}>Logout</button>
               </li> */}
-      </>
+              <NavMain />
+            </>
           )}
           {(!isLoggedIn && !localStorage.getItem('token')) && (
-             <> 
-              <button><Link to="/login">Sign In</Link></button>
-              <button><Link to="/register">Get Started</Link></button>
-             </>
+            <> 
+              {/* <button><Link to="/login">Sign In</Link></button>
+              <button><Link to="/register">Get Started</Link></button> */}
+              <Navbar />
+            </>
           )}
       </ul>
 

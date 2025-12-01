@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from "react";
-import axios from "../../config/axios";
-import UserContext from "../../context/UserContext";
+import axios from "../config/axios";
+import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 const userReducer = (state, action) => {

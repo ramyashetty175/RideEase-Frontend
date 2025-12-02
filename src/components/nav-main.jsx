@@ -1,63 +1,76 @@
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent } from "@/components/ui/navigation-menu";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+"use client"
+import * as React from "react"
+import { Link } from "react-router-dom"
+import { Button } from "./ui/button"
+import { useContext } from "react"
 import UserContext from "../context/UserContext";
-import { useContext } from "react";
+import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from "lucide-react"
 
-export default function NavMain() {
+import { useIsMobile } from "@/hooks/use-mobile"
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu"
+
+export function NavMain() {
   const { handleLogout } = useContext(UserContext);
+  const isMobile = useIsMobile()
+
   return (
-    <nav className="w-full bg-white shadow-sm py-4 flex items-center px-6">
-      
-      {/* Left: RideEase */}
-      <div className="text-2xl font-bold text-black mr-8">
-        <Link to="/">RideEase</Link>
-      </div>
-
-      {/* Center: Navigation Links */}
-      <div className="flex justify-center flex-1 space-x-8">
-        <Link to="/home">
-          <Button variant="ghost" className="text-black px-4 py-2">Home</Button>
-        </Link>
-        <Link to="/vehiclelist">
-          <Button variant="ghost" className="text-black px-4 py-2">List Vehicles</Button>
-        </Link>
-        <Link to="/bookings">
-          <Button variant="ghost" className="text-black px-4 py-2">Bookings</Button>
-        </Link>
-        <Link to="/users">
-          <Button variant="ghost" className="text-black px-4 py-2">Users</Button>
-        </Link>
-
-        {/* Account Dropdown */}
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                <Button variant="ghost" className="text-black px-4 py-2">Account</Button>
-              </NavigationMenuTrigger>
-
-              <NavigationMenuContent className="mt-1">
-                <div className="flex flex-col gap-1 p-2">
-                  {/* Profile */}
-                  <Button variant="ghost" className="text-black text-left px-3 py-2">
-                    <Link to="/dashboard">Dashboard</Link>
-                  </Button>
-
-                  {/* Logout */}
-                  <Button
-                    variant="ghost"
-                    className="text-black text-left px-3 py-2"
-                    onClick={handleLogout}
-                  >
-                    Sign out
-                  </Button>
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-    </nav>
-  );
+    <NavigationMenu viewport={isMobile}>
+      <NavigationMenuList className="flex-wrap">
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/docs">Home</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/docs">Vehicles</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/docs">Bookings</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/docs">Users</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/docs">Search</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem className="hidden md:block">
+          <NavigationMenuTrigger>Account</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[200px] gap-4">
+              <li>
+                <NavigationMenuLink asChild>
+                  <Link to="/dashboard">Dashboard</Link>
+                </NavigationMenuLink>
+                {/* <NavigationMenuLink asChild>
+                  <Link to="/logout">Sign Out</Link>
+                </NavigationMenuLink> */}
+                <Button onClick={handleLogout}>
+                   Sign Out
+                 </Button>
+                <NavigationMenuLink asChild>
+                  <Link href="#">Blocks</Link>
+                </NavigationMenuLink>
+              </li>
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
+  )
 }

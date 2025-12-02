@@ -18,7 +18,7 @@ import { useContext, useState } from "react";
 import UserContext from "./context/UserContext";
 import './App.css';
 import Navbar from "./components/Navbar";
-import NavMain from "./components/nav-main";
+import  { NavMain }  from "./components/nav-main";
 
 function App() {
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);

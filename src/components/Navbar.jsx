@@ -27,8 +27,6 @@ export default function Navbar() {
           </Link>
         </div>
       </nav>
-
-      {/* Just a thin separator line below navbar */}
       <Separator />
     </>
   )

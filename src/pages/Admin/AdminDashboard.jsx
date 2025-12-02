@@ -1,19 +1,20 @@
-import AdminProfile from "./AdminProfile";
-import Vehicle from "../Vehicle";
-import Bookings from "../Bookings";
-import OwnerList from "./OwnerList";
-import UsersList from "./UsersList";
-import BookingCancel from "../BookingCancel";
+// import AdminProfile from "./AdminProfile";
+// import Vehicle from "../Vehicle";
+// import Bookings from "../Bookings";
+// import OwnerList from "./OwnerList";
+// import UsersList from "../UsersList";
+// import BookingCancel from "../BookingCancel";
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 export default function AdminDashboard() {
-    return(
-        <div>
-            <AdminProfile />
-            <Bookings />
-            <Vehicle />
-            <OwnerList />
-            <UsersList />
-            <BookingCancel />
-        </div>
-    )
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+      </main>
+    </SidebarProvider>
+  )
 }

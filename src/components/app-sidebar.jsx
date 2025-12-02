@@ -1,4 +1,13 @@
-import { LayoutDashboard, Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { LayoutDashboard, Calendar, Home, Inbox, Search, Settings, ChevronUp } from "lucide-react"
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import {
   Sidebar,
@@ -69,7 +78,7 @@ export function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    <User2 /> Username
+                    {/* <User2 />*/} Username 
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>

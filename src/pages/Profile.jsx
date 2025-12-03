@@ -4,13 +4,11 @@ export default function Profile() {
     
     })
     const [form, setForm] = useState({
+        avatar: '',
         username: '',
         email: '',
-        password: '',
-        newPassword: '',
         role: '',
         bio: '',
-        avatar: '',
         insuranceDoc: '',
         licenceDoc: ''
     }) 
@@ -20,8 +18,6 @@ export default function Profile() {
         const formData = {
             username,
             email,
-            password,
-            newPassword,
             role,
             bio,
             avatar,
@@ -52,22 +48,6 @@ export default function Profile() {
                         name="email"
                         placeholder="Enter Email"
                         value={form.email}
-                        onChange={handleChange}
-                />
-            </div>
-            <div>
-                <input type="text"
-                        name="password"
-                        placeholder="Enter Password"
-                        value={form.password}
-                        onChange={handleChange}
-                />
-            </div>
-            <div>
-                <input type="text"
-                        name="newPassword"
-                        placeholder="Enter New Password"
-                        value={form.newPassword}
                         onChange={handleChange}
                 />
             </div>

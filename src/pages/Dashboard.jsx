@@ -2,6 +2,7 @@ import { useContext } from "react"
 import UserContext from "../context/UserContext";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import OwnerDashboard from "../pages/owner/OwnerDashboard";
+import UserDashboard from "../pages/UserDashbaord";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard(props) {

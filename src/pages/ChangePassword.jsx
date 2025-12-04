@@ -18,8 +18,9 @@ export default function ChangePassword() {
         }
         console.log(formData);
     }
-    const handleChange = () => {
 
+    const handleChange = (e) => {
+        setForm({ ...state, [e.target.name] : e.target.value });
     }
 
     return(

@@ -18,6 +18,9 @@ import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
 // import { TeamSwitcher } from "@/components/team-switcher"
+import { useContext } from "react"
+import UserContext from "../context/UserContext";
+
 import {
   Sidebar,
   SidebarContent,
@@ -50,124 +53,225 @@ const data = {
       plan: "Free",
     },
   ],
-  navMain: [
+  navMainAdmin: [
     {
-      title: "Playground",
+      title: "Dashboard",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Models",
+      title: "Manage Users",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
+          title: "All Users",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Owners",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Users",
+          url: "#",
+        },
+        {
+          title: "New Requests",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Bookings",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "All Bookings",
           url: "#",
         },
         {
-          title: "Get Started",
+          title: "Pending",
           url: "#",
         },
         {
-          title: "Tutorials",
+          title: "Approved",
           url: "#",
         },
         {
-          title: "Changelog",
+          title: "New Request",
+          url: "#",
+        },
+        {
+          title: "In-Progress",
+          url: "#",
+        },
+        {
+          title: "Rejected",
+          url: "#",
+        },
+        {
+          title: "Cancel Requested",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Vehilcles",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "All Vehicles",
           url: "#",
         },
         {
-          title: "Team",
+          title: "Add Vehicles",
           url: "#",
         },
         {
-          title: "Billing",
+          title: "Pending",
           url: "#",
         },
         {
-          title: "Limits",
+          title: "Requested Vehicle",
+          url: "#",
+        },
+        {
+          title: "Approved Vehicle",
+          url: "#",
+        },
+        {
+          title: "Rejected Vehicle",
           url: "#",
         },
       ],
     },
   ],
-  projects: [
+  navMainOwner: [
     {
-      name: "Design Engineering",
+      title: "Dashboard",
       url: "#",
-      icon: Frame,
+      icon: SquareTerminal,
+      isActive: true,
     },
     {
-      name: "Sales & Marketing",
+      title: "Manage Users",
       url: "#",
-      icon: PieChart,
+      icon: Bot,
+      items: [
+        {
+          title: "Users",
+          url: "#",
+        },
+        {
+          title: "New Requests",
+          url: "#",
+        },
+      ],
     },
     {
-      name: "Travel",
+      title: "Bookings",
       url: "#",
-      icon: Map,
+      icon: BookOpen,
+      items: [
+        {
+          title: "All Bookings",
+          url: "#",
+        },
+        {
+          title: "Pending",
+          url: "#",
+        },
+        {
+          title: "Approved",
+          url: "#",
+        },
+        {
+          title: "In-Progress",
+          url: "#",
+        },
+        {
+          title: "Completed",
+          url: "#",
+        },
+         {
+          title: "Rejected",
+          url: "#",
+        },
+        {
+          title: "Cancel Requested",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Vehicles",
+      url: "#",
+      icon: Settings2,
+      items: [
+        {
+          title: "All Vehicles",
+          url: "#",
+        },
+        {
+          title: "Add Vehicles",
+          url: "#",
+        },
+      ],
     },
   ],
+  navMainUser: [
+    {
+      title: "Profile",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Bookings",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Transactions",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Change Password",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Logout",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+  ]
 }
 
 export function AppSidebar(props) {
+  const { user } = useContext(UserContext);
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <div className="px-4 py-2 font-bold text-lg">RideEase</div>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        { user.role == 'admin' && <NavMain items={data.navMainAdmin} />}
+        { user.role == 'owner' && <NavMain items={data.navMainOwner} />}
+        { user.role == 'user' && <NavMain items={data.navMainUser} />}
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        { (user.role == 'admin' || user.role == 'owner') && <NavUser user={data.user} />}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

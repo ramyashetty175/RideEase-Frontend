@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/navigation-menu"
 
 export function Navbar() {
-  const { handleLogout } = useContext(UserContext);
+  const { handleLogout, user } = useContext(UserContext);
   const isMobile = useIsMobile()
 
   return (
@@ -26,27 +26,27 @@ export function Navbar() {
       <NavigationMenuList className="flex-wrap">
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Home</Link>
+            <Link to="/docs">Home</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Vehicles</Link>
+            <Link to="/docs">Vehicles</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Bookings</Link>
+            <Link to="/docs">Bookings</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Users</Link>
+            <Link to="/docs">Users</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Search</Link>
+            <Link to="/docs">Search</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem className="hidden md:block">
@@ -55,7 +55,9 @@ export function Navbar() {
             <ul className="grid w-[200px] gap-4">
               <li>
                 <NavigationMenuLink asChild>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to={ user?.role === "admin" ? "/dashboard/admin" : user?.role === "owner" ? "/dashboard/owner" : "/dashboard" }>
+                    Dashboard
+                  </Link>
                 </NavigationMenuLink>
                 {/* <NavigationMenuLink asChild>
                   <Link to="/logout">Sign Out</Link>

@@ -36,10 +36,37 @@
 
 // <DataTable columns={columns} data={data} />
 
-import { columns, Payment } from "./columns"
+
+
+
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+
+// This type is used to define the shape of our data.
+// You can use a Zod schema here if you want.
+
+export const columns = [
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+  },
+  {
+    accessorKey: "amount",
+    header: "Amount",
+  },
+]
+
+
+
+
 import { DataTable } from "./data-table"
 
-async function getData(): Promise<Payment[]> {
+async function getData() {
   // Fetch data from your API here.
   return [
     {

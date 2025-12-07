@@ -1,34 +1,63 @@
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
-export default function OwnerList() {
-    const { data } = useSelector((state) => {
-        return state.Owner;
-    })
+// export default function OwnerList() {
+//     const { data } = useSelector((state) => {
+//         return state.owner;
+//     })
 
-    return(
-        <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                { data.map((ele, i) => {
-                    return(
-                        <tr key={ele._id}>
-                            <td>{ i+1 }</td>
-                            <td>{ ele.name }</td>
-                            <td>{ ele.email }</td>
-                            <td>{ ele.phone }</td>
-                            <td></td>
-                        </tr>
-                    )
-                })}
-            </tbody>
-        </table>
-    )
+//     return(
+//         <table>
+//             <thead>
+//                 <tr>
+//                     <th>Id</th>
+//                     <th>Name</th>
+//                     <th>Email</th>
+//                     <th>Phone</th>
+//                     <th>Actions</th>
+//                 </tr>
+//             </thead>
+//             <tbody>
+//                 { data.map((ele, i) => {
+//                     return(
+//                         <tr key={ele._id}>
+//                             <td>{ i+1 }</td>
+//                             <td>{ ele.name }</td>
+//                             <td>{ ele.email }</td>
+//                             <td>{ ele.phone }</td>
+//                             <td></td>
+//                         </tr>
+//                     )
+//                 })}
+//             </tbody>
+//         </table>
+//     )
+// }
+
+
+// <DataTable columns={columns} data={data} />
+
+import { columns, Payment } from "./columns"
+import { DataTable } from "./data-table"
+
+async function getData(): Promise<Payment[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+    // ...
+  ]
+}
+
+export default async function DemoPage() {
+  const data = await getData()
+
+  return (
+    <div className="container mx-auto py-10">
+      <DataTable columns={columns} data={data} />
+    </div>
+  )
 }

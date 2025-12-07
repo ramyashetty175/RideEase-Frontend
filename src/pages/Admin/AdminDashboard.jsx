@@ -5,6 +5,7 @@
 // import UsersList from "../UsersList";
 // import BookingCancel from "../BookingCancel";
 
+import OwnerList from "./OwnerList";
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
@@ -55,6 +56,7 @@ export default function Page() {
             <div className="bg-muted/50 aspect-video rounded-xl" />
           </div>
           <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+          <OwnerList />
         </div>
       </SidebarInset>
     </SidebarProvider>

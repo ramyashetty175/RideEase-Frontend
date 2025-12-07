@@ -1,30 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../config/axios";
 
-export const fetchUser = createAsyncThunk("Owner/fetchUser", async(undefined, { rejectWithValue }) => {
+export const fetchOwner = createAsyncThunk("owner/fetchOwner", async(undefined, { rejectWithValue }) => {
     try {
-        const response = await axios.get('/api/user', { headers: { Authorization: localStorage.getItem('token')}});
-        return response.data;
-    } catch(err) {
-        console.log(err);
-    }
-}) 
-
-export const fetchOwner = createAsyncThunk("Owner/fetchOwner", async(undefined, { rejectWithValue }) => {
-    try {
-        const response = await axios.get('/api/owner', { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.get('/users/listOwners', { headers: { Authorization: localStorage.getItem('token')}});
         return response.data;
     } catch(err) {
         console.log(err);
     }
 })
 
-export const OwnerApprove = createAsyncThunk("Owner/OwnerApprove", async(undefined, { rejectWithValue }) => {
+export const OwnerApprove = createAsyncThunk("owner/ownerApprove", async({ editId, formData }, { rejectWithValue }) => {
     try {
-        const response = await axios.put('/api/ApproveOwner', { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/users/approveOwner/${editId}`, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
+        return rejectWithValue(err.message);
     }
 })
 
@@ -51,27 +45,23 @@ const ownerSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUser.fulfilled, (state, action) => {
-
-            })
-            .addCase(fetchUser.rejected, (state, action) => {
-
-            })
             .addCase(fetchOwner.fulfilled, (state, action) => {
-
+                state.data = action.payload;
             })
-            .addCase(fetchOwner.rejected, (state, action) => {
+            // .addCase(fetchOwner.rejected, (state, action) => {
 
-            })
+            // })
             .addCase(OwnerApprove.fulfilled, (state, action) => {
-
+                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
+                state.data[idx] = action.payload;
+                state.editId = null;
             })
             .addCase(OwnerApprove.rejected, (state, action) => {
-
+                state.errors = action.payload;
             })
     }
 })
 
 export const { resetOwner, assignEditId, resetEditId} = ownerSlice.actions;
 
-export default ownerSlice.reducers;
+export default ownerSlice.reducer;

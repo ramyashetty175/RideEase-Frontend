@@ -27,6 +27,7 @@ import { useDispatch } from 'react-redux';
 import OwnerList from "./pages/Admin/OwnerList";
 import UsersList from "./pages/UsersList";
 import { fetchOwner } from "./slices/ownerSlice";
+import { fetchBooking } from "./slices/bookingSlice";
 
 function App() {
   const dispatch = useDispatch();

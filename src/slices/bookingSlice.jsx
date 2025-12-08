@@ -3,7 +3,7 @@ import axios from "../config/axios";
 
 export const fetchBooking = createAsyncThunk("booking/fetchBooking", async(undefined, { rejectWithValue }) => {
     try {
-        const response = await axios.get('/api/', { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.get('/api/bookings', { headers: { Authorization: localStorage.getItem('token')}});
         return response.data;
     } catch(err) {
         console.log(err);

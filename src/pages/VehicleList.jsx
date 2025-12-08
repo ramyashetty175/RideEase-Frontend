@@ -1,7 +1,3 @@
-import { useState, useEffect, useContext } from "react";
-import UserContext from "../context/UserContext";
-import axios from "../config/axios";
-
 "use client"
 
 import { MoreHorizontal } from "lucide-react";
@@ -53,9 +49,7 @@ export const columns = [
       )
     },
   },
-  { accessorKey: "role", header: "Role" },
-  { accessorKey: "license", header: "License" },
-  { accessorKey: "action", header: "Action" }
+  { accessorKey: "vehicles", header: "No of Vehicles" }
 ]
 
 export default function VehicleList() {

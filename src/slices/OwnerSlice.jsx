@@ -48,9 +48,6 @@ const ownerSlice = createSlice({
             .addCase(fetchOwner.fulfilled, (state, action) => {
                 state.data = action.payload;
             })
-            // .addCase(fetchOwner.rejected, (state, action) => {
-
-            // })
             .addCase(OwnerApprove.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);
                 state.data[idx] = action.payload;

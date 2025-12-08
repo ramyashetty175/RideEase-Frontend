@@ -19,14 +19,23 @@ import BookingList from "./pages/BookingList";
 import { Navbar }  from "./components/Navbar";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import UserContext from "./context/UserContext";
 import './App.css';
+import { useDispatch } from 'react-redux';
 import OwnerList from "./pages/Admin/OwnerList";
 import UsersList from "./pages/UsersList";
+import { fetchOwner } from "./slices/ownerSlice";
 
 function App() {
+  const dispatch = useDispatch();
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
+
+  useEffect(() => {
+    if(localStorage.getItem('token')) {
+      dispatch(fetchOwner);
+    }
+  },[dispatch])
 
   return(
      <div>

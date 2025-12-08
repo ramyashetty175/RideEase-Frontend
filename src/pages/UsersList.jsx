@@ -2,6 +2,62 @@ import { useState, useEffect, useContext } from "react";
 import UserContext from "../context/UserContext";
 import axios from "../config/axios";
 
+"use client"
+
+import { MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DataTableColumnHeader } from "../components/data-table-column-header";
+import { useSelector } from "react-redux";
+import { DataTable } from "@/components/data-table";
+import { SidebarProvider } from "../components/ui/sidebar";
+import { AppSidebar } from "../components/app-sidebar";
+
+export const columns = [
+  { accessorKey: "_id", header: "ID" },
+  {
+    accessorKey: "username",
+    header: ({ column }) => {
+      <DataTableColumnHeader column={column} title="Name" />
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  {
+    accessorKey: "email",
+    header: ({ column }) => {
+      <DataTableColumnHeader column={column} title="Email" />
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+  },
+  { accessorKey: "role", header: "Role" },
+  { accessorKey: "license", header: "License" },
+  { accessorKey: "action", header: "Action" }
+]
+
 export default function Users() {
     const { user } = useContext(UserContext);
     const [users, setUsers] = useState([]);
@@ -18,9 +74,9 @@ export default function Users() {
         fetchUsersList();
     }, [])
 
-        if(!user) {
-            return <p>loading...</p>
-        }
+    if(!user) {
+        return <p>loading...</p>
+    }
     
         const handleRemove = async (id, email) => {
             const userConfirm = window.confirm("Are you sure?");
@@ -41,28 +97,11 @@ export default function Users() {
         }
     
     return(
-        <div>
-            <h2>Users List</h2>
-            <table border="2">
-               <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  { (user?.role == "admin") && <th>Actions</th>}
-                  </tr>
-               </thead>
-               <tbody>
-                   { users.map((ele) => (
-                      <tr key={ele._id}>
-                        <td>{ele.username}</td>
-                        <td>{ele.email}</td>
-                        <td>{ele.role}</td>
-                        {(user?.role == "admin") && <td>{user._id != ele._id && <button onClick={() => {handleRemove(ele._id, ele.email)}}>Remove</button>}</td>}
-                      </tr>                      
-                   ))}
-               </tbody>
-            </table>
-        </div>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="p-4">
+            <DataTable columns={columns} data={users} />
+          </main>
+        </SidebarProvider>
     )
 }

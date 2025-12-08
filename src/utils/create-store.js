@@ -4,7 +4,8 @@ import ownerReducer from "../slices/OwnerSlice";
 const createStore = () => {
     return configureStore({
         reducer: {
-            owner: ownerReducer
+            owner: ownerReducer,
+            booking: bookingReducer
         }
     })
 }

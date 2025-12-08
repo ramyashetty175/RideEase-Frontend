@@ -18,9 +18,9 @@ import { SidebarProvider } from "../../components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
 
 export const columns = [
-  { accessorKey: "id", header: "ID" },
+  { accessorKey: "_id", header: "ID" },
   {
-    accessorKey: "name",
+    accessorKey: "username",
     header: ({ column }) => {
       <DataTableColumnHeader column={column} title="Name" />
       return (

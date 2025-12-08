@@ -6,6 +6,7 @@
 // import BookingCancel from "../BookingCancel";
 
 import OwnerList from "./OwnerList";
+import UsersList from "../UsersList";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -57,6 +58,7 @@ export default function AdminDashboard() {
           </div> */}
           {/* <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"> */}
           <OwnerList />
+          <UsersList />
           {/* </div> */}
         </div>
       </SidebarInset>

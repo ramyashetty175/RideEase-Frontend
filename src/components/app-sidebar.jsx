@@ -56,96 +56,88 @@ const data = {
   navMainAdmin: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard/admin",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Manage Users",
-      url: "#",
+      url: "/dashboard/admin/users",
       icon: Bot,
       items: [
         {
           title: "All Users",
-          url: "#",
+          url: "/dashboard/admin/users/all",
         },
         {
           title: "Owners",
-          url: "#",
+          url: "/dashboard/admin/users/owners",
         },
         {
           title: "Users",
-          url: "#",
+          url: "/dashboard/admin/users/user",
         },
         {
-          title: "New Requests",
-          url: "#",
+          title: "New Request",
+          url: "/dashboard/admin/users/new-request",
         },
       ],
     },
     {
       title: "Bookings",
-      url: "#",
+      url: "/dashboard/admin/bookings",
       icon: BookOpen,
       items: [
         {
           title: "All Bookings",
-          url: "#",
-        },
-        {
-          title: "Pending",
-          url: "#",
-        },
-        {
-          title: "Approved",
-          url: "#",
+          url: "/dashboard/admin/bookings/all",
         },
         {
           title: "New Request",
-          url: "#",
+          url: "/dashboard/admin/bookings/new-request",
+        },
+        {
+          title: "Approve",
+          url: "/dashboard/admin/bookings/approve",
         },
         {
           title: "In-Progress",
-          url: "#",
+          url: "/dashboard/admin/bookings/in-progress",
         },
         {
-          title: "Rejected",
-          url: "#",
+          title: "Reject",
+          url: "/dashboard/admin/bookings/reject",
         },
         {
-          title: "Cancel Requested",
-          url: "#",
+          title: "Cancel Request",
+          url: "/dashboard/admin/bookings/cancel-request",
         },
       ],
     },
     {
       title: "Vehilcles",
-      url: "#",
+      url: "/dashboard/admin/vehicles",
       icon: Settings2,
       items: [
         {
           title: "All Vehicles",
-          url: "#",
+          url: "/dashboard/admin/vehicles/all",
         },
         {
           title: "Add Vehicles",
-          url: "#",
+          url: "/dashboard/admin/vehicles/add",
         },
         {
-          title: "Pending",
-          url: "#",
+          title: "New Request",
+          url: "/dashboard/admin/vehicles/new-request",
         },
         {
-          title: "Requested Vehicle",
-          url: "#",
+          title: "Approve",
+          url: "/dashboard/admin/vehicles/approve",
         },
         {
-          title: "Approved Vehicle",
-          url: "#",
-        },
-        {
-          title: "Rejected Vehicle",
-          url: "#",
+          title: "Reject",
+          url: "/dashboard/admin/vehicles/reject",
         },
       ],
     },
@@ -153,72 +145,72 @@ const data = {
   navMainOwner: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard/owner",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Manage Users",
-      url: "#",
+      url: "/dashboard/owner/users",
       icon: Bot,
       items: [
         {
           title: "Users",
-          url: "#",
+          url: "/dashboard/owner/users/all",
         },
         {
-          title: "New Requests",
-          url: "#",
+          title: "New Request",
+          url: "/dashboard/owner/users/new-requests",
         },
       ],
     },
     {
       title: "Bookings",
-      url: "#",
+      url: "/dashboard/owner/bookings",
       icon: BookOpen,
       items: [
         {
           title: "All Bookings",
-          url: "#",
+          url: "/dashboard/owner/bookings/all",
         },
         {
-          title: "Pending",
-          url: "#",
+          title: "New Request",
+          url: "/dashboard/owner/bookings/new-request",
         },
         {
-          title: "Approved",
-          url: "#",
+          title: "Approve",
+          url: "/dashboard/owner/bookings/approve",
         },
         {
           title: "In-Progress",
-          url: "#",
+          url: "/dashboard/owner/bookings/in-progress",
         },
         {
-          title: "Completed",
-          url: "#",
+          title: "Complete",
+          url: "/dashboard/owner/bookings/complete",
         },
          {
-          title: "Rejected",
-          url: "#",
+          title: "Reject",
+          url: "/dashboard/owner/bookings/reject",
         },
         {
-          title: "Cancel Requested",
-          url: "#",
+          title: "Cancel Request",
+          url: "/dashboard/owner/bookings/cancel-request",
         },
       ],
     },
     {
       title: "Vehicles",
-      url: "#",
+      url: "/dashboard/owner/vehicles",
       icon: Settings2,
       items: [
         {
           title: "All Vehicles",
-          url: "#",
+          url: "/dashboard/owner/vehicles/all",
         },
         {
           title: "Add Vehicles",
-          url: "#",
+          url: "/dashboard/owner/vehicles/add",
         },
       ],
     },
@@ -226,31 +218,31 @@ const data = {
   navMainUser: [
     {
       title: "Profile",
-      url: "#",
+      url: "/profile",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Bookings",
-      url: "#",
+      url: "/bookings",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Transactions",
-      url: "#",
+      url: "/transaction",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Change Password",
-      url: "#",
+      url: "/change-password",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Logout",
-      url: "#",
+      url: "/logout",
       icon: SquareTerminal,
       isActive: true,
     },

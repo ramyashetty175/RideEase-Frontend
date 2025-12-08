@@ -2,17 +2,20 @@
 
 import * as React from "react"
 
+import { DataTableViewOptions } from "./data-table-view-options";
+import { DataTablePagination } from "./DataTablePagination";
+
 import {
-  ColumnDef,
-  SortingState,
+  // ColumnDef,
+  // SortingState,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  ColumnFiltersState,
+  // ColumnFiltersState,
   useReactTable,
   getPaginationRowModel,
   getFilteredRowModel,
-  VisibilityState,
+  // VisibilityState,
 } from "@tanstack/react-table"
 
 import {
@@ -34,13 +37,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+// export const columns = [
+//   { accessorKey: "status", header: "Status" },
+//   { accessorKey: "id", header: "ID" },
+//   { accessorKey: "name", header: "Name" },
+//   { accessorKey: "amount", header: "Amount" }
+// ];
+
 export function DataTable({ columns, data }) {
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
 
   const table = useReactTable({
     data,
@@ -70,6 +77,7 @@ export function DataTable({ columns, data }) {
           }
           className="max-w-sm"
         />
+        <DataTableViewOptions table={table} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -142,6 +150,7 @@ export function DataTable({ columns, data }) {
           )}
         </TableBody>
       </Table>
+      <DataTablePagination table={table} />
     </div>
     <div className="flex items-center justify-end space-x-2 py-4">
         <Button

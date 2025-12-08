@@ -22,6 +22,8 @@ import viteLogo from '/vite.svg'
 import { useContext, useState } from "react";
 import UserContext from "./context/UserContext";
 import './App.css';
+import OwnerList from "./pages/Admin/OwnerList";
+import UsersList from "./pages/UsersList";
 
 function App() {
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
@@ -82,7 +84,10 @@ function App() {
         <Route path="/dashboard/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/dashboard/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerDashboard /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute allowedRoles={['user']}><Dashboard /></PrivateRoute>} />
-        <Route path="/users" element={<PrivateRoute allowedRoles={['admin', 'owner']}><Users /></PrivateRoute>} />
+        <Route path="/all" element={<PrivateRoute allowedRoles={['user']}><UsersList /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList /></PrivateRoute>} />
+        <Route path="/users" element={<PrivateRoute allowedRoles={['user']}><UsersList /></PrivateRoute>} />
+        <Route path="/request" element={<PrivateRoute allowedRoles={['admin', 'owner']}><UsersList /></PrivateRoute>} />
         <Route path="/vehiclelist" element={<PrivateRoute allowedRoles={['admin', 'owner','user']}><VehicleList /></PrivateRoute>} />
         <Route path="/bookings" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><BookingList /></PrivateRoute>} />
         <Route path="/search" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><SearchPage /></PrivateRoute>} />

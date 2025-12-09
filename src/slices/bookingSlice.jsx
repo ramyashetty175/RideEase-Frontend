@@ -12,7 +12,7 @@ export const fetchBooking = createAsyncThunk("booking/fetchBooking", async (unde
 
 export const createBooking = createAsyncThunk("booking/createBooking", async ({ formData, handleReset }, { rejectWithValue }) => {
     try {
-        const response = await axios.post('/api', formData, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.post('/api/bookings', formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         handleReset();
         return response.data;
@@ -24,7 +24,7 @@ export const createBooking = createAsyncThunk("booking/createBooking", async ({ 
 
 export const removeBooking = createAsyncThunk("booking/removeBooking", async (id, { rejectWithValue }) => {
     try {
-        const response = await axios.delete('/api', { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.delete(`/api/bookings/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         return response.data;
     } catch(err) {
@@ -35,7 +35,7 @@ export const removeBooking = createAsyncThunk("booking/removeBooking", async (id
 
 export const updateBooking = createAsyncThunk("booking/updateBooking", async ({ editId, formData }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/api/`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/api/bookings/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         handleReset();
         return response.data;
@@ -70,6 +70,28 @@ const bookingSlice = createSlice({
         builder
             .addCase(fetchBooking.fulfilled, (state, action) => {
                 state.data = action.payload;
+            })
+            .addCase(createBooking.fulfilled, (state, action) => {
+                state.data.push(action.payload);
+                state.errors = null;
+            })
+            .addCase(createBooking.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+            .addCase(removeBooking.fulfilled, (state, action) => {
+                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
+                state.data.splice(idx, 1);
+            })
+            .addCase(removeBooking.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+            .addCase(updateBooking.fulfilled, (state, action) => {
+                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
+                state.data[idx] = action.payload;
+                state.editId = null;
+            })
+            .addCase(updateBooking.rejected, (state, action) => {
+                state.errors = action.payload;
             })
     }
 })

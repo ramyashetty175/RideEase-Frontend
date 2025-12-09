@@ -28,6 +28,7 @@ import OwnerList from "./pages/Admin/OwnerList";
 import UsersList from "./pages/UsersList";
 import { fetchOwner } from "./slices/ownerSlice";
 import { fetchBooking } from "./slices/bookingSlice";
+import { fetchVehicles } from "./slices/vehicleSlice";
 import Transactions from "./pages/Transactions";
 import ChangePassword from "./pages/ChangePassword";
 import Profile from "./pages/Profile";

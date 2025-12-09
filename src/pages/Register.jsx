@@ -83,7 +83,7 @@ export default function Register() {
                     <Button type="submit" className="w-full">
                        Create Account
                     </Button>
-                    <CardDescription>
+        <CardDescription>
           Already have an account? <Link to="/login"className="underline">Sign in</Link>
         </CardDescription>
                 </CardFooter>

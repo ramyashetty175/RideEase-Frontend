@@ -8,7 +8,7 @@ const createStore = () => {
         reducer: {
             owner: ownerReducer,
             booking: bookingReducer,
-            Vehicle: vehicleReducer
+            vehicle: vehicleReducer
         }
     })
 }

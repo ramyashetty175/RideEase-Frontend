@@ -37,65 +37,97 @@ export default function OwnerProfile() {
     
     return(
         <div>
-        <h2>Admin Profile Page</h2>
-        <form onSubmit={handleSubmit}>
-            <div>
-                <input type="text"
-                        name="username"
-                        placeholder="Enter Username"
-                        value={form.username}
-                        onChange={handleChange}    
-                />
-            </div>
-            <div>
-                <input type="text"
-                        name="email"
-                        placeholder="Enter Email"
-                        value={form.email}
+           <SidebarProvider>
+           <AppSidebar />
+           <main className="p-4">
+               <form onSubmit={handleSubmit}>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="VehicleName" className="text-foreground">
+                     UserName
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="vehicleName" 
+                        name="vehicleName"
+                        value={formdata.vehicleName}
+                        placeholder="Enter vehicleName"
                         onChange={handleChange}
                 />
-            </div>
-            <div>
-                <input type="text"
-                        name="password"
-                        placeholder="Enter Password"
-                        value={form.password}
+                </InputGroup>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="VehicleName" className="text-foreground">
+                     Email
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="vehicleName" 
+                        name="vehicleName"
+                        value={formdata.vehicleName}
+                        placeholder="Enter vehicleName"
                         onChange={handleChange}
                 />
-            </div>
-            <div>
-                <input type="text"
-                        name="newPassword"
-                        placeholder="Enter New Password"
-                        value={form.newPassword}
+                </InputGroup>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="VehicleName" className="text-foreground">
+                     Bio
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="vehicleName" 
+                        name="vehicleName"
+                        value={formdata.vehicleName}
+                        placeholder="Enter vehicleName"
                         onChange={handleChange}
                 />
-            </div>
-            <div>
-                <input type="text"
-                        name="bio"
-                        placeholder="Enter bio"
-                        value={form.bio}
-                        onChange={handleChange}    
-                />
-            </div>
-            <div>
-                <input type=""
-                        name="insuranceDoc"
-                        placeholder="upload your insurance"
-                        value={form.insuranceDoc}
-                        onChange={handleChange}
-                />
-            </div>
-            <div>
-                <input type=""
-                        name="licenceDoc"
-                        placeholder="upload your licence"
-                        value={form.licenceDoc}
-                        onChange={handleChange}
-                />
-            </div>
-        </form>
+                </InputGroup>
+               </form>
+           </main>
+       </SidebarProvider>
         </div>
     )
 }

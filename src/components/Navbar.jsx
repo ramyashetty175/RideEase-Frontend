@@ -19,34 +19,34 @@ import {
 
 export function Navbar() {
   const { handleLogout, user } = useContext(UserContext);
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile();
 
   return (
     <NavigationMenu viewport={isMobile}>
       <NavigationMenuList className="flex-wrap">
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/docs">Home</Link>
+            <Link to="/home">Home</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/docs">Vehicles</Link>
+            <Link to="/vehicles">Vehicles</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/docs">Bookings</Link>
+            <Link to="/bookings">Bookings</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/docs">Users</Link>
+            <Link to="/users">Users</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/docs">Search</Link>
+            <Link to="/search">Search</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem className="hidden md:block">

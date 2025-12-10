@@ -77,16 +77,16 @@ export default function Register() {
                         />
                     </div>
                     </div>
-                    </form>
-                </CardContent>
-                <CardFooter className="flex-col gap-2">
+                    <CardFooter className="flex-col gap-2">
                     <Button type="submit" className="w-full">
                        Create Account
                     </Button>
-        <CardDescription>
-          Already have an account? <Link to="/login"className="underline">Sign in</Link>
-        </CardDescription>
-                </CardFooter>
+                        <CardDescription>
+                           Already have an account? <Link to="/login"className="underline">Sign in</Link>
+                        </CardDescription>
+                    </CardFooter>
+                    </form>
+                </CardContent>
         </Card>
         </div>
     )

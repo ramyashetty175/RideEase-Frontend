@@ -34,7 +34,10 @@ export default function Profile() {
     return(
         <div>
         <h2>Admin Profile Page</h2>
-        <form onSubmit={handleSubmit}>
+        <SidebarProvider>
+           <AppSidebar />
+           <main className="p-4">
+              <form onSubmit={handleSubmit}>
             <div>
                 <input type="text"
                         name="username"
@@ -76,6 +79,8 @@ export default function Profile() {
                 />
             </div>
         </form>
+           </main>
+       </SidebarProvider>
         </div>
     )
 }

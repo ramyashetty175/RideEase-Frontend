@@ -55,7 +55,7 @@ export function Navbar() {
             <ul className="grid w-[200px] gap-4">
               <li>
                 <NavigationMenuLink asChild>
-                  <Link to={ user?.role === "admin" ? "/dashboard/admin" : user?.role === "owner" ? "/dashboard/owner" : "/dashboard" }>
+                  <Link to={ user?.role === "admin" ? "/dashboard/admin" : user?.role === "owner" ? "/dashboard/owner" : "/dashboard/user" }>
                     Dashboard
                   </Link>
                 </NavigationMenuLink>

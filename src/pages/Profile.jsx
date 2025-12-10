@@ -1,3 +1,18 @@
+import { InfoIcon } from "lucide-react"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { Label } from "@/components/ui/label"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { useDispatch, useSelector } from "react-redux"
+
 export default function Profile() {
     const dispatch = useDispatch();
     const {} = useSelector(() => {
@@ -37,48 +52,92 @@ export default function Profile() {
         <SidebarProvider>
            <AppSidebar />
            <main className="p-4">
-              <form onSubmit={handleSubmit}>
-            <div>
-                <input type="text"
-                        name="username"
-                        placeholder="Enter Username"
-                        value={form.username}
-                        onChange={handleChange}    
-                />
-            </div>
-            <div>
-                <input type="text"
-                        name="email"
-                        placeholder="Enter Email"
-                        value={form.email}
+               <form onSubmit={handleSubmit}>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="VehicleName" className="text-foreground">
+                     UserName
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="vehicleName" 
+                        name="vehicleName"
+                        value={formdata.vehicleName}
+                        placeholder="Enter vehicleName"
                         onChange={handleChange}
                 />
-            </div>
-            <div>
-                <input type="text"
-                        name="bio"
-                        placeholder="Enter bio"
-                        value={form.bio}
-                        onChange={handleChange}    
-                />
-            </div>
-            <div>
-                <input type=""
-                        name="insuranceDoc"
-                        placeholder="upload your insurance"
-                        value={form.insuranceDoc}
+                </InputGroup>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="VehicleName" className="text-foreground">
+                     Email
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="vehicleName" 
+                        name="vehicleName"
+                        value={formdata.vehicleName}
+                        placeholder="Enter vehicleName"
                         onChange={handleChange}
                 />
-            </div>
-            <div>
-                <input type=""
-                        name="licenceDoc"
-                        placeholder="upload your licence"
-                        value={form.licenceDoc}
+                </InputGroup>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="VehicleName" className="text-foreground">
+                     Bio
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="vehicleName" 
+                        name="vehicleName"
+                        value={formdata.vehicleName}
+                        placeholder="Enter vehicleName"
                         onChange={handleChange}
                 />
-            </div>
-        </form>
+                </InputGroup>
+               </form>
            </main>
        </SidebarProvider>
         </div>

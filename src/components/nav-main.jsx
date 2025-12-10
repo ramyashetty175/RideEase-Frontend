@@ -1,5 +1,6 @@
 "use client"
 
+import { Link } from "react-router-dom"
 import { ChevronRight } from "lucide-react"
 
 import {
@@ -45,9 +46,9 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <Link to={subItem.url}>
                           <span>{subItem.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

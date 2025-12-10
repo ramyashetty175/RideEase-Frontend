@@ -218,31 +218,31 @@ const data = {
   navMainUser: [
     {
       title: "Profile",
-      url: "/profile",
+      url: "/dashboard/profile",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Bookings",
-      url: "/bookings",
+      url: "/dashboard/bookings",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Transactions",
-      url: "/transaction",
+      url: "/dashboard/transactions",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Change Password",
-      url: "/change-password",
+      url: "/dashboard/change-password",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Logout",
-      url: "/logout",
+      url: "/dashboard/logout",
       icon: SquareTerminal,
       isActive: true,
     },

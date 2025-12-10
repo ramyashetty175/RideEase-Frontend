@@ -6,8 +6,6 @@ import OwnerProfile from "./OwnerProfile";
 export default function OwnerMain() {
     return(
         <div>
-           <OwnerProfile />
-           <OwnerAddVehicle />
         </div>
     )
 }

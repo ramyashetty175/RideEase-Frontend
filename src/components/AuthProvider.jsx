@@ -32,7 +32,7 @@ export default function AuthProvider(props) {
         if(localStorage.getItem('token')) {
             const fetchUser = async () => {
                 try {
-                    const response = await axios.get('/users/account', { headers: { Authorization: localStorage.getItem('token') }})
+                    const response = await axios.get('/users/account', { headers: { Authorization: localStorage.getItem('token') }});
                     dispatch({ type: "LOGIN", payload: response.data });
                 } catch(err) {
                     console.log(err);
@@ -41,7 +41,7 @@ export default function AuthProvider(props) {
             fetchUser()
         }
     }, [])
-
+    
     const handleRegister = async (formData, resetForm) => {
         try {
             const response = await axios.post('/users/register', formData)

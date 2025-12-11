@@ -34,6 +34,8 @@ import ChangePassword from "./pages/ChangePassword";
 import Profile from "./pages/Profile";
 import OwnerAddVehicle from "./pages/Owner/OwnerAddVehicle";
 import AdminAddVehicle from "./pages/Admin/AdminAddVehicle";
+import AdminHome from "./pages/Admin/AdminHome";
+import OwnerHome from "./pages/Owner/OwnerHome";
 
 function App() {
   const dispatch = useDispatch();
@@ -94,16 +96,19 @@ function App() {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<Home />}/>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword/>} />
-        <Route path="/account" element={<PrivateRoute allowedRoles={['admin', 'user']}><Account /></PrivateRoute>} />
+        <Route path="/users/account" element={<PrivateRoute allowedRoles={['admin', 'user']}><Account /></PrivateRoute>} />
 
         <Route path="/dashboard/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/dashboard/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerDashboard /></PrivateRoute>} />
         <Route path="/dashboard/user" element={<PrivateRoute allowedRoles={['user']}><Dashboard /></PrivateRoute>} />
          
+        <Route path="/home/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminHome /></PrivateRoute>} />
+        <Route path="/home/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerHome /></PrivateRoute>} />
+        <Route path="/home/user" element={<PrivateRoute allowedRoles={['user']}><Home /></PrivateRoute>} />
+
         <Route path="/dashboard/admin/users/all" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />

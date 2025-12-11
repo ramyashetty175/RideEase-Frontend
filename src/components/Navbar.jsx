@@ -26,7 +26,7 @@ export function Navbar() {
       <NavigationMenuList className="flex-wrap">
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/home">Home</Link>
+            <Link to={ user?.role === "admin" ? "/home/admin" : user?.role === "owner" ? "/home/owner" : "/home/user" }>Home</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>

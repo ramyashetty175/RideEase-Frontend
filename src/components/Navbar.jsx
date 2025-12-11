@@ -22,8 +22,10 @@ export function Navbar() {
   const isMobile = useIsMobile();
 
   return (
+    <div class="w-full flex justify-center">
     <NavigationMenu viewport={isMobile}>
-      <NavigationMenuList className="flex-wrap">
+      {/* <NavigationMenuList className="flex-wrap"> */}
+      <NavigationMenuList className="flex flex-wrap justify-center items-center gap-x-4">
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <Link to={ user?.role === "admin" ? "/home/admin" : user?.role === "owner" ? "/home/owner" : "/home/user" }>Home</Link>
@@ -74,5 +76,6 @@ export function Navbar() {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
+    </div>
   )
 }

@@ -35,6 +35,7 @@ export default function LandingPage() {
       Start Your Journey →
     </Button>
   </Link>
+  
 </section>
       <Footer />
     </div>

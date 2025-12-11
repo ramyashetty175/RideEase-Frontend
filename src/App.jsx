@@ -62,6 +62,7 @@ function App() {
               <button onClick={handleLogout}>Logout</button>
               </li> */}
               <Navbar />
+              <Separator />
             </>
           )}
           {(!isLoggedIn && !localStorage.getItem('token')) && (

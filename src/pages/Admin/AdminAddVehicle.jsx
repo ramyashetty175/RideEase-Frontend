@@ -312,8 +312,10 @@ export default function AdminAddVehicle() {
                 </div>
                 </div>
                 <div className="flex justify-start mt-4 gap-4">
-                   <Button type="submit">Submit</Button>
-                   <Button type="button">Cancel</Button>
+                     <Button type="submit">Submit</Button>
+                     <Button variant="outline" type="button">
+                        Cancel
+                     </Button>
                 </div>
             </form>
             </main>

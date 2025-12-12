@@ -147,6 +147,9 @@ function App() {
         {/* <Route path="/dashboard/logout" element={<PrivateRoute allowedRoles={['admin']}>< /></PrivateRoute>} /> */}
 
         <Route path="/search" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><SearchPage /></PrivateRoute>} />
+
+        <Route path="/vehicles" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><Vehicle /></PrivateRoute>} />
+
       </Routes>
     </div>
   )

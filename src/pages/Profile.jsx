@@ -51,7 +51,7 @@ export default function Profile() {
         <h2>Admin Profile Page</h2>
         <SidebarProvider>
            <AppSidebar />
-           <main className="p-4">
+            <main className="p-4">
                <form onSubmit={handleSubmit}>
                 <InputGroup>
                 <InputGroupAddon align="block-start">

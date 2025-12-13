@@ -22,7 +22,7 @@ export function Navbar() {
   const isMobile = useIsMobile();
 
   return (
-    <div class="w-full flex justify-center">
+    <div className="w-full flex justify-center">
     <NavigationMenu viewport={isMobile}>
       {/* <NavigationMenuList className="flex-wrap"> */}
       <NavigationMenuList className="flex flex-wrap justify-center items-center gap-x-4">

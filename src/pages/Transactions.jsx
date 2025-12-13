@@ -8,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 const invoices = [
   {
@@ -56,6 +58,9 @@ const invoices = [
 
 export default function Transactions() {
   return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="p-4">
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
@@ -83,5 +88,7 @@ export default function Transactions() {
         </TableRow>
       </TableFooter>
     </Table>
+    </main>
+    </SidebarProvider>
   )
 }

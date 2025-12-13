@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from '@/components/ui/input';
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 export default function ChangePassword() {
     const [state, setState] = useState({
@@ -26,6 +29,9 @@ export default function ChangePassword() {
     return(
         <div>
             <h2>Change Your Password</h2>
+            <SidebarProvider>
+           <AppSidebar />
+           <main className="p-4">
             <form onSubmit={handleSubmit}>
                 <div className="grid gap-2">
                    <Label htmlFor="username">Old Password</Label>
@@ -58,6 +64,8 @@ export default function ChangePassword() {
                     <Button>Submit</Button>
                 </div>
             </form>
+            </main>
+            </SidebarProvider>
         </div>
     )
 }

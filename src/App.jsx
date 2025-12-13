@@ -42,8 +42,10 @@ function App() {
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
 
   useEffect(() => {
+    if(localStorage.getItem('token') && user?.role === 'admin') {
+       dispatch(fetchOwner());
+    }
     if(localStorage.getItem('token')) {
-      dispatch(fetchOwner());
       dispatch(fetchBooking());
       dispatch(fetchVehicles());
     }
@@ -104,7 +106,7 @@ function App() {
 
         <Route path="/dashboard/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/dashboard/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerDashboard /></PrivateRoute>} />
-        <Route path="/dashboard/user" element={<PrivateRoute allowedRoles={['user']}><Dashboard /></PrivateRoute>} />
+        {/* <Route path="/dashboard/user" element={<PrivateRoute allowedRoles={['user']}><Dashboard /></PrivateRoute>} /> */}
          
         <Route path="/home/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminHome /></PrivateRoute>} />
         <Route path="/home/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerHome /></PrivateRoute>} />

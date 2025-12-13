@@ -1,54 +1,65 @@
-import { InfoIcon } from "lucide-react"
+import { InfoIcon } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/input-group";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+} from "@/components/ui/tooltip";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import { useState, useContext, useEffect } from "react";
+import UserContext from "../context/UserContext";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/ui/avatar"
+} from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import axios from "@/config/axios";
 
 export default function Profile() {
-    const dispatch = useDispatch();
-    // const {} = useSelector(() => {
-    
-    // })
+    const { user } = useContext(UserContext);
     const [form, setForm] = useState({
         avatar: '',
         username: '',
         email: '',
-        role: '',
         bio: '',
         insuranceDoc: '',
         licenceDoc: ''
     }) 
     
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = {
-            username,
-            email,
-            role,
-            bio,
-            avatar,
-            insuranceDoc,
-            licenceDoc
+    useEffect(() => {
+        if(user) {
+            setForm({
+              ...form,
+              avatar: user.avatar,
+              username: user.username,
+              email: user.email,
+              bio: user.bio,
+              insuranceDoc: user.insuranceDoc,
+              licenceDoc: user.licenceDoc
+            })
         }
-        console.log(form);
+    }, [user])
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(form); 
+        try {
+            const response = await axios.put(`/users/profile/${id}`, form, { headers: localStorage.getItem('token')});
+            console.log(response);
+            setForm([]);
+        } catch(err) {
+            console.log(err);
+            alert('update failed');
+        }
     }
     
     const handleChange = (e) => {
@@ -57,29 +68,30 @@ export default function Profile() {
     
     return(
         <div>
-        <h1>Profile</h1>
-        <p>view and Edit Profile</p>
         <SidebarProvider>
            <AppSidebar />
             <main className="p-4">
-                <div className="flex flex-row flex-wrap items-center gap-12">
-                    <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                    <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
+                <div className="text-left pl-2 mb-6">
+                    <h1 className="text-black font-bold text-3xl">Profile</h1>
+                    <p className="text-black font-semibold text-lg">View and Edit Profile</p>
                 </div>
-                <div className="grid w-full max-w-sm items-center gap-3">
-                    <Label htmlFor="picture">Avatar</Label>
-                    <Input id="picture" type="file" />
+               <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="flex items-center gap-6 mb-6">
+                   <Avatar className="h-14 w-14">
+                       <AvatarImage src="https://github.com/shadcn.png" alt="avatar"/>
+                       <AvatarFallback>CN</AvatarFallback>
+                   </Avatar>
+                <div className="flex flex-col gap-2">
+                    <Label htmlFor="avatar">Avatar</Label>
+                    <Input id="avatar" type="file" />
                 </div>
-               <form onSubmit={handleSubmit}>
-
+               </div>
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
-                       UserName
+                       User Name
                    </Label>
-                <Tooltip>
+                   <Tooltip>
                    <TooltipTrigger asChild>
                    <InputGroupButton
                         variant="ghost"
@@ -93,16 +105,15 @@ export default function Profile() {
                     <TooltipContent>
                        <p>We&apos;ll use this to send you notifications</p>
                     </TooltipContent>
-                </Tooltip>
+                    </Tooltip>
                 </InputGroupAddon>
-                <InputGroupInput id="username" 
+                <InputGroupInput id="username"
                         name="username"
                         value={form.username}
                         placeholder="Enter username"
                         onChange={handleChange}
                 />
                 </InputGroup>
-
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="email" className="text-foreground">
@@ -159,65 +170,20 @@ export default function Profile() {
                         onChange={handleChange}
                 />
                 </InputGroup>
-                <InputGroup>
-                <InputGroupAddon align="block-start">
-                   <Label htmlFor="insuranceDoc" className="text-foreground">
-                       InsuranceDoc
-                   </Label>
-                <Tooltip>
-                   <TooltipTrigger asChild>
-                   <InputGroupButton
-                        variant="ghost"
-                        aria-label="Help"
-                        className="ml-auto rounded-full"
-                        size="icon-xs"
-                    >
-                    <InfoIcon />
-                    </InputGroupButton>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
-                    </TooltipContent>
-                </Tooltip>
-                </InputGroupAddon>
-                <InputGroupInput id="insuranceDoc" 
-                        name="insuranceDoc"
-                        value={form.insuranceDoc}
-                        placeholder="Enter InsuranceDoc"
-                        onChange={handleChange}
-                />
-                </InputGroup>
-                <InputGroup>
-                <InputGroupAddon align="block-start">
-                   <Label htmlFor="licenceDoc" className="text-foreground">
-                       LicenceDoc
-                   </Label>
-                <Tooltip>
-                   <TooltipTrigger asChild>
-                   <InputGroupButton
-                        variant="ghost"
-                        aria-label="Help"
-                        className="ml-auto rounded-full"
-                        size="icon-xs"
-                    >
-                    <InfoIcon />
-                    </InputGroupButton>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
-                    </TooltipContent>
-                </Tooltip>
-                </InputGroupAddon>
-                <InputGroupInput id="licenceDoc" 
-                        name="licenceDoc"
-                        value={form.licenceDoc}
-                        placeholder="Enter LicenceDoc"
-                        onChange={handleChange}
-                />
-                </InputGroup>
+                <div className="grid w-full max-w-sm items-center gap-3">
+                    <Label htmlFor="licenceDoc">LicenceDoc</Label>
+                    <Input id="licenceDoc" type="file" />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-3">
+                    <Label htmlFor="insuranceDoc">InsuranceDoc</Label>
+                    <Input id="insuranceDoc" type="file" />
+                </div>
+                <div className="text-left">
+                    <Button>Submit</Button>
+                </div>
                </form>
            </main>
-       </SidebarProvider>
+        </SidebarProvider>
         </div>
     )
 }

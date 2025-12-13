@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from '@/components/ui/input';
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import UserContext from "../context/UserContext";
 
 export default function ChangePassword() {
-    const [state, setState] = useState({
+    const { user } = useContext(UserContext);
+    const [form, setForm] = useState({
         oldpassword: '',
         newpassword: '',
         confirmnewpassword: ''
@@ -23,7 +25,7 @@ export default function ChangePassword() {
     }
 
     const handleChange = (e) => {
-        setForm({ ...state, [e.target.name] : e.target.value });
+        setForm({ ...form, [e.target.name] : e.target.value });
     }
 
     return(
@@ -32,35 +34,35 @@ export default function ChangePassword() {
             <SidebarProvider>
            <AppSidebar />
            <main className="p-4">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid gap-2">
-                   <Label htmlFor="username">Old Password</Label>
+                   <Label htmlFor="oldpassword">Old Password</Label>
                         <Input type="password"
-                          name="password"
-                          placeholder="enter old password"
-                          value={state.oldpassword}
+                          name="oldpassword"
+                          placeholder="Enter Old Password"
+                          value={form.oldpassword}
                           onChange={handleChange}
                         />
                 </div>
                 <div className="grid gap-2">
-                   <Label htmlFor="username">New Password</Label>
+                   <Label htmlFor="password">New Password</Label>
                         <Input type="password"
-                          name="password"
-                          placeholder="enter new password"
-                          value={state.newpassword}
+                          name="newpassword"
+                          placeholder="Enter New Password"
+                          value={form.newpassword}
                           onChange={handleChange}
                         />
                 </div>
                 <div className="grid gap-2">
-                   <Label htmlFor="username">Confirm New Password</Label>
+                   <Label htmlFor="password">Confirm New Password</Label>
                         <Input type="password"
-                          name="password"
-                          placeholder="confirm new password"
-                          value={state.confirmnewpassword}
+                          name="confirmnewpassword"
+                          placeholder="Confirm New Password"
+                          value={form.confirmnewpassword}
                           onChange={handleChange}
                         />
                    </div>
-                <div>
+                <div className="text-left">
                     <Button>Submit</Button>
                 </div>
             </form>

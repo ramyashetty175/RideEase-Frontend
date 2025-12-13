@@ -14,14 +14,28 @@ export default function ChangePassword() {
         confirmnewpassword: ''
     }); 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = {
-           oldpassword: '',
-           newpassword: '',
-           confirmnewpassword: ''
+    useEffect(() => {
+        if(user) {
+            setForm({
+                ...form,
+                oldpassword: user.oldpassword,
+                newpassword: user.newpassword,
+                confirmnewpassword: user.confirmnewpassword
+            })
         }
-        console.log(formData);
+    }, [user])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(form);
+        try {
+            const response = await axios.put(`/users/profile/${id}`, form, { headers: localStorage.getItem('token')});
+            console.log(response);
+            setForm([]);
+        } catch(err) {
+            console.log(err);
+            alert('update failed');
+        }
     }
 
     const handleChange = (e) => {

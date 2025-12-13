@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from '@/components/ui/input';
@@ -29,7 +29,7 @@ export default function ChangePassword() {
         e.preventDefault();
         console.log(form);
         try {
-            const response = await axios.put(`/users/profile/${id}`, form, { headers: localStorage.getItem('token')});
+            const response = await axios.put(`/users/password/${id}`, form, { headers: localStorage.getItem('token')});
             console.log(response);
             setForm([]);
         } catch(err) {
@@ -44,10 +44,12 @@ export default function ChangePassword() {
 
     return(
         <div>
-            <h2>Change Your Password</h2>
             <SidebarProvider>
            <AppSidebar />
            <main className="p-4">
+            <div className="text-left pl-2 mb-6">
+                <h1 className="text-black font-bold text-3xl">Change Your Password</h1>
+            </div>
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid gap-2">
                    <Label htmlFor="oldpassword">Old Password</Label>

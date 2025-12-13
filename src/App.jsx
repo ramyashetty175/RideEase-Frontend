@@ -2,16 +2,13 @@ import { Route, Routes, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Users from "./pages/UsersList";
 import Account from './pages/Account';
 import ForgotPassword from "./pages/ForgotPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import OwnerDashboard from "./pages/Owner/OwnerDashboard";
 import LandingPage from "./pages/LandingPage";
-import BookingListList from "./pages/BookingList";
 import SearchPage from "./pages/SearchPage";
 import PrivateRoute from "./components/PrivateRoute";
 import Vehicle from "./pages/Vehicle";
@@ -36,6 +33,8 @@ import OwnerAddVehicle from "./pages/Owner/OwnerAddVehicle";
 import AdminAddVehicle from "./pages/Admin/AdminAddVehicle";
 import AdminHome from "./pages/Admin/AdminHome";
 import OwnerHome from "./pages/Owner/OwnerHome";
+import OwnerProfile from "./pages/Owner/OwnerProfile";
+import AdminProfile from "./pages/Admin/AdminProfile";
 
 function App() {
   const dispatch = useDispatch();
@@ -111,7 +110,8 @@ function App() {
         <Route path="/home/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminHome /></PrivateRoute>} />
         <Route path="/home/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerHome /></PrivateRoute>} />
         <Route path="/home/user" element={<PrivateRoute allowedRoles={['user']}><Home /></PrivateRoute>} />
-
+         
+        <Route path="/dashboard/admin/profile" element={<PrivateRoute allowedRoles={['admin']}><AdminProfile /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/all" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
@@ -129,9 +129,10 @@ function App() {
         <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
-
+ 
+        <Route path="/dashboard/owner/profile" element={<PrivateRoute allowedRoles={['owner']}><OwnerProfile /></PrivateRoute>} /> 
         <Route path="/dashboard/owner/users/user" element={<PrivateRoute allowedRoles={['owner']}><UsersList /></PrivateRoute>} />
-
+        
         <Route path="/dashboard/owner/bookings/all" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/owner/bookings/new-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/owner/bookings/approve" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />

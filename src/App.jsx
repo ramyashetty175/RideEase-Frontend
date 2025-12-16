@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     if(localStorage.getItem('token') && user?.role === 'admin') {
-       dispatch(fetchOwner());
+      dispatch(fetchOwner());
     }
     if(localStorage.getItem('token')) {
       dispatch(fetchBooking());

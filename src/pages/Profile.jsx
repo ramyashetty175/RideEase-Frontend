@@ -27,38 +27,48 @@ import axios from "@/config/axios";
 export default function Profile() {
     const { user } = useContext(UserContext);
     const [form, setForm] = useState({
-        avatar: '',
+        avatar: null,
         username: '',
         email: '',
         bio: '',
-        insuranceDoc: '',
-        licenceDoc: ''
+        insuranceDoc: null,
+        licenceDoc: null
     }) 
     
     useEffect(() => {
         if(user) {
-            setForm({
-              ...form,
-              avatar: user.avatar,
-              username: user.username,
-              email: user.email,
-              bio: user.bio,
-              insuranceDoc: user.insuranceDoc,
-              licenceDoc: user.licenceDoc
-            })
+          setForm({
+            avatar: null,
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            licenceDoc: null,
+            insuranceDoc: null,
+           })
         }
     }, [user])
-    
+
+    if(!user) {
+        return <p>Loading profile...</p>
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form); 
+        const formData = {
+            avatar,
+            username,
+            email,
+            bio,
+            insuranceDoc,
+            licenceDoc
+        }
+        console.log(formData);
         try {
-            const response = await axios.put(`/users/profile/${id}`, form, { headers: localStorage.getItem('token')});
-            console.log(response);
-            setForm([]);
-        } catch(err) {
-            console.log(err);
-            alert('update failed');
+           await axios.put("/users/profile", formData, { headers: { Authorization: localStorage.getItem("token") }});
+           alert("Profile updated successfully")
+        } catch (err) {
+           console.log(err)
+           alert("Profile update failed")
         }
     }
     
@@ -179,7 +189,7 @@ export default function Profile() {
                     <Input id="insuranceDoc" type="file" />
                 </div>
                 <div className="text-left">
-                    <Button>Submit</Button>
+                    <Button>Save Profile</Button>
                 </div>
                </form>
            </main>

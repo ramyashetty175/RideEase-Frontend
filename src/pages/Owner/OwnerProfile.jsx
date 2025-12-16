@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useContext, useEffect } from "react";
+import UserContext from "@/context/UserContext";
+// import { useDispatch, useSelector } from "react-redux";
 import { InfoIcon } from "lucide-react"
 import {
   InputGroup,
@@ -24,16 +25,31 @@ import { SidebarProvider } from "../../components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
 
 export default function AdminProfile() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     // const {} = useSelector(() => {
 
     // })
+    const { user } = useContext(UserContext);
     const [form, setForm] = useState({
         avatar: '',
         username: '',
         email: '',
         bio: '',
     }) 
+
+    useEffect(() => {
+        if(user) {
+            setForm({
+                ...form,
+                avatar: user.avatar,
+                username: user.username,
+                email: user.email,
+                bio: user.bio,
+                insuranceDoc: user.insuranceDoc,
+                licenceDoc: user.licenceDoc
+            })
+        }
+    }, [user])
 
     const handleSubmit = (e) => {
         e.preventDefault();

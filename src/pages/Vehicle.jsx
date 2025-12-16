@@ -9,7 +9,7 @@ const vehicles = [
   { name: "Suzuki Swift", type: "Hatchback", status: "Maintenance" },
 ];
 
-export default function VehiclesSection() {
+export default function Vehicle() {
   return (
     <div className="w-full flex flex-col items-center mt-10 space-y-6">
       <h1 className="text-3xl font-bold text-gray-900 w-full max-w-5xl">All Vehicles</h1>

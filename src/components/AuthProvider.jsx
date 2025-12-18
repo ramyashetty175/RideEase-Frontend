@@ -11,6 +11,9 @@ const userReducer = (state, action) => {
         case "LOGOUT": {
             return { ...state, isLoggedIn: false, user: null }
         }
+        case "SET_USER": {       
+            return { ...state, user: action.payload }
+        }
         case "SET_SERVER_ERROR": {
             return { ...state, serverErrorMsg: action.payload }
         }
@@ -32,10 +35,13 @@ export default function AuthProvider(props) {
         if(localStorage.getItem('token')) {
             const fetchUser = async () => {
                 try {
-                    const response = await axios.get('/users/account', { headers: { Authorization: localStorage.getItem('token') }});
+                    const response = await axios.get('/users/profile', { headers: { Authorization: localStorage.getItem('token') }});
                     dispatch({ type: "LOGIN", payload: response.data });
                 } catch(err) {
                     console.log(err);
+                    localStorage.removeItem("token");
+                    dispatch({ type: "LOGOUT" });
+                    navigate("/login");
                 }
             }
             fetchUser()
@@ -61,7 +67,7 @@ export default function AuthProvider(props) {
             const response = await axios.post('/users/login', formData)
             console.log(response.data);
             localStorage.setItem('token', response.data.token);
-            const userResponse = await axios.get('/users/account', { headers: { Authorization: localStorage.getItem('token') }})
+            const userResponse = await axios.get('/users/profile', { headers: { Authorization: localStorage.getItem('token') }})
             resetForm();
             alert('logged in successfully');
             dispatch({ type: "LOGIN", payload: userResponse.data });

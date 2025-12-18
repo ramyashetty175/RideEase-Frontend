@@ -59,24 +59,24 @@ export const columns = [
 ]
 
 export default function Users() {
-    const { user } = useContext(UserContext);
-    const [users, setUsers] = useState([]);
+  const { user } = useContext(UserContext);
+  const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        const fetchUsersList = async () => {
-            try {
-                const response = await axios.get('/users', { headers: { Authorization: localStorage.getItem('token') } })
-                setUsers(response.data);
-            } catch(err) {
-                console.log(err);
-            }
+  useEffect(() => {
+    const fetchUsersList = async () => {
+      try {
+        const response = await axios.get('/users', { headers: { Authorization: localStorage.getItem('token') } })
+          setUsers(response.data);
+        } catch(err) {
+          console.log(err);
         }
-        fetchUsersList();
-    }, [])
+      }
+      fetchUsersList();
+  }, [])
 
-    if(!user) {
-        return <p>loading...</p>
-    }
+  if(!user) {
+    return <p>loading...</p>
+  }
     
         const handleRemove = async (id, email) => {
             const userConfirm = window.confirm("Are you sure?");

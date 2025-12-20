@@ -85,7 +85,7 @@ export default function AuthProvider(props) {
     }
 
     return(
-        <UserContext.Provider value={{ ...state, handleRegister, handleLogin, handleLogout }}>
+        <UserContext.Provider value={{ ...state, dispatch, handleRegister, handleLogin, handleLogout }}>
             {props.children}
         </UserContext.Provider>
     )

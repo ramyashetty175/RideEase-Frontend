@@ -25,89 +25,115 @@ import { Button } from "@/components/ui/button";
 import axios from "@/config/axios";
 
 export default function Profile() {
-  const { user, dispatch } = useContext(UserContext);
-  const [form, setForm] = useState({
+    const { user, dispatch } = useContext(UserContext);
+
+    const [form, setForm] = useState({
+      username: "",
+      email: "",
+      bio: "",
+    });
+
+    const [files, setFiles] = useState({
       avatar: null,
-      username: '',
-      email: '',
-      bio: '',
+      licenceDoc: null,
       insuranceDoc: null,
-      licenceDoc: null
-  }) 
+    });
 
-  const [previewAvatar, setPreviewAvatar] = useState(null);
+    const [previewAvatar, setPreviewAvatar] = useState(null);
 
-  useEffect(() => {
-      if(user) {
+    useEffect(() => {
+      if (user) {
         setForm({
-            ...form,
-            username: user.username,
-            email: user.email
-        })
+          username: user.username || "",
+          email: user.email || "",
+          bio: user.bio || "",
+        });
+        setPreviewAvatar(user.avatar || null);
+        setFiles({
+          avatar: null, 
+          licenceDoc: user.licenceDoc || null,
+          insuranceDoc: user.insuranceDoc || null,
+        });
       }
-  }, [user])
+    }, [user]);
 
-  if(!user) {
-    return <p>Loading profile...</p>
-  }
-
-  const uploadFile = async (file, type) => {
-      const data = new FormData();
-      data.append(type, file);
-      const response = await axios.post(`/api/upload/${type}`, data, { headers: { Authorization: localStorage.getItem("token") }});
-      return response.data[type];
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-        try {
-          let avatarUrl = null;
-          let licenceUrl = null;
-          let insuranceUrl = null;
-        if(form.avatar) {
-          avatarUrl = await uploadFile(form.avatar, "avatar");
-        }
-        if(form.licenceDoc) {
-          licenceUrl = await uploadFile(form.licenceDoc, "licenceDoc");
-        }
-        if (form.insuranceDoc) {
-          insuranceUrl = await uploadFile(form.insuranceDoc, "insuranceDoc");
-        }
-        const payload = {
-          username: form.username,
-          email: form.email,
-          bio: form.bio
-        };
-        if(avatarUrl) {
-          payload.avatar = avatarUrl;
-        }
-        if (licenceUrl) {
-          payload.licenceDoc = licenceUrl;
-        }
-        if (insuranceUrl) {
-          payload.insuranceDoc = insuranceUrl;
-        }
-        const response = await axios.put("/users/profile", payload, { headers: { Authorization: localStorage.getItem("token")}});
-          dispatch({ type: "SET_USER", payload: response.data });
-          alert("Profile updated successfully!");
-        } catch (err) {
-          console.log(err);
-          alert("Profile update failed!");
-        }
-  }
+    if (!user) {
+      return <p>Loading profile...</p>;
+    }
 
     const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      setForm({ ...form, [e.target.name]: file });
-      if(e.target.name === "avatar") {
+      const { name, files: selectedFiles } = e.target;
+      const file = selectedFiles[0];
+      setFiles((prev) => ({ ...prev, [name]: file }));
+      if (name === "avatar") {
         setPreviewAvatar(URL.createObjectURL(file));
       }
     };
 
     const handleChange = (e) => {
-      setForm({ ...form, [e.target.name] : e.target.value });
+      const { name, value } = e.target;
+      setForm((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const uploadAvatar = async (file) => {
+      if (!file) return null;
+      try {
+        const data = new FormData();
+        data.append("avatar", file);
+        const res = await axios.post("/api/upload/avatar", data, { headers: { Authorization: localStorage.getItem("token")}});
+        return res.data.avatarUrl;
+      } catch (err) {
+        console.log("Avatar upload failed:", err);
+      }
     }
-    
+
+    const uploadLicence = async (file) => {
+      if (!file) return null;
+      try {
+        const data = new FormData();
+        data.append("avatar", file);
+        const res = await axios.post("/api/upload/licence", data, { headers: { Authorization: localStorage.getItem("token")}});
+        return res.data.avatarUrl;
+      } catch (err) {
+        console.log("Avatar upload failed:", err);
+      }
+    }
+
+  const uploadInsurance = async (file) => {
+    if (!file) return null;
+      try {
+        const data = new FormData();
+        data.append("avatar", file);
+        const res = await axios.post("/api/upload/insurance", data, { headers: { Authorization: localStorage.getItem("token")}});
+        return res.data.avatarUrl;
+      } catch (err) {
+        console.log("Avatar upload failed:", err);
+      }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const [avatarUrl, licenceUrl, insuranceUrl] = await Promise.all([
+        uploadAvatar(files.avatar),
+        uploadLicence(files.licenceDoc),
+        uploadInsurance(files.insuranceDoc),
+      ])
+      const payload = {
+        bio: form.bio,
+      }
+      if (avatarUrl) payload.avatar = avatarUrl;
+      if (licenceUrl) payload.licenceDoc = licenceUrl;
+      if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
+      const res = await axios.put("/users/profile", payload, { headers: { Authorization: localStorage.getItem("token")}});
+        dispatch({ type: "SET_USER", payload: res.data });
+        alert("Profile updated successfully");
+      } catch (err) {
+        console.error("Profile update error:", err);
+        alert(err.message || "Profile update failed");
+      }
+  }
+
     return(
         <div>
         <SidebarProvider>

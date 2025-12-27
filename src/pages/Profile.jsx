@@ -28,15 +28,15 @@ export default function Profile() {
     const { user, dispatch } = useContext(UserContext);
 
     const [form, setForm] = useState({
-      username: "",
-      email: "",
-      bio: "",
+        username: "",
+        email: "",
+        bio: "",
     });
 
     const [files, setFiles] = useState({
-      avatar: null,
-      licenceDoc: null,
-      insuranceDoc: null,
+        avatar: null,
+        licenceDoc: null,
+        insuranceDoc: null,
     });
 
     const [previewAvatar, setPreviewAvatar] = useState(null);
@@ -70,17 +70,24 @@ export default function Profile() {
       }
     };
 
+    // const handleChange = (e) => {
+    //   const { name, value } = e.target;
+    //   setForm((prev) => ({ ...prev, [name]: value }));
+    // };
+
     const handleChange = (e) => {
-      const { name, value } = e.target;
-      setForm((prev) => ({ ...prev, [name]: value }));
-    };
+      setForm({ ...form, [e.target.name] : e.target.value });
+    }
 
     const uploadAvatar = async (file) => {
-      if (!file) return null;
+      if (!file) {
+        alert("Profile image is not uploaded");
+        return null;
+      }
       try {
         const data = new FormData();
         data.append("avatar", file);
-        const res = await axios.post("/api/upload/avatar", data, { headers: { Authorization: localStorage.getItem("token")}});
+        const res = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
         return res.data.avatarUrl;
       } catch (err) {
         console.log("Avatar upload failed:", err);
@@ -88,11 +95,14 @@ export default function Profile() {
     }
 
     const uploadLicence = async (file) => {
-      if (!file) return null;
+      if (!file) {
+        alert("licence is not uploaded");
+        return null;
+      }
       try {
         const data = new FormData();
-        data.append("avatar", file);
-        const res = await axios.post("/api/upload/licence", data, { headers: { Authorization: localStorage.getItem("token")}});
+        data.append("licence", file);
+        const res = await axios.post('/api/upload/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
         return res.data.avatarUrl;
       } catch (err) {
         console.log("Avatar upload failed:", err);
@@ -100,11 +110,14 @@ export default function Profile() {
     }
 
   const uploadInsurance = async (file) => {
-    if (!file) return null;
+    if (!file) {
+      alert("insurance is not uploaded");
+      return null;
+    }
       try {
         const data = new FormData();
-        data.append("avatar", file);
-        const res = await axios.post("/api/upload/insurance", data, { headers: { Authorization: localStorage.getItem("token")}});
+        data.append("insurance", file);
+        const res = await axios.post('/api/upload/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
         return res.data.avatarUrl;
       } catch (err) {
         console.log("Avatar upload failed:", err);
@@ -125,12 +138,12 @@ export default function Profile() {
       if (avatarUrl) payload.avatar = avatarUrl;
       if (licenceUrl) payload.licenceDoc = licenceUrl;
       if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
-      const res = await axios.put("/users/profile", payload, { headers: { Authorization: localStorage.getItem("token")}});
-        dispatch({ type: "SET_USER", payload: res.data });
+      const response = await axios.put("/users/profile", payload, { headers: { Authorization: localStorage.getItem("token")}});
+        dispatch({ type: "SET_USER", payload: response.data });
         alert("Profile updated successfully");
       } catch (err) {
-        console.error("Profile update error:", err);
-        alert(err.message || "Profile update failed");
+        console.log("Profile update error:", err);
+        alert("Profile update failed");
       }
   }
 

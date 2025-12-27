@@ -83,7 +83,7 @@ export function NavUser({ user }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               {/* <DropdownMenuItem> */}
-              <DropdownMenuItem onClick={() => navigate(user.role === "admin" ? "/dashboard/admin/profile" : "/dashboard/owner/profile")}>
+              <DropdownMenuItem onClick={() => navigate(user.role === "admin" ? "/dashboard/owner/profile" : "/dashboard/admin/profile")}>
                   <BadgeCheck />
                 Account
               </DropdownMenuItem>

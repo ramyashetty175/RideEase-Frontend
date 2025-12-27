@@ -25,127 +25,122 @@ import { Button } from "@/components/ui/button";
 import axios from "@/config/axios";
 
 export default function Profile() {
-    const { user, dispatch } = useContext(UserContext);
+      const { user, dispatch } = useContext(UserContext);
 
-    const [form, setForm] = useState({
-        username: "",
-        email: "",
-        bio: "",
-    });
+      const [form, setForm] = useState({
+          username: "",
+          email: "",
+          bio: "",
+      });
 
-    const [files, setFiles] = useState({
-        avatar: null,
-        licenceDoc: null,
-        insuranceDoc: null,
-    });
+      const [files, setFiles] = useState({
+          avatar: null,
+          licenceDoc: null,
+          insuranceDoc: null,
+      });
 
-    const [previewAvatar, setPreviewAvatar] = useState(null);
+      const [previewAvatar, setPreviewAvatar] = useState(null);
 
-    useEffect(() => {
-      if (user) {
-        setForm({
-          username: user.username || "",
-          email: user.email || "",
-          bio: user.bio || "",
-        });
-        setPreviewAvatar(user.avatar || null);
-        setFiles({
-          avatar: null, 
-          licenceDoc: user.licenceDoc || null,
-          insuranceDoc: user.insuranceDoc || null,
-        });
+      useEffect(() => {
+          if (user) {
+            setForm({ 
+              username: user.username, 
+              email: user.email, 
+              bio: user.bio });
+            setPreviewAvatar(user.avatar);
+            setFiles({ 
+              avatar: null, 
+              licenceDoc: null, 
+              insuranceDoc: null });
+          }
+      }, [user]);
+
+      if (!user) {
+          return <p>Loading profile...</p>;
       }
-    }, [user]);
 
-    if (!user) {
-      return <p>Loading profile...</p>;
-    }
+      const handleFileChange = (e) => {
+          const { name, files: selectedFiles } = e.target;
+          const file = selectedFiles[0];
+          setFiles((prev) => ({ ...prev, [name]: file }));
+          if (name === "avatar") {
+              setPreviewAvatar(URL.createObjectURL(file));
+          }
+      };
 
-    const handleFileChange = (e) => {
-      const { name, files: selectedFiles } = e.target;
-      const file = selectedFiles[0];
-      setFiles((prev) => ({ ...prev, [name]: file }));
-      if (name === "avatar") {
-        setPreviewAvatar(URL.createObjectURL(file));
+      const handleChange = (e) => {
+          setForm({ ...form, [e.target.name] : e.target.value });
       }
-    };
 
-    // const handleChange = (e) => {
-    //   const { name, value } = e.target;
-    //   setForm((prev) => ({ ...prev, [name]: value }));
-    // };
+      const uploadAvatar = async (file) => {
+          if (!file) {
+              alert("Profile image is not uploaded");
+              return null;
+          }
+          try {
+              const data = new FormData();
+              data.append("avatar", file);
+              const response = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+              return response.data.avatarUrl;
+          } catch (err) {
+              console.log("Avatar upload failed:", err);
+          }
+      }
 
-    const handleChange = (e) => {
-      setForm({ ...form, [e.target.name] : e.target.value });
-    }
+      const uploadLicence = async (file) => {
+          if (!file) {
+              alert("Licence is not uploaded");
+              return null;
+          }
+          try {
+              const data = new FormData();
+              data.append("licenceDoc", file);
+              const response = await axios.post('/api/upload/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
+              return response.data.licenceDoc;
+          } catch (err) {
+              console.log("Licence upload failed:", err);
+          }
+      }
 
-    const uploadAvatar = async (file) => {
-      if (!file) {
-        alert("Profile image is not uploaded");
-        return null;
-      }
-      try {
-        const data = new FormData();
-        data.append("avatar", file);
-        const res = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
-        return res.data.avatarUrl;
-      } catch (err) {
-        console.log("Avatar upload failed:", err);
-      }
-    }
+      const uploadInsurance = async (file) => {
+          if (!file) {
+              alert("Insurance is not uploaded");
+              return null;
+          }
+          try {
+              const data = new FormData();
+              data.append("insuranceDoc", file);
+              const res = await axios.post('/api/upload/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
+              return res.data.insuranceDoc;
+          } catch (err) {
+              console.log("Insurance upload failed:", err);
+          }
+      };
 
-    const uploadLicence = async (file) => {
-      if (!file) {
-        alert("licence is not uploaded");
-        return null;
+      const handleSubmit = async (e) => {
+          e.preventDefault();
+          try {
+              const uploads = await Promise.all([
+                  files.avatar ? uploadAvatar(files.avatar) : null,
+                  files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
+                  files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
+              ]);
+              const [avatarUrl, licenceUrl, insuranceUrl] = uploads;
+              const payload = {
+                  username: form.username,
+                  bio: form.bio
+              }
+              if (avatarUrl) payload.avatar = avatarUrl;
+              if (licenceUrl) payload.licenceDoc = licenceUrl;
+              if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
+              const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
+              dispatch({ type: "SET_USER", payload: response.data });
+              alert("Profile updated successfully");
+          } catch (err) {
+              console.log(err);
+              alert("Profile update failed");
+          }
       }
-      try {
-        const data = new FormData();
-        data.append("licence", file);
-        const res = await axios.post('/api/upload/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
-        return res.data.avatarUrl;
-      } catch (err) {
-        console.log("Avatar upload failed:", err);
-      }
-    }
-
-  const uploadInsurance = async (file) => {
-    if (!file) {
-      alert("insurance is not uploaded");
-      return null;
-    }
-      try {
-        const data = new FormData();
-        data.append("insurance", file);
-        const res = await axios.post('/api/upload/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
-        return res.data.avatarUrl;
-      } catch (err) {
-        console.log("Avatar upload failed:", err);
-      }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const [avatarUrl, licenceUrl, insuranceUrl] = await Promise.all([
-        uploadAvatar(files.avatar),
-        uploadLicence(files.licenceDoc),
-        uploadInsurance(files.insuranceDoc),
-      ])
-      const payload = {
-        bio: form.bio,
-      }
-      if (avatarUrl) payload.avatar = avatarUrl;
-      if (licenceUrl) payload.licenceDoc = licenceUrl;
-      if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
-      const response = await axios.put("/users/profile", payload, { headers: { Authorization: localStorage.getItem("token")}});
-        dispatch({ type: "SET_USER", payload: response.data });
-        alert("Profile updated successfully");
-      } catch (err) {
-        console.log("Profile update error:", err);
-        alert("Profile update failed");
-      }
-  }
 
     return(
         <div>
@@ -262,11 +257,41 @@ export default function Profile() {
                 </InputGroup>
                 <div className="grid w-full max-w-sm items-center gap-3">
                     <Label htmlFor="licenceDoc">LicenceDoc</Label>
+                    <div className="flex items-center gap-3 w-full">
                     <Input id="licenceDoc" name="licenceDoc" type="file" onChange={handleFileChange}/>
+                        { files.licenceDoc ? (
+                        <span className="text-gray-500 truncate max-w-xs">{files.licenceDoc.name}</span>
+                        ) : user.licenceDoc ? (
+                        <a
+                          href={user.licenceDoc}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline truncate max-w-xs"
+                          title={user.licenceDoc.split("/").pop()}
+                        >
+                          {user.licenceDoc.split("/").pop()}
+                        </a>
+                        ) : null}
+                    </div>
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-3">
                     <Label htmlFor="insuranceDoc">InsuranceDoc</Label>
+                    <div className="flex items-center gap-3 w-full">
                     <Input id="insuranceDoc" name="insuranceDoc" type="file" onChange={handleFileChange}/>
+                        { files.insuranceDoc ? (
+                        <span className="text-gray-500 truncate max-w-xs">{files.insuranceDoc.name}</span>
+                        ) : user.insuranceDoc ? (
+                        <a
+                          href={user.insuranceDoc}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline truncate max-w-xs"
+                          title={user.insuranceDoc.split("/").pop()}
+                        >
+                          {user.insuranceDoc.split("/").pop()}
+                        </a>
+                        ) : null}
+                    </div>
                 </div>
                 <div className="text-left">
                     <Button>Save Profile</Button>

@@ -67,7 +67,7 @@ export default function AuthProvider(props) {
             const response = await axios.post('/users/login', formData)
             console.log(response.data);
             localStorage.setItem('token', response.data.token);
-            const userResponse = await axios.get('/users/profile', { headers: { Authorization: localStorage.getItem('token') }})
+            const userResponse = await axios.get('/users/profile', { headers: { Authorization: localStorage.getItem('token') }});
             resetForm();
             alert('logged in successfully');
             dispatch({ type: "LOGIN", payload: userResponse.data });

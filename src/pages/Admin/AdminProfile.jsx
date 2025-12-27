@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../../context/UserContext";
 import { InfoIcon } from "lucide-react"
 import {
   InputGroup,
@@ -22,26 +22,74 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "../../components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
+import axios from "@/config/axios";
 
 export default function AdminProfile() {
-    const dispatch = useDispatch();
-    // const {} = useSelector(() => {
-
-    // })
+    const { user, dispatch } = useContext(UserContext);
     const [form, setForm] = useState({
-        avatar: '',
         username: '',
         email: '',
         bio: '',
     }) 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
-    }
+    const [previewAvatar, setPreviewAvatar] = useState(null);
 
+    useEffect(() => {
+      if (user) {
+        setForm({
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+        });
+        setPreviewAvatar(user.avatar || null);
+      }
+    }, [user])
+
+    if (!user) {
+        return <p>Loading profile...</p>;
+    }
+    
+    const handleFileChange = (e) => {
+        const { name, files: selectedFiles } = e.target;
+        const file = selectedFiles[0];
+        setFiles((prev) => ({ ...prev, [name]: file }));
+        if (name === "avatar") {
+            setPreviewAvatar(URL.createObjectURL(file));
+        }
+    };
+    
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name] : e.target.value });
+    }
+    
+    const uploadAvatar = async (file) => {
+        if (!file) {
+            alert("Profile image is not uploaded");
+            return null;
+        }
+        try {
+            const data = new FormData();
+            data.append("avatar", file);
+            const res = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return res.data.avatarUrl;
+        } catch (err) {
+            console.log("Avatar upload failed:", err);
+        }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = {
+            username,
+            bio
+        }
+        console.log(formData);
+        try {
+            const response = await axios.put('/users/profile', formData, { headers: { Authorization: localStorage.getItem('token')}});
+            console.log(response.data);
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     return(
@@ -55,10 +103,23 @@ export default function AdminProfile() {
                 </div>
                <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="flex items-center gap-6 mb-6">
-                   <Avatar className="h-14 w-14">
-                       <AvatarImage src="https://github.com/shadcn.png" alt="avatar"/>
-                       <AvatarFallback>CN</AvatarFallback>
-                   </Avatar>
+                    <Avatar className="h-14 w-14">
+                    { previewAvatar ? (
+                      <AvatarImage src={previewAvatar} alt="avatar" />
+                    ) : (
+                      <AvatarFallback>CN</AvatarFallback>
+                    )}
+                  </Avatar>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="avatar">Avatar</Label>
+                    <Input
+                      id="avatar"
+                      name="avatar"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                   </div>
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="avatar">Avatar</Label>
                     <Input id="avatar" type="file" />

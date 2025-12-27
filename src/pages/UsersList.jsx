@@ -55,6 +55,7 @@ export const columns = [
   },
   { accessorKey: "role", header: "Role" },
   { accessorKey: "license", header: "License" },
+  { accessorKey: "insurance", header: "insurance" },
   { accessorKey: "action", header: "Action" }
 ]
 

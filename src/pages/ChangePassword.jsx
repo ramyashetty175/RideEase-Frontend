@@ -17,7 +17,6 @@ export default function ChangePassword() {
     useEffect(() => {
         if(user) {
             setForm({
-                ...form,
                 oldpassword: user.oldpassword,
                 newpassword: user.newpassword,
                 confirmnewpassword: user.confirmnewpassword

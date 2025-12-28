@@ -29,20 +29,23 @@ export default function AdminProfile() {
     const [form, setForm] = useState({
         username: '',
         email: '',
-        bio: '',
+        bio: ''
     }) 
+
+    const [avatarFile, setAvatarFile] = useState(null);
 
     const [previewAvatar, setPreviewAvatar] = useState(null);
 
     useEffect(() => {
-      if (user) {
-        setForm({
-            username: user.username,
-            email: user.email,
-            bio: user.bio,
-        });
-        setPreviewAvatar(user.avatar || null);
-      }
+        if (user) {
+            setForm({
+               username: user.username,
+               email: user.email,
+               bio: user.bio
+            })
+        setPreviewAvatar(user.avatar);
+        setAvatarFile(null);
+        }
     }, [user])
 
     if (!user) {
@@ -50,13 +53,13 @@ export default function AdminProfile() {
     }
     
     const handleFileChange = (e) => {
-        const { name, files: selectedFiles } = e.target;
-        const file = selectedFiles[0];
-        setFiles((prev) => ({ ...prev, [name]: file }));
+        const { name, files } = e.target;
+        const file = files[0];
         if (name === "avatar") {
+            setAvatarFile(file);
             setPreviewAvatar(URL.createObjectURL(file));
         }
-    };
+    }
     
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name] : e.target.value });
@@ -70,25 +73,29 @@ export default function AdminProfile() {
         try {
             const data = new FormData();
             data.append("avatar", file);
-            const res = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
-            return res.data.avatarUrl;
+            const response = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return response.data.avatarUrl;
         } catch (err) {
-            console.log("Avatar upload failed:", err);
+            console.log(err);
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = {
-            username,
-            bio
+        let avatarUrl = avatarFile ? await uploadAvatar(avatarFile) : null;
+        const payload = {
+            username: form.username,
+            bio: form.bio
         }
-        console.log(formData);
+        if (avatarUrl) payload.avatar = avatarUrl;
         try {
-            const response = await axios.put('/users/profile', formData, { headers: { Authorization: localStorage.getItem('token')}});
+            const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem('token')}});
             console.log(response.data);
+            dispatch({ type: "SET_USER", payload: response.data });
+            alert("Profile updated successfully");
         } catch(err) {
             console.log(err);
+            alert("Profile update failed");
         }
     }
 
@@ -103,8 +110,8 @@ export default function AdminProfile() {
                 </div>
                <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="flex items-center gap-6 mb-6">
-                    <Avatar className="h-14 w-14">
-                    { previewAvatar ? (
+                  <Avatar className="h-14 w-14">
+                    {previewAvatar ? (
                       <AvatarImage src={previewAvatar} alt="avatar" />
                     ) : (
                       <AvatarFallback>CN</AvatarFallback>
@@ -119,12 +126,8 @@ export default function AdminProfile() {
                       accept="image/*"
                       onChange={handleFileChange}
                     />
-                   </div>
-                <div className="flex flex-col gap-2">
-                    <Label htmlFor="avatar">Avatar</Label>
-                    <Input id="avatar" type="file" />
+                  </div>
                 </div>
-               </div>
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
@@ -210,7 +213,7 @@ export default function AdminProfile() {
                 />
                 </InputGroup>
                 <div className="text-left">
-                    <Button>Submit</Button>
+                    <Button>Save Profile</Button>
                 </div>
                </form>
            </main>

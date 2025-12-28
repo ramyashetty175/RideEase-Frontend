@@ -35,7 +35,7 @@ export default function OwnerProfile() {
         avatar: null,
         licenceDoc: null,
         insuranceDoc: null
-    });
+    })
 
     const [previewAvatar, setPreviewAvatar] = useState(null);
      
@@ -83,7 +83,7 @@ export default function OwnerProfile() {
             const res = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
             return res.data.avatarUrl;
         } catch (err) {
-            console.log("Avatar upload failed:", err);
+            console.log("Avatar upload failed", err);
         }
     }
     

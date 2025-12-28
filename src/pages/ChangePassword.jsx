@@ -1,10 +1,11 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from '@/components/ui/input';
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import UserContext from "../context/UserContext";
+import axios from "../config/axios";
 
 export default function ChangePassword() {
     const { user } = useContext(UserContext);
@@ -14,23 +15,19 @@ export default function ChangePassword() {
         confirmnewpassword: ''
     }); 
 
-    useEffect(() => {
-        if(user) {
-            setForm({
-                oldpassword: user.oldpassword,
-                newpassword: user.newpassword,
-                confirmnewpassword: user.confirmnewpassword
-            })
-        }
-    }, [user])
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(form);
+        const formData = {
+            oldpassword: form.oldpassword,
+            newpassword: form.newpassword,
+            confirmnewpassword: form.confirmnewpassword
+        }
+        console.log(formData);
         try {
-            const response = await axios.put(`/users/password/${id}`, form, { headers: localStorage.getItem('token')});
-            console.log(response);
-            setForm([]);
+            const response = await axios.put(`/users/password/${user._id}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+            console.log(response.data);
+            setForm({ oldpassword: '', newpassword: '', confirmnewpassword: '' });
+            alert('update updated');
         } catch(err) {
             console.log(err);
             alert('update failed');
@@ -50,7 +47,7 @@ export default function ChangePassword() {
                 <h1 className="text-black font-bold text-3xl">Change Your Password</h1>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid gap-2">
+                <div className="grid gap-5">
                    <Label htmlFor="oldpassword">Old Password</Label>
                         <Input type="password"
                           name="oldpassword"
@@ -59,7 +56,7 @@ export default function ChangePassword() {
                           onChange={handleChange}
                         />
                 </div>
-                <div className="grid gap-2">
+                <div className="grid gap-5">
                    <Label htmlFor="password">New Password</Label>
                         <Input type="password"
                           name="newpassword"
@@ -68,7 +65,7 @@ export default function ChangePassword() {
                           onChange={handleChange}
                         />
                 </div>
-                <div className="grid gap-2">
+                <div className="grid gap-5">
                    <Label htmlFor="password">Confirm New Password</Label>
                         <Input type="password"
                           name="confirmnewpassword"
@@ -78,7 +75,7 @@ export default function ChangePassword() {
                         />
                    </div>
                 <div className="text-left">
-                    <Button>Submit</Button>
+                    <Button>Save Password</Button>
                 </div>
             </form>
             </main>

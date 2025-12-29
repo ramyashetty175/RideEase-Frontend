@@ -39,8 +39,6 @@ export default function OwnerList({ type }) {
     },
     { accessorKey: "email", header: "Email" },
     { accessorKey: "role", header: "Role" },
-    
-
     {
   accessorKey: "licenceVerified",
   header: "License",
@@ -58,8 +56,7 @@ export default function OwnerList({ type }) {
     )
   },
 },
-
-   {
+{
   accessorKey: "insuranceVerified",
   header: "Insurance",
   cell: ({ row }) => {
@@ -76,8 +73,6 @@ export default function OwnerList({ type }) {
     )
   },
 },
-
-
   ]
 
   // Action column for new requests
@@ -89,8 +84,7 @@ export default function OwnerList({ type }) {
         const owner = row.original
 
         return (
-          
-              <NativeSelect
+        <NativeSelect
   value={actionValue[owner._id] || "pending"}
   onChange={(e) => {
     const value = e.target.value;
@@ -122,7 +116,6 @@ export default function OwnerList({ type }) {
     }
   }}
 >
-
             <NativeSelectOption value="pending">Pending</NativeSelectOption>
             <NativeSelectOption value="approve">Approve</NativeSelectOption>
             <NativeSelectOption value="reject">Reject</NativeSelectOption>

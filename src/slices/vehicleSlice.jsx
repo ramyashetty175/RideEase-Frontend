@@ -23,6 +23,17 @@ export const createVehicle = createAsyncThunk("vehicle/createVehicle", async({ f
     }
 })
 
+export const updateVehicle = createAsyncThunk("vehicle/updateVehicle", async ({ editId, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/api/vehicles/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
 export const removeVehicle = createAsyncThunk("vehicle/removeVehicle", async (id, { rejectWithValue }) => {
     try {
         const response = await axios.delete(`/api/vehicles/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
@@ -31,18 +42,6 @@ export const removeVehicle = createAsyncThunk("vehicle/removeVehicle", async (id
     } catch(err) {
         console.log(err);
         return err.message;
-    }
-})
-
-export const updateVehicle = createAsyncThunk("vehicle/updateVehicle", async ({ editId, formData }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/api/vehicles/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        handleReset();
-        return response.data;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
     }
 })
 
@@ -84,13 +83,23 @@ const vehicleSlice = createSlice({
                 state.errors = action.payload;
                 state.loading = false;
             })
-            
+            .addCase(createVehicle.pending, (state) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
+            })
             .addCase(createVehicle.fulfilled, (state, action) => {
-                state.data.push(action.payload);
+                // state.data.push(action.payload);
+                state.data.push(action.payload.vehicle);
                 state.errors = null;
             })
             .addCase(createVehicle.rejected, (state, action) => {
                 state.errors = action.payload;
+            })
+            .addCase(removeVehicle.pending, (state) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
             })
             .addCase(removeVehicle.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);
@@ -98,6 +107,11 @@ const vehicleSlice = createSlice({
             })
             .addCase(removeVehicle.rejected, (state, action) => {
                 state.errors = action.payload;
+            })
+            .addCase(updateVehicle.pending, (state) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
             })
             .addCase(updateVehicle.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);

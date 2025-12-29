@@ -7,6 +7,7 @@ export const fetchVehicles = createAsyncThunk("vehicle/fetchVehicles", async(und
         return response.data;
     } catch(err) {
         console.log(err);
+        return rejectWithValue(err.message);
     }
 })
 
@@ -68,9 +69,22 @@ const vehicleSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchVehicles.pending,(state)=> {
+                state.loading = true;
+                state.data = [];
+                state.errors = null;
+            })
             .addCase(fetchVehicles.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.loading = false;
+                state.errors = null;
             })
+            .addCase(fetchVehicles.rejected,(state,action)=> {
+                state.data = [];
+                state.errors = action.payload;
+                state.loading = false;
+            })
+            
             .addCase(createVehicle.fulfilled, (state, action) => {
                 state.data.push(action.payload);
                 state.errors = null;

@@ -37,13 +37,12 @@ export const OwnerReject = createAsyncThunk("owner/OwnerReject", async({ editId,
 
 export const removeOwner = createAsyncThunk("category/removeOwner", async(id, { rejectWithValue }) => {
     try {
-        const response = await axios.delete(`/api/categories/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.delete(`/users/profile/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         return response.data;
     } catch(err) {
         console.log(err);
         return err.message;
-
     }
 })
 
@@ -85,7 +84,7 @@ const ownerSlice = createSlice({
                 state.errors = action.payload;
                 state.loading = false;
             })
-            .addCase(OwnerApprove.pending, (state, action) => {
+            .addCase(OwnerApprove.pending, (state) => {
                 state.loading = true;
                 // state.data = [];
                 state.errors = null;
@@ -98,7 +97,7 @@ const ownerSlice = createSlice({
             .addCase(OwnerApprove.rejected, (state, action) => {
                 state.errors = action.payload;
             })
-            .addCase(OwnerReject.pending, (state, action) => {
+            .addCase(OwnerReject.pending, (state) => {
                 state.loading = true;
                 // state.data = [];
                 state.errors = null;

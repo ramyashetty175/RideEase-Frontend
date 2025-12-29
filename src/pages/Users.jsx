@@ -138,7 +138,7 @@ export default function Users() {
                 const userEmail = window.prompt("Enter email of your user");
                 if(userEmail == email) {
                    try {
-                    const response = await axios.delete(`/users/${id}`, { headers: { Authorization: localStorage.getItem('token')}})
+                    const response = await axios.delete(`/users/profile/${id}`, { headers: { Authorization: localStorage.getItem('token')}})
                     const newArr = users.filter(ele => ele._id != response.data._id);
                     setUsers(newArr);
                 } catch(err) {

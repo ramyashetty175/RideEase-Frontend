@@ -20,41 +20,77 @@ import { AppSidebar } from "../components/app-sidebar";
 export const columns = [
   { accessorKey: "_id", header: "ID" },
   {
-    accessorKey: "username",
-    header: ({ column }) => {
-      <DataTableColumnHeader column={column} title="Name" />
+    accessorKey: "images",
+    header: "Images",
+    cell: ({ row }) => {
+      const vehicle = row.original;
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
+        <div className="flex gap-2">
+          {vehicle.images?.map((img, idx) => (
+            <img
+              key={idx}
+              src={img}
+              alt={`Vehicle ${idx}`}
+              className="w-24 h-16 object-cover border rounded"
+            />
+          ))}
+        </div>
+      );
     },
   },
+  { accessorKey: "vehicleName", header: "Vehicle Name" },
+  { accessorKey: "type", header: "Type" },
+  { accessorKey: "brand", header: "Brand" },
+  { accessorKey: "registrationNumber", header: "Registration Number" },
+  { accessorKey: "owner", header: "Owner" },
+  
+   {
+  accessorKey: "insuranceVerified",
+  header: "Insurance",
+  cell: ({ row }) => {
+    const owner = row.original
+
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => window.open(owner.insuranceDoc, "_blank")}
+      >
+        View
+      </Button>
+    )
+  },
+},
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      <DataTableColumnHeader column={column} title="Email" />
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+  accessorKey: "insuranceVerified",
+  header: "Insurance",
+  cell: ({ row }) => {
+    const owner = row.original
+
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => window.open(owner.insuranceDoc, "_blank")}
+      >
+        View
+      </Button>
+    )
   },
-  { accessorKey: "vehicles", header: "No of Vehicles" }
+},
+  { accessorKey: "fuelType", header: "Fuel Type" },
+  { accessorKey: "transmission", header: "Transmission" },
+  { accessorKey: "seats", header: "Seats" },
+  { accessorKey: "pricePerDay", header: "Price Per Day" },
+  { accessorKey: "location", header: "Location" },
+  { accessorKey: "availabilityStatus", header: "Availability Status" },
+  { accessorKey: "isApproved", header: "Approved" },
+  { accessorKey: "averageRating", header: "Average Rating" },
 ]
 
 export default function VehicleList() {
     const { data } = useSelector((state) => {
-      return state.booking;
+      return state.vehicle;
     })
     return(
         <SidebarProvider>

@@ -35,16 +35,15 @@ import AdminHome from "./pages/Admin/AdminHome";
 import OwnerHome from "./pages/Owner/OwnerHome";
 import OwnerProfile from "./pages/Owner/OwnerProfile";
 import AdminProfile from "./pages/Admin/AdminProfile";
+import Users from "./pages/Users";
 
 function App() {
   const dispatch = useDispatch();
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
 
   useEffect(() => {
-    if(localStorage.getItem('token') && user?.role === 'admin') {
-      dispatch(fetchOwner());
-    }
     if(localStorage.getItem('token')) {
+      dispatch(fetchOwner());
       dispatch(fetchBooking());
       dispatch(fetchVehicles());
     }
@@ -113,9 +112,9 @@ function App() {
          
         <Route path="/dashboard/admin/profile" element={<PrivateRoute allowedRoles={['admin']}><AdminProfile /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/all" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="owners" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><Users /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="newRequest" /></PrivateRoute>} />
         
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Pending" /></PrivateRoute>} />

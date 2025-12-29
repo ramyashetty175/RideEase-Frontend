@@ -29,10 +29,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import UserContext from "@/context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 
-export function NavUser({ user }) {
-  const { isMobile } = useSidebar()
+export function NavUser() {
+  const { user } = useContext(UserContext);
+  const { isMobile } = useSidebar();
   const navigate = useNavigate();
 
   return (
@@ -83,7 +86,7 @@ export function NavUser({ user }) {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               {/* <DropdownMenuItem> */}
-              <DropdownMenuItem onClick={() => navigate(user.role === "admin" ? "/dashboard/owner/profile" : "/dashboard/admin/profile")}>
+              <DropdownMenuItem onClick={() => navigate(user.role === "admin" ? "/dashboard/admin/profile" : "/dashboard/owner/profile")}>
                   <BadgeCheck />
                 Account
               </DropdownMenuItem>

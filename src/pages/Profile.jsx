@@ -25,23 +25,23 @@ import { Button } from "@/components/ui/button";
 import axios from "@/config/axios";
 
 export default function Profile() {
-      const { user, dispatch } = useContext(UserContext);
+        const { user, dispatch } = useContext(UserContext);
 
-      const [form, setForm] = useState({
-          username: "",
-          email: "",
-          bio: "",
-      });
+        const [form, setForm] = useState({
+            username: "",
+            email: "",
+            bio: "",
+        });
 
-      const [files, setFiles] = useState({
-          avatar: null,
-          licenceDoc: null,
-          insuranceDoc: null,
-      });
+        const [files, setFiles] = useState({
+            avatar: null,
+            licenceDoc: null,
+            insuranceDoc: null,
+        });
 
-      const [previewAvatar, setPreviewAvatar] = useState(null);
+        const [previewAvatar, setPreviewAvatar] = useState(null);
 
-      useEffect(() => {
+        useEffect(() => {
           if (user) {
             setForm({ 
               username: user.username, 
@@ -52,27 +52,27 @@ export default function Profile() {
               avatar: null, 
               licenceDoc: null, 
               insuranceDoc: null });
-          }
-      }, [user]);
+            }
+        }, [user]);
 
-      if (!user) {
+        if (!user) {
           return <p>Loading profile...</p>;
-      }
+        }
 
-      const handleFileChange = (e) => {
+        const handleFileChange = (e) => {
           const { name, files: selectedFiles } = e.target;
           const file = selectedFiles[0];
           setFiles((prev) => ({ ...prev, [name]: file }));
           if (name === "avatar") {
               setPreviewAvatar(URL.createObjectURL(file));
           }
-      };
+        };
 
-      const handleChange = (e) => {
+        const handleChange = (e) => {
           setForm({ ...form, [e.target.name] : e.target.value });
-      }
+        }
 
-      const uploadAvatar = async (file) => {
+        const uploadAvatar = async (file) => {
           if (!file) {
               alert("Profile image is not uploaded");
               return null;
@@ -85,9 +85,9 @@ export default function Profile() {
           } catch (err) {
               console.log("Avatar upload failed:", err);
           }
-      }
+        }
 
-      const uploadLicence = async (file) => {
+        const uploadLicence = async (file) => {
           if (!file) {
               alert("Licence is not uploaded");
               return null;
@@ -100,9 +100,9 @@ export default function Profile() {
           } catch (err) {
               console.log("Licence upload failed:", err);
           }
-      }
+        }
 
-      const uploadInsurance = async (file) => {
+        const uploadInsurance = async (file) => {
           if (!file) {
               alert("Insurance is not uploaded");
               return null;
@@ -115,9 +115,9 @@ export default function Profile() {
           } catch (err) {
               console.log("Insurance upload failed:", err);
           }
-      };
+        };
 
-      const handleSubmit = async (e) => {
+        const handleSubmit = async (e) => {
           e.preventDefault();
           try {
               const uploads = await Promise.all([
@@ -140,7 +140,7 @@ export default function Profile() {
               console.log(err);
               alert("Profile update failed");
           }
-      }
+        }
 
     return(
         <div>

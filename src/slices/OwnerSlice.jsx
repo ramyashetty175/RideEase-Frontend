@@ -1,24 +1,49 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "../config/axios";
 
-export const fetchOwner = createAsyncThunk("owner/fetchOwner", async(undefined, { rejectWithValue }) => {
+export const fetchOwner = createAsyncThunk("owner/fetchOwner", async (undefined, { rejectWithValue }) => {
     try {
-        const response = await axios.get('/users/listOwners', { headers: { Authorization: localStorage.getItem('token')}});
-        return response.data;
-    } catch(err) {
-        console.log(err);
-    }
-})
-
-export const OwnerApprove = createAsyncThunk("owner/ownerApprove", async({ editId, formData }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/users/approveOwner/${editId}`, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        handleReset();
+        const response = await axios.get('/users/owners', { headers: { Authorization: localStorage.getItem('token')}});
         return response.data;
     } catch(err) {
         console.log(err);
         return rejectWithValue(err.message);
+    }
+})
+
+export const OwnerApprove = createAsyncThunk("owner/OwnerApprove", async({ editId, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/users/owner/approve/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        // handleReset();
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
+export const OwnerReject = createAsyncThunk("owner/OwnerReject", async({ editId, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/users/owner/reject/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        // handleReset();
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
+export const removeOwner = createAsyncThunk("category/removeOwner", async(id, { rejectWithValue }) => {
+    try {
+        const response = await axios.delete(`/api/categories/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return err.message;
+
     }
 })
 
@@ -45,8 +70,25 @@ const ownerSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchOwner.pending,(state)=> {
+                state.loading = true;
+                state.data = [];
+                state.errors = null;
+            })
             .addCase(fetchOwner.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.loading = false;
+                state.errors = null;
+            })
+            .addCase(fetchOwner.rejected,(state,action)=> {
+                state.data = [];
+                state.errors = action.payload;
+                state.loading = false;
+            })
+            .addCase(OwnerApprove.pending, (state, action) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
             })
             .addCase(OwnerApprove.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);
@@ -56,9 +98,39 @@ const ownerSlice = createSlice({
             .addCase(OwnerApprove.rejected, (state, action) => {
                 state.errors = action.payload;
             })
+            .addCase(OwnerReject.pending, (state, action) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
+            })
+            .addCase(OwnerReject.fulfilled, (state, action) => {
+                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
+                state.data[idx] = action.payload; 
+                state.editId = null;
+            })
+            .addCase(OwnerReject.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+            .addCase(removeOwner.pending, (state) => {
+                state.loading = true;
+                state.data = [];
+                state.errors = null;
+            })
+            .addCase(removeOwner.fulfilled, (state, action) => {
+                /*
+                    return { ...state, data: state.data.filter(ele => ele._id != action.payload._id )}
+                */
+                // state.data = state.data.filter(ele => ele._id !== action.payload._id)
+                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
+                state.data.splice(idx, 1);
+            })
+            .addCase(removeOwner.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+
     }
 })
 
-export const { resetOwner, assignEditId, resetEditId} = ownerSlice.actions;
+export const { resetOwner, assignEditId, resetEditId } = ownerSlice.actions;
 
 export default ownerSlice.reducer;

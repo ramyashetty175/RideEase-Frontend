@@ -7,6 +7,7 @@ export const fetchBooking = createAsyncThunk("booking/fetchBooking", async (unde
         return response.data;
     } catch(err) {
         console.log(err);
+        return rejectWithValue(err.message);
     }
 })
 
@@ -68,9 +69,22 @@ const bookingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchBooking.pending,(state)=> {
+                state.loading = true;
+                state.data = [];
+                state.errors = null;
+            })
             .addCase(fetchBooking.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.loading = false;
+                state.errors = null;
             })
+            .addCase(fetchBooking.rejected,(state,action)=> {
+                state.data = [];
+                state.errors = action.payload;
+                state.loading = false;
+            })
+
             .addCase(createBooking.fulfilled, (state, action) => {
                 state.data.push(action.payload);
                 state.errors = null;

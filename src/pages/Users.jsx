@@ -52,17 +52,74 @@ export const columns = [
       )
     },
   },
-  { accessorKey: "role", header: "Role" }
+  { accessorKey: "role", header: "Role" },
+  {
+  accessorKey: "licenceVerified",
+  header: "License",
+  cell: ({ row }) => {
+    const owner = row.original
+
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => window.open(owner.licenceDoc, "_blank")}
+      >
+        View
+      </Button>
+    )
+  },
+},
+
+   {
+  accessorKey: "insuranceVerified",
+  header: "Insurance",
+  cell: ({ row }) => {
+    const owner = row.original
+
+    return (
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => window.open(owner.insuranceDoc, "_blank")}
+      >
+        View
+      </Button>
+    )
+  },
+},
+
+{
+  id: "action",
+  header: "Action",
+  cell: ({ row }) => {
+    const user = row.original
+    return (
+      <Button
+        variant="destructive"
+        size="sm"
+        onClick={() => {
+          if (confirm("Remove this user?")) {
+            dispatch(removeUser(user._id))
+          }
+        }}
+      >
+        Remove
+      </Button>
+    )
+  },
+}
+
 ]
 
-export default function UsersList() {
+export default function Users() {
       const { user } = useContext(UserContext);
       const [users, setUsers] = useState([]);
 
       useEffect(() => {
           const fetchUsersList = async () => {
                 try {
-                    const response = await axios.get('/users', { headers: { Authorization: localStorage.getItem('token')}});
+                    const response = await axios.get('/users/listUsers', { headers: { Authorization: localStorage.getItem('token')}});
                     setUsers(response.data);
                 } catch(err) {
                     console.log(err);
@@ -75,24 +132,24 @@ export default function UsersList() {
           return <p>loading...</p>
       }
     
-        // const handleRemove = async (id, email) => {
-        //     const userConfirm = window.confirm("Are you sure?");
-        //     if(userConfirm) {
-        //         const userEmail = window.prompt("Enter email of your user");
-        //         if(userEmail == email) {
-        //            try {
-        //             const response = await axios.delete(`/users/${id}`, { headers: { Authorization: localStorage.getItem('token')}})
-        //             const newArr = users.filter(ele => ele._id != response.data._id);
-        //             setUsers(newArr);
-        //         } catch(err) {
-        //             console.log(err);
-        //         }
-        //         } else {
-        //             alert("Email is incorrect");
-        //         }
-        //     }
-        // }
-    
+      const handleRemove = async (id, email) => {
+            const userConfirm = window.confirm("Are you sure?");
+            if(userConfirm) {
+                const userEmail = window.prompt("Enter email of your user");
+                if(userEmail == email) {
+                   try {
+                    const response = await axios.delete(`/users/${id}`, { headers: { Authorization: localStorage.getItem('token')}})
+                    const newArr = users.filter(ele => ele._id != response.data._id);
+                    setUsers(newArr);
+                } catch(err) {
+                    console.log(err);
+                }
+                } else {
+                    alert("Email is incorrect");
+                }
+            }
+        }
+
     return(
         <SidebarProvider>
           <AppSidebar />

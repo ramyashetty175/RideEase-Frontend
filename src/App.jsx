@@ -130,7 +130,7 @@ function App() {
         <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
  
         <Route path="/dashboard/owner/profile" element={<PrivateRoute allowedRoles={['owner']}><OwnerProfile /></PrivateRoute>} /> 
-        <Route path="/dashboard/owner/users/user" element={<PrivateRoute allowedRoles={['owner']}><UsersList /></PrivateRoute>} />
+        <Route path="/dashboard/owner/users/user/all" element={<PrivateRoute allowedRoles={['owner']}><Users /></PrivateRoute>} />
         
         <Route path="/dashboard/owner/bookings/all" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/owner/bookings/new-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />

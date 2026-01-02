@@ -15,11 +15,11 @@ export const createVehicle = createAsyncThunk("vehicle/createVehicle", async({ f
     try {
         const response = await axios.post('/api/vehicles', formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        handleReset();
-        return response.data;
+        // handleReset();
+        return response.data.vehicle;
     } catch(err) {
         console.log(err);
-        return rejectWithValue(err.response.data.error);
+        return rejectWithValue(err.message);
     }
 })
 
@@ -90,10 +90,12 @@ const vehicleSlice = createSlice({
             })
             .addCase(createVehicle.fulfilled, (state, action) => {
                 // state.data.push(action.payload);
-                state.data.push(action.payload.vehicle);
+                state.data.push(action.payload);
+                state.loading = false;
                 state.errors = null;
             })
             .addCase(createVehicle.rejected, (state, action) => {
+                state.loading = false;
                 state.errors = action.payload;
             })
             .addCase(removeVehicle.pending, (state) => {

@@ -207,7 +207,8 @@ const columns = [
         size="sm"
         onClick={() => {
           dispatch(assignEditId(vehicle._id))
-          navigate("/dashboard/owner/vehicles/add") 
+          // navigate("/dashboard/owner/vehicles/add")
+          navigate(`/dashboard/owner/vehicles/add/${vehicle._id}`); 
         }}
       >
         Edit

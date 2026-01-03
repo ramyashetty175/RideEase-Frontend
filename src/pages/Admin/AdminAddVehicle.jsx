@@ -1,188 +1,136 @@
-"use client"
+"use client";
 
-import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from "@/components/ui/button"
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select"
-import { InfoIcon } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createVehicle, updateVehicle } from "../../slices/vehicleSlice";
+import { SidebarProvider } from "../../components/ui/sidebar";
+import { AppSidebar } from "../../components/app-sidebar";
+import { Button } from "@/components/ui/button";
+import { InfoIcon } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group"
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/input-group";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createVehicle, updateVehicle } from "../../slices/vehicleSlice";
-import { SidebarProvider } from "../../components/ui/sidebar";
-import { AppSidebar } from "../../components/app-sidebar";
-import axios from "../../config/axios";
+export default function OwnerAddVehicle() {
+  const dispatch = useDispatch();
+  const { errors, editId, data } = useSelector((state) => state.vehicle);
 
-export default function AdminAddVehicle() {
-         const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    vehicleName: "",
+    brand: "",
+    type: "",
+    registrationNumber: "",
+    fuelType: "",
+    transmission: "",
+    seats: "",
+    pricePerDay: "",
+    availabilityStatus: "",
+    location: "",
+  })
 
-         const { errors, data, editId } = useSelector((state) => {
-               return state.vehicle;
-         })
+  const [files, setFiles] = useState({
+    image: null,
+    licenseDoc: null,
+    insuranceDoc: null,
+  })
 
-         const [formdata, setFormData] = useState({
-               vehicleName: '',
-               brand: '',
-               type: '',
-               owner: '',
-               registrationNumber: '',
-               licenceDoc: '',
-               insuranceDoc: '',
-               fuelType: '',
-               transmission: '',
-               seats: '',
-               pricePerDay: '',
-               image: '',
-               availabilityStatus: '',
-               isApproved: ''
-         })
+  const [previewImage, setPreviewImage] = useState(null);
 
-         const [files, setFiles] = useState({
-               image: null,
-               licenceDoc: null,
-               insuranceDoc: null
-         })
+  useEffect(() => {
+    if (editId && data) {
+      const vehicle = data.find((v) => v._id === editId);
+      if (vehicle) {
+        setFormData({
+          vehicleName: vehicle.vehicleName || "",
+          brand: vehicle.brand || "",
+          type: vehicle.type || "",
+          registrationNumber: vehicle.registrationNumber || "",
+          fuelType: vehicle.fuelType || "",
+          transmission: vehicle.transmission || "",
+          seats: vehicle.seats || "",
+          pricePerDay: vehicle.pricePerDay || "",
+          availabilityStatus: vehicle.availabilityStatus || "",
+          location: vehicle.location || "",
+        })
+        setPreviewImage(vehicle.image || null);
+      }
+    }
+  }, [editId, data])
 
-         const [previewVehicleImage, setPreviewVehicleImage] = useState(null);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
 
-         const handleChange = (e) => {
-               const key = e.target.name;
-               const value = e.target.value;
-               setFormData({ ...formdata, [key]: value });
-         }
-       
-         const handleFileChange = (e) => {
-               const { name, files } = e.target;
-               const file = files[0];
-               setFiles((prev) => ({ ...prev, [name]: file }));
-               if (name === "image") {
-                  setPreviewVehicleImage(URL.createObjectURL(file));
-               }
-         }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFiles({ ...files, [e.target.name]: file });
+    if (e.target.name === "image") setPreviewImage(URL.createObjectURL(file));
+  }
 
-         const uploadVehicleImage = async (file) => {
-                  if (!file) {
-                     alert("Profile image is not uploaded");
-                     return null;
-                  }
-                  try {
-                        const data = new FormData();
-                        data.append("vehicle", file);
-                        const response = await axios.post(`/api/upload/vehicle/${editId}`, data, { headers: { Authorization: localStorage.getItem("token")}});
-                        return response.data.image;
-                  } catch (err) {
-                        console.log("Avatar upload failed:", err);
-                  }
-         }
-       
-         const uploadLicence = async (file) => {
-                  if (!file) {
-                     alert("Licence is not uploaded");
-                     return null;
-                  }
-                  try {
-                        const data = new FormData();
-                        data.append("licenceDoc", file);
-                        const response = await axios.post(`/api/upload/vehicle/licence/${editId}`, data, { headers: { Authorization: localStorage.getItem("token")}});
-                        return response.data.licenceDoc;
-                  } catch (err) {
-                        console.log("Licence upload failed:", err);
-                  }
-         }
-       
-         const uploadInsurance = async (file) => {
-                  if (!file) {
-                     alert("Insurance is not uploaded");
-                     return null;
-                  }
-                  try {
-                       const data = new FormData();
-                       data.append("insuranceDoc", file);
-                       const res = await axios.post(`/api/upload/vehicle/insurance/${editId}`, data, { headers: { Authorization: localStorage.getItem("token")}});
-                       return res.data.insuranceDoc;
-                  } catch (err) {
-                       console.log("Insurance upload failed:", err);
-                  }
-         }
+  const resetForm = () => {
+    setFormData({
+      vehicleName: "",
+      brand: "",
+      type: "",
+      registrationNumber: "",
+      fuelType: "",
+      transmission: "",
+      seats: "",
+      pricePerDay: "",
+      availabilityStatus: "",
+      location: ""
+    })
+    setFiles({ image: null, licenseDoc: null, insuranceDoc: null });
+    setPreviewImage(null);
+  };
 
-         useEffect(() => {
-               if (editId && data) {
-                     setFormData({
-                           vehicleName: data.vehicleName || "",
-                           brand: data.brand || "",
-                           type: data.type || "",
-                           owner: data.owner || "",
-                           registrationNumber: data.registrationNumber || "",
-                           licenceDoc: data.licenceDoc || "",
-                           insuranceDoc: data.insuranceDoc || "",
-                           fuelType: data.fuelType || "",
-                           transmission: data.transmission || "",
-                           seats: data.seats || "",
-                           pricePerDay: data.pricePerDay || "",
-                           image: '',
-                           availabilityStatus: data.availabilityStatus || "",
-                           isApproved: data.isApproved || "",
-                     })
-                           setPreviewVehicleImage(data.image || null);
-               }
-         }, [editId, data])
-       
-         const handleSubmit = async (e) => {
-                  e.preventDefault();
-                  const resetFormData = () => {
-                        setFormData({
-                              vehicleName: '',
-                              brand: '',
-                              type: '',
-                              owner: '',
-                              registrationNumber: '',
-                              licenceDoc: '',
-                              insuranceDoc: '',
-                              fuelType: '',
-                              transmission: '',
-                              seats: '',
-                              pricePerDay: '',
-                              availabilityStatus: '',
-                              isApproved: ''
-                        })
-                  }
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-                  const uploads = await Promise.all([
-                        files.image ? uploadVehicleImage(files.image) : null,
-                        files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
-                        files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
-                  ])
-                  const [imageUrl, licenceUrl, insuranceUrl] = uploads;
-                  const payload = {
-                        ...formdata,
-                        image: imageUrl || formdata.image,
-                        licenceDoc: licenceUrl || formdata.licenceDoc,
-                        insuranceDoc: insuranceUrl || formdata.insuranceDoc
-                  }
-                  if (imageUrl) payload.image = imageUrl;
-                  if (licenceUrl) payload.licenceDoc = licenceUrl;
-                  if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
-                  if(editId) {
-                        dispatch(updateVehicle({ editId, formData: payload, handleReset: resetFormData }));
-                  } else {
-                        dispatch(createVehicle({ formData: payload, handleReset: resetFormData }));
-                  }
-         }
+  try {
+    const form = new FormData();
+
+    Object.keys(formData).forEach((key) => {
+      if (key === "seats" || key === "pricePerDay") {
+        form.append(key, Number(formData[key]));
+      } else {
+        form.append(key, formData[key]);
+      }
+    })
+
+    if (!files.image || !files.licenseDoc || !files.insuranceDoc) {
+      return alert("Please upload all required files!");
+    }
+    form.append("image", files.image);
+    form.append("licenseDoc", files.licenseDoc);
+    form.append("insuranceDoc", files.insuranceDoc);
+
+    if (editId) {
+      await dispatch(updateVehicle({ editId, formData: form })).unwrap();
+      alert("Vehicle updated successfully!");
+    } else {
+      await dispatch(createVehicle({ formData: form })).unwrap();
+      alert("Vehicle added successfully!");
+    }
+
+    resetForm();
+  } catch (err) {
+    console.error("Submit error:", err);
+    alert("Failed to submit vehicle. Check console.");
+  }
+};
+
 
       return(
             <SidebarProvider>
@@ -195,9 +143,9 @@ export default function AdminAddVehicle() {
                   <form onSubmit={handleSubmit}>
                         <div className="grid grid-cols-12 gap-6">
                         <div className="col-span-4 flex flex-col gap-6">
-                        {previewVehicleImage && (
+                        {previewImage && (
                            <img
-                                 src={previewVehicleImage}
+                                 src={previewImage}
                                  alt="vehicle"
                                  className="w-40 h-24 object-cover rounded-md border"
                            />
@@ -212,24 +160,24 @@ export default function AdminAddVehicle() {
                            />
                        </div>
                     <div className="grid w-full max-w-sm items-center gap-3">
-                           <Label htmlFor="licenceDoc">LicenceDoc</Label>
+                           <Label htmlFor="licenseDoc">LicenseDoc</Label>
                            <div className="flex items-center gap-3 w-full">
-                           <Input id="licenceDoc" 
-                                   name="licenceDoc" 
+                           <Input id="licenseDoc" 
+                                   name="licenseDoc" 
                                    type="file" 
                                    onChange={handleFileChange}
                            />
-                        { files.licenceDoc ? (
-                        <span className="text-gray-500 truncate max-w-xs">{files.licenceDoc.name}</span>
-                        ) : formdata.licenceDoc ? (
+                        { files.licenseDoc ? (
+                        <span className="text-gray-500 truncate max-w-xs">{files.licenseDoc.name}</span>
+                        ) : formData.licenseDoc ? (
                         <a
-                          href={formdata.licenceDoc}
+                          href={formData.licenseDoc}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 underline truncate max-w-xs"
-                          title={formdata.licenceDoc.split("/").pop()}
+                          title={formData.licenseDoc.split("/").pop()}
                         >
-                          {formdata.licenceDoc.split("/").pop()}
+                          {formData.licenseDoc.split("/").pop()}
                         </a>
                         ) : null}
                     </div>
@@ -240,15 +188,15 @@ export default function AdminAddVehicle() {
                     <Input id="insuranceDoc" name="insuranceDoc" type="file" onChange={handleFileChange}/>
                         { files.insuranceDoc ? (
                         <span className="text-gray-500 truncate max-w-xs">{files.insuranceDoc.name}</span>
-                        ) : formdata.insuranceDoc ? (
+                        ) : formData.insuranceDoc ? (
                         <a
-                          href={formdata.insuranceDoc}
+                          href={formData.insuranceDoc}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 underline truncate max-w-xs"
-                          title={formdata.insuranceDoc.split("/").pop()}
+                          title={formData.insuranceDoc.split("/").pop()}
                         >
-                          {formdata.insuranceDoc.split("/").pop()}
+                          {formData.insuranceDoc.split("/").pop()}
                         </a>
                         ) : null}
                     </div>
@@ -278,7 +226,7 @@ export default function AdminAddVehicle() {
                 </InputGroupAddon>
                 <InputGroupInput id="vehicleName" 
                         name="vehicleName"
-                        value={formdata.vehicleName}
+                        value={formData.vehicleName}
                         placeholder="Enter Vehicle Name"
                         onChange={handleChange}
                 />
@@ -306,7 +254,7 @@ export default function AdminAddVehicle() {
                 </InputGroupAddon>
                 <InputGroupInput id="brand" 
                         name="brand"
-                        value={formdata.brand}
+                        value={formData.brand}
                         placeholder="Enter Brand"
                         onChange={handleChange}
                 />
@@ -334,44 +282,41 @@ export default function AdminAddVehicle() {
                 </InputGroupAddon>
                 <InputGroupInput id="registrationNumber" 
                         name="registrationNumber"
-                        value={formdata.registrationNumber}
+                        value={formData.registrationNumber}
                         placeholder="Enter Registration Number"
                         onChange={handleChange}
                 />
                 </InputGroup>
-                
                  <NativeSelect
   name="type"
-  value={formdata.type}
+  value={formData.type}
   onChange={handleChange}
 >
   <NativeSelectOption value="">Select Type</NativeSelectOption>
-  <NativeSelectOption value="car">Car</NativeSelectOption>
-  <NativeSelectOption value="bike">Bike</NativeSelectOption>
+  <NativeSelectOption value="Car">Car</NativeSelectOption>
+  <NativeSelectOption value="Bike">Bike</NativeSelectOption>
 </NativeSelect>
-                </div>
-                <div className="col-span-4 flex flex-col gap-8">
-                  <NativeSelect
+<NativeSelect
   name="fuelType"
-  value={formdata.fuelType}
+  value={formData.fuelType}
   onChange={handleChange}
 >
   <NativeSelectOption value="">Select Fuel Type</NativeSelectOption>
-  <NativeSelectOption value="petrol">Petrol</NativeSelectOption>
-  <NativeSelectOption value="diesel">Diesel</NativeSelectOption>
-  <NativeSelectOption value="electric">Electric</NativeSelectOption>
+  <NativeSelectOption value="Petrol">Petrol</NativeSelectOption>
+  <NativeSelectOption value="Diesel">Diesel</NativeSelectOption>
+  <NativeSelectOption value="Electric">Electric</NativeSelectOption>
 </NativeSelect>
+                </div>
+                <div className="col-span-4 flex flex-col gap-8">
 <NativeSelect
   name="transmission"
-  value={formdata.transmission}
+  value={formData.transmission}
   onChange={handleChange}
 >
   <NativeSelectOption value="">Select Transmission</NativeSelectOption>
-  <NativeSelectOption value="manual">Manual</NativeSelectOption>
-  <NativeSelectOption value="automatic">Automatic</NativeSelectOption>
+  <NativeSelectOption value="Manual">Manual</NativeSelectOption>
+  <NativeSelectOption value="Electric">Electric</NativeSelectOption>
 </NativeSelect>
-
-
                   <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="seats" className="text-foreground">
@@ -395,7 +340,7 @@ export default function AdminAddVehicle() {
                 </InputGroupAddon>
                 <InputGroupInput id="seats" 
                         name="seats"
-                        value={formdata.seats}
+                        value={formData.seats}
                         placeholder="Enter Seats"
                         onChange={handleChange}
                 />
@@ -423,24 +368,53 @@ export default function AdminAddVehicle() {
                 </InputGroupAddon>
                 <InputGroupInput id="pricePerDay" 
                         name="pricePerDay"
-                        value={formdata.pricePerDay}
+                        value={formData.pricePerDay}
                         placeholder="Enter Price"
                         onChange={handleChange}
                 />
                 </InputGroup>
                 <NativeSelect
   name="availabilityStatus"
-  value={formdata.availabilityStatus}
+  value={formData.availabilityStatus}
   onChange={handleChange}
 >
+  <NativeSelectOption value="">
+    Select Availability
+  </NativeSelectOption>
+  <NativeSelectOption value="Available">Available</NativeSelectOption>
+  <NativeSelectOption value="Booked">Booked</NativeSelectOption>
+  <NativeSelectOption value="Maintainance">Maintainance</NativeSelectOption>
+  <NativeSelectOption value="unAvailable">Unavailable</NativeSelectOption>
+</NativeSelect>
 
-                
-                    <NativeSelectOption value="available">Available</NativeSelectOption>
-<NativeSelectOption value="booked">Booked</NativeSelectOption>
-<NativeSelectOption value="maintenance">Maintenance</NativeSelectOption>
-<NativeSelectOption value="unavailable">Unavailable</NativeSelectOption>
-
-                </NativeSelect>
+                <InputGroup>
+                <InputGroupAddon align="block-start">
+                   <Label htmlFor="location" className="text-foreground">
+                     Location
+                   </Label>
+                <Tooltip>
+                   <TooltipTrigger asChild>
+                   <InputGroupButton
+                       variant="ghost"
+                       aria-label="Help"
+                       className="ml-auto rounded-full"
+                       size="icon-xs"
+                    >
+                    <InfoIcon />
+                    </InputGroupButton>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                       <p>We&apos;ll use this to send you notifications</p>
+                    </TooltipContent>
+                </Tooltip>
+                </InputGroupAddon>
+                <InputGroupInput id="location" 
+                        name="location"
+                        value={formData.location}
+                        placeholder="Enter Location"
+                        onChange={handleChange}
+                />
+                </InputGroup>
                 </div>
                 </div>
                 <div className="flex justify-start mt-18 gap-4">

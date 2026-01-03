@@ -8,7 +8,7 @@ import { SidebarProvider } from "../../components/ui/sidebar"
 import { AppSidebar } from "../../components/app-sidebar"
 import { useSelector, useDispatch } from "react-redux"
 import { OwnerApprove } from "../../slices/ownerSlice"
-import { useState } from "react"
+import { useState } from "react";
 
 export default function OwnerList({ type }) {
   const dispatch = useDispatch()
@@ -16,13 +16,11 @@ export default function OwnerList({ type }) {
 
   const [actionValue, setActionValue] = useState({});
 
-  // Filter data
   const filteredData =
     type === "newRequest"
       ? data.filter((owner) => owner.isApproved === false)
       : data.filter((owner) => owner.isApproved === true)
 
-  // Columns
   const columns = [
     { accessorKey: "_id", header: "ID" },
     {
@@ -75,14 +73,12 @@ export default function OwnerList({ type }) {
 },
   ]
 
-  // Action column for new requests
   if (type === "newRequest") {
     columns.push({
       id: "action",
       header: "Action",
       cell: ({ row }) => {
         const owner = row.original
-
         return (
         <NativeSelect
   value={actionValue[owner._id] || "pending"}
@@ -148,7 +144,6 @@ export default function OwnerList({ type }) {
   })
 }
 
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -158,3 +153,4 @@ export default function OwnerList({ type }) {
     </SidebarProvider>
   )
 }
+

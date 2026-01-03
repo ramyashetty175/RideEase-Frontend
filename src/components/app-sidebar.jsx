@@ -29,7 +29,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
 const data = {
   user: {
     name: "shadcn",
@@ -84,6 +83,33 @@ const data = {
       ],
     },
     {
+      title: "Vehilcles",
+      url: "/dashboard/admin/vehicles",
+      icon: Settings2,
+      items: [
+        {
+          title: "All Vehicles",
+          url: "/dashboard/admin/vehicles/all",
+        },
+        {
+          title: "Add Vehicles",
+          url: "/dashboard/admin/vehicles/add",
+        },
+        {
+          title: "New Request",
+          url: "/dashboard/admin/vehicles/new-request",
+        },
+        {
+          title: "Approve",
+          url: "/dashboard/admin/vehicles/approve",
+        },
+        {
+          title: "Reject",
+          url: "/dashboard/admin/vehicles/reject",
+        },
+      ],
+    },
+    {
       title: "Bookings",
       url: "/dashboard/admin/bookings",
       icon: BookOpen,
@@ -114,33 +140,6 @@ const data = {
         },
       ],
     },
-    {
-      title: "Vehilcles",
-      url: "/dashboard/admin/vehicles",
-      icon: Settings2,
-      items: [
-        {
-          title: "All Vehicles",
-          url: "/dashboard/admin/vehicles/all",
-        },
-        {
-          title: "Add Vehicles",
-          url: "/dashboard/admin/vehicles/add",
-        },
-        {
-          title: "New Request",
-          url: "/dashboard/admin/vehicles/new-request",
-        },
-        {
-          title: "Approve",
-          url: "/dashboard/admin/vehicles/approve",
-        },
-        {
-          title: "Reject",
-          url: "/dashboard/admin/vehicles/reject",
-        },
-      ],
-    },
   ],
   navMainOwner: [
     {
@@ -161,6 +160,21 @@ const data = {
         {
           title: "New Request",
           url: "/dashboard/owner/users/new-requests",
+        },
+      ],
+    },
+    {
+      title: "Vehicles",
+      url: "/dashboard/owner/vehicles",
+      icon: Settings2,
+      items: [
+        {
+          title: "All Vehicles",
+          url: "/dashboard/owner/vehicles/all",
+        },
+        {
+          title: "Add Vehicles",
+          url: "/dashboard/owner/vehicles/add",
         },
       ],
     },
@@ -196,21 +210,6 @@ const data = {
         {
           title: "Cancel Request",
           url: "/dashboard/owner/bookings/cancel-request",
-        },
-      ],
-    },
-    {
-      title: "Vehicles",
-      url: "/dashboard/owner/vehicles",
-      icon: Settings2,
-      items: [
-        {
-          title: "All Vehicles",
-          url: "/dashboard/owner/vehicles/all",
-        },
-        {
-          title: "Add Vehicles",
-          url: "/dashboard/owner/vehicles/add",
         },
       ],
     },

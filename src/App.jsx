@@ -125,7 +125,7 @@ function App() {
 
         <Route path="/dashboard/admin/vehicles/all" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/add" element={<PrivateRoute allowedRoles={['admin']}><AdminAddVehicle /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="newRequest" /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
  

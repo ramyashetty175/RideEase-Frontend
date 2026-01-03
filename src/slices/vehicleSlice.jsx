@@ -34,6 +34,30 @@ export const updateVehicle = createAsyncThunk("vehicle/updateVehicle", async ({ 
     }
 })
 
+export const vehicleApprove = createAsyncThunk("vehicle/vehicleApprove", async({ editId, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/api/vehicles/approve/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        // handleReset();
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
+export const vehicleReject = createAsyncThunk("vehicle/vehicleReject", async({ editId, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/api/vehicles/reject/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        // handleReset();
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
 export const removeVehicle = createAsyncThunk("vehicle/removeVehicle", async (id, { rejectWithValue }) => {
     try {
         const response = await axios.delete(`/api/vehicles/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
@@ -124,6 +148,36 @@ const vehicleSlice = createSlice({
                 state.errors = action.payload;
             })
 
+            .addCase(vehicleApprove.pending, (state) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
+            })
+            .addCase(vehicleApprove.fulfilled, (state, action) => {
+                const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle._id);
+                state.data[idx] = action.payload;
+                state.editId = null;
+                state.loading = false; 
+            })
+            .addCase(vehicleApprove.rejected, (state, action) => {
+                state.errors = action.payload.vehicle;
+                state.loading = false; 
+            })
+            .addCase(vehicleReject.pending, (state) => {
+                state.loading = true;
+                // state.data = [];
+                state.errors = null;
+            })
+            .addCase(vehicleReject.fulfilled, (state, action) => {
+                const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle_id);
+                state.data[idx] = action.payload.vehicle; 
+                state.editId = null;
+                state.loading = false; 
+            })
+            .addCase(vehicleReject.rejected, (state, action) => {
+                state.errors = action.payload;
+                state.loading = false;
+            })
     }
 })
 

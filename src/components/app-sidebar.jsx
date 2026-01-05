@@ -69,12 +69,16 @@ const data = {
           url: "/dashboard/admin/users/all",
         },
         {
+          title: "Users",
+          url: "/dashboard/admin/users/user",
+        },
+        {
           title: "Owners",
           url: "/dashboard/admin/users/owners",
         },
         {
-          title: "Users",
-          url: "/dashboard/admin/users/user",
+          title: "Reject Owner",
+          url: "/dashboard/admin/users/owners/reject",
         },
         {
           title: "New Request",

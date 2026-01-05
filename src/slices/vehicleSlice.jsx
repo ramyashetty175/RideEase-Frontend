@@ -34,9 +34,9 @@ export const updateVehicle = createAsyncThunk("vehicle/updateVehicle", async ({ 
     }
 })
 
-export const vehicleApprove = createAsyncThunk("vehicle/vehicleApprove", async({ editId, formData }, { rejectWithValue }) => {
+export const vehicleApprove = createAsyncThunk("vehicle/vehicleApprove", async({ editId }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/api/vehicles/approve/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         // handleReset();
         return response.data;
@@ -46,9 +46,9 @@ export const vehicleApprove = createAsyncThunk("vehicle/vehicleApprove", async({
     }
 })
 
-export const vehicleReject = createAsyncThunk("vehicle/vehicleReject", async({ editId, formData }, { rejectWithValue }) => {
+export const vehicleReject = createAsyncThunk("vehicle/vehicleReject", async({ editId }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/api/vehicles/reject/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/api/vehicles/reject/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         // handleReset();
         return response.data;
@@ -155,7 +155,7 @@ const vehicleSlice = createSlice({
             })
             .addCase(vehicleApprove.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle._id);
-                state.data[idx] = action.payload;
+                state.data[idx] = action.payload.vehicle;
                 state.editId = null;
                 state.loading = false; 
             })
@@ -169,8 +169,8 @@ const vehicleSlice = createSlice({
                 state.errors = null;
             })
             .addCase(vehicleReject.fulfilled, (state, action) => {
-                const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle_id);
-                state.data[idx] = action.payload.vehicle; 
+                const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle._id);
+                state.data[idx] = action.payload.vehicle.vehicle; 
                 state.editId = null;
                 state.loading = false; 
             })

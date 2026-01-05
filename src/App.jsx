@@ -112,10 +112,11 @@ function App() {
          
         <Route path="/dashboard/admin/profile" element={<PrivateRoute allowedRoles={['admin']}><AdminProfile /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/all" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="owners" /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><Users /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/owners" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/owners/reject" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="rejected" /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="newRequest" /></PrivateRoute>} />
-        
+      
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Pending" /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/approve" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Approved"/></PrivateRoute>} />
@@ -126,8 +127,8 @@ function App() {
         <Route path="/dashboard/admin/vehicles/all" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/add" element={<PrivateRoute allowedRoles={['admin']}><AdminAddVehicle /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="newRequest" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="rejected" /></PrivateRoute>} />
  
         <Route path="/dashboard/owner/profile" element={<PrivateRoute allowedRoles={['owner']}><OwnerProfile /></PrivateRoute>} /> 
         <Route path="/dashboard/owner/users/user/all" element={<PrivateRoute allowedRoles={['owner']}><Users /></PrivateRoute>} />

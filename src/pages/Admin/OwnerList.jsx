@@ -120,6 +120,7 @@ export default function OwnerList({ type }) {
       },
     })
   }
+  
   if (type !== "newRequest") {
   columns.push({
     id: "remove",

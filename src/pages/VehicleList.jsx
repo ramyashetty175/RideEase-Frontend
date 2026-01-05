@@ -135,10 +135,19 @@ export default function VehicleList({ type }) {
 
   const [actionValue, setActionValue] = useState({});
 
-  const filteredData =
-    type === "newRequest"
-      ? data.filter((vehicle) => vehicle.isApproved === false)
-      : data.filter((vehicle) => vehicle.isApproved === true);
+  const filteredData = (() => {
+  if (type === "newRequest") {
+    return data.filter(vehicle => vehicle.status === "pending");
+  }
+  if (type === "approved") {
+    return data.filter(vehicle => vehicle.status === "approved");
+  }
+  if (type === "rejected") {
+    return data.filter(vehicle => vehicle.status === "rejected");
+  }
+  return data;
+})();
+
 
   const columns = [
     { accessorKey: "_id", header: "ID" },
@@ -199,7 +208,7 @@ export default function VehicleList({ type }) {
     { accessorKey: "pricePerDay", header: "Price Per Day" },
     { accessorKey: "location", header: "Location" },
     { accessorKey: "availabilityStatus", header: "Availability Status" },
-
+    { accessorKey: "status", header: "Status" },
     {
       id: "edit",
       header: "Edit Vehicle",
@@ -220,42 +229,61 @@ export default function VehicleList({ type }) {
       },
     },
   ];
-
+  
   if (type === "newRequest") {
-    columns.push({
-      id: "action",
-      header: "Action",
-      cell: ({ row }) => {
-        const vehicle = row.original;
+     columns.push({
+  id: "action",
+  header: "Action",
+  cell: ({ row }) => {
+    const vehicle = row.original;
 
-        return (
-          <NativeSelect
-            value={actionValue[vehicle._id] || "pending"}
-            onChange={(e) => {
-              const value = e.target.value;
+    // Determine current dropdown value
+    const currentValue =
+      actionValue[vehicle._id] ||
+      (vehicle.status === "pending"
+        ? "pending"
+        : vehicle.status === "approved"
+        ? "approved"
+        : "rejected");
 
-              setActionValue((prev) => ({
-                ...prev,
-                [vehicle._id]: value,
-              }));
+    return (
+      <NativeSelect
+        value={currentValue}
+        disabled={vehicle.status !== "pending"}
+        className="h-9 w-32 text-sm"
+        onChange={(e) => {
+          const value = e.target.value;
 
-              if (value === "approve") {
-                dispatch(vehicleApprove({ editId: vehicle._id }));
-              }
+          // Update local state immediately
+          setActionValue((prev) => ({ ...prev, [vehicle._id]: value }));
 
-              if (value === "reject") {
-                dispatch(vehicleReject({ editId: vehicle._id }));
-              }
-            }}
-          >
-            <NativeSelectOption value="pending">Pending</NativeSelectOption>
-            <NativeSelectOption value="approve">Approve</NativeSelectOption>
-            <NativeSelectOption value="reject">Reject</NativeSelectOption>
-          </NativeSelect>
-        );
-      },
-    });
-  }
+          // Dispatch the correct thunk
+          if (value === "approved") {
+            dispatch(
+              vehicleApprove({
+                editId: vehicle._id,
+                formData: { status: "approved" },
+              })
+            );
+          }
+          if (value === "rejected") {
+            dispatch(
+              vehicleReject({
+                editId: vehicle._id,
+                formData: { status: "rejected" },
+              })
+            );
+          }
+        }}
+      >
+        <NativeSelectOption value="pending">Pending</NativeSelectOption>
+        <NativeSelectOption value="approved">Approve</NativeSelectOption>
+        <NativeSelectOption value="rejected">Reject</NativeSelectOption>
+      </NativeSelect>
+    );
+  },
+});
+}
 
   return (
     <SidebarProvider>

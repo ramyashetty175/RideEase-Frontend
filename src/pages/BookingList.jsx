@@ -12,13 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "../components/data-table-column-header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
+import { useState } from "react";
 
 export const columns = [
-  { accessorKey: "_id", header: "ID" },
+  { accessorKey: "_id", header: "Booking ID" },
   {
     accessorKey: "username",
     header: ({ column }) => {
@@ -49,13 +50,47 @@ export const columns = [
       )
     },
   },
-  { accessorKey: "vehicles", header: "No of Vehicles" }
+  { accessorKey: "vehicles", header: "Vehicle ID" },
+  { accessorKey: "vehicles", header: "Vehicle Name" },
+  { accessorKey: "vehicles", header: "Owner ID" },
+  { accessorKey: "vehicles", header: "Owner Name" },
+  { accessorKey: "vehicles", header: "Pickup Location" },
+  { accessorKey: "vehicles", header: "Return Location" },
+  { accessorKey: "vehicles", header: "Total Amount" },
+  { accessorKey: "vehicles", header: "Payment Status" },
+  { accessorKey: "vehicles", header: "Booking Status" },
+  { accessorKey: "vehicles", header: "TripStartTime" },
+  { accessorKey: "vehicles", header: "TripEndTime" }
 ]
 
-export default function BookingList() {
+export default function BookingList({ status }) {
     const { data } = useSelector((state) => {
       return state.booking;
     })
+
+  const dispatch = useDispatch();
+
+  const [actionValue, setActionValue] = useState({});
+
+  const filteredData = (() => {
+  if (type === "newRequest") {
+    return data.filter((owner) => owner.status === "pending");
+  }
+  if (type === "approved") {
+    return data.filter((owner) => owner.status === "approved");
+  }
+  if (type === "canceled") {
+    return data.filter((owner) => owner.status === "rejected");
+  }
+  if (type === "rejected") {
+    return data.filter((owner) => owner.status === "rejected");
+  }
+  if (type === "rejected") {
+    return data.filter((owner) => owner.status === "rejected");
+  }
+  return data;
+})();
+
     return(
         <SidebarProvider>
             <AppSidebar />

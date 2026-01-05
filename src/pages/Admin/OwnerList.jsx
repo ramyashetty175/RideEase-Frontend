@@ -11,7 +11,7 @@ import { OwnerApprove } from "../../slices/ownerSlice"
 import { useState } from "react";
 
 export default function OwnerList({ type }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { data } = useSelector((state) => state.owner)
 
   const [actionValue, setActionValue] = useState({});

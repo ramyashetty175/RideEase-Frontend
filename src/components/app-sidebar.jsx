@@ -131,15 +131,23 @@ const data = {
           url: "/dashboard/admin/bookings/approve",
         },
         {
+          title: "Confirm",
+          url: "/dashboard/admin/bookings/reject",
+        },
+        {
           title: "In-Progress",
           url: "/dashboard/admin/bookings/in-progress",
         },
         {
-          title: "Reject",
+          title: "Complete",
           url: "/dashboard/admin/bookings/reject",
         },
         {
-          title: "Cancel Request",
+          title: "Canceled",
+          url: "/dashboard/admin/bookings/cancel",
+        },
+        {
+          title: "CancelRequested",
           url: "/dashboard/admin/bookings/cancel-request",
         },
       ],

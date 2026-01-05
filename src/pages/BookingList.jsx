@@ -79,14 +79,20 @@ export default function BookingList({ status }) {
   if (type === "approved") {
     return data.filter((owner) => owner.status === "approved");
   }
+  if (type === "confirmed") {
+    return data.filter((owner) => owner.status === "confirmed");
+  }
+  if (type === "in-progress") {
+    return data.filter((owner) => owner.status === "in-progress");
+  }
+  if (type === "completed") {
+    return data.filter((owner) => owner.status === "completed");
+  }
   if (type === "canceled") {
-    return data.filter((owner) => owner.status === "rejected");
+    return data.filter((owner) => owner.status === "canceled");
   }
-  if (type === "rejected") {
-    return data.filter((owner) => owner.status === "rejected");
-  }
-  if (type === "rejected") {
-    return data.filter((owner) => owner.status === "rejected");
+  if (type === "cancelRequested") {
+    return data.filter((owner) => owner.status === "cancelRequested");
   }
   return data;
 })();

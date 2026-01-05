@@ -88,7 +88,6 @@ export const columns = [
     )
   },
 },
-
 {
   id: "action",
   header: "Action",

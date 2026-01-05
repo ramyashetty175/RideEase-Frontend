@@ -89,7 +89,7 @@ export default function OwnerList({ type }) {
         const owner = row.original
         return (
         <NativeSelect
-  value={actionValue[owner._id] || "pending"}
+  value={actionValue[owner._id] || owner.status}
   onChange={(e) => {
     const value = e.target.value;
 
@@ -98,7 +98,7 @@ export default function OwnerList({ type }) {
       [owner._id]: value,
     }));
 
-    if (value === "approve") {
+    if (value === "approved") {
       dispatch(
         OwnerApprove({
           editId: owner._id,
@@ -110,7 +110,7 @@ export default function OwnerList({ type }) {
       );
     }
 
-    if (value === "reject") {
+    if (value === "rejected") {
       dispatch(
         OwnerReject({
           editId: owner._id,

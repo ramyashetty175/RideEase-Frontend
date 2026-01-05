@@ -74,7 +74,7 @@ const data = {
         },
         {
           title: "Owners",
-          url: "/dashboard/admin/users/owners",
+          url: "/dashboard/admin/users/owners/approve",
         },
         {
           title: "Reject Owner",

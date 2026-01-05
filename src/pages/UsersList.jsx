@@ -52,6 +52,7 @@ export const columns = [
       )
     },
   },
+  { accessorKey: "status", header: "Status" },
   { accessorKey: "role", header: "Role" }
 ]
 

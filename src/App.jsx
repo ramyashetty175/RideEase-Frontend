@@ -117,18 +117,18 @@ function App() {
         <Route path="/dashboard/admin/users/owners/reject" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="rejected" /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="newRequest" /></PrivateRoute>} />
       
+        <Route path="/dashboard/admin/vehicles/all" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/add" element={<PrivateRoute allowedRoles={['admin']}><AdminAddVehicle /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="newRequest" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="rejected" /></PrivateRoute>} />
+
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Pending" /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/approve" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Approved"/></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/in-progress" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="in-progress"/></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/reject" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Canceled"/></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/cancel-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="CancelRequested"/></PrivateRoute>} />
-
-        <Route path="/dashboard/admin/vehicles/all" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/add" element={<PrivateRoute allowedRoles={['admin']}><AdminAddVehicle /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="newRequest" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="approved" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="rejected" /></PrivateRoute>} />
  
         <Route path="/dashboard/owner/profile" element={<PrivateRoute allowedRoles={['owner']}><OwnerProfile /></PrivateRoute>} /> 
         <Route path="/dashboard/owner/users/user/all" element={<PrivateRoute allowedRoles={['owner']}><Users /></PrivateRoute>} />
@@ -150,7 +150,7 @@ function App() {
         {/* <Route path="/dashboard/logout" element={<PrivateRoute allowedRoles={['admin']}>< /></PrivateRoute>} /> */}
 
         <Route path="/search" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><SearchPage /></PrivateRoute>} />
-
+        
         <Route path="/vehicles" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><Vehicle /></PrivateRoute>} />
 
       </Routes>

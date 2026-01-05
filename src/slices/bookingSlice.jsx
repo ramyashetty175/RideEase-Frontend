@@ -132,18 +132,18 @@ const bookingSlice = createSlice({
                 state.errors = action.payload.booking;
                 state.loading = false; 
             })
-            .addCase(bookingReject.pending, (state) => {
+            .addCase(bookingCancel.pending, (state) => {
                 state.loading = true;
                 // state.data = [];
                 state.errors = null;
             })
-            .addCase(bookingReject.fulfilled, (state, action) => {
+            .addCase(bookingCancel.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload.booking._id);
                 state.data[idx] = action.payload.vehicle.booking; 
                 state.editId = null;
                 state.loading = false; 
             })
-            .addCase(bookingReject.rejected, (state, action) => {
+            .addCase(bookingCancel.rejected, (state, action) => {
                 state.errors = action.payload;
                 state.loading = false;
             })
@@ -156,7 +156,6 @@ const bookingSlice = createSlice({
             .addCase(updateBooking.rejected, (state, action) => {
                 state.errors = action.payload;
             })
-
             .addCase(removeBooking.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);
                 state.data.splice(idx, 1);

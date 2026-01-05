@@ -13,12 +13,47 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "../components/data-table-column-header";
 import { useSelector, useDispatch } from "react-redux";
+import { bookingApprove, bookingCancel } from "../slices/bookingSlice";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 import { useState } from "react";
 
-export const columns = [
+export default function BookingList({ status }) {
+    const { data } = useSelector((state) => {
+      return state.booking;
+    })
+
+  const dispatch = useDispatch();
+
+  const [actionValue, setActionValue] = useState({});
+
+  const filteredData = (() => {
+  if (status === "newRequest") {
+    return data.filter((owner) => owner.status === "pending");
+  }
+  if (status === "approved") {
+    return data.filter((owner) => owner.status === "approved");
+  }
+  if (status === "confirmed") {
+    return data.filter((owner) => owner.status === "confirmed");
+  }
+  if (status === "in-progress") {
+    return data.filter((owner) => owner.status === "in-progress");
+  }
+  if (status === "completed") {
+    return data.filter((owner) => owner.status === "completed");
+  }
+  if (status === "canceled") {
+    return data.filter((owner) => owner.status === "canceled");
+  }
+  if (status === "cancelRequested") {
+    return data.filter((owner) => owner.status === "cancelRequested");
+  }
+  return data;
+})();
+
+    const columns = [
   { accessorKey: "_id", header: "Booking ID" },
   {
     accessorKey: "username",
@@ -63,45 +98,59 @@ export const columns = [
   { accessorKey: "vehicles", header: "TripEndTime" }
 ]
 
-export default function BookingList({ status }) {
-    const { data } = useSelector((state) => {
-      return state.booking;
+  if (status === "newRequest") {
+    columns.push({
+      id: "action",
+      header: "Action",
+      cell: ({ row }) => {
+        const booking = row.original
+        return (
+        <NativeSelect
+  value={actionValue[booking._id] || booking.status}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    setActionValue((prev) => ({
+      ...prev,
+      [booking._id]: value,
+    }));
+
+    if (value === "approved") {
+      dispatch(
+        bookingApprove({
+          editId: booking._id,
+          formData: {
+            licenceDoc: owner.licenceDoc,
+            insuranceDoc: owner.insuranceDoc,
+          },
+        })
+      );
+    }
+
+    if (value === "canceled") {
+      dispatch(
+        bookingCancel({
+          editId: booking._id,
+          formData: { reason: "Canceled by admin" },
+        })
+      );
+    }
+  }}
+>
+            <NativeSelectOption value="pending">Pending</NativeSelectOption>
+            <NativeSelectOption value="approved">Approve</NativeSelectOption>
+            <NativeSelectOption value="canceled">Cancel</NativeSelectOption>
+          </NativeSelect>
+        )
+      },
     })
-
-  const dispatch = useDispatch();
-
-  const [actionValue, setActionValue] = useState({});
-
-  const filteredData = (() => {
-  if (type === "newRequest") {
-    return data.filter((owner) => owner.status === "pending");
   }
-  if (type === "approved") {
-    return data.filter((owner) => owner.status === "approved");
-  }
-  if (type === "confirmed") {
-    return data.filter((owner) => owner.status === "confirmed");
-  }
-  if (type === "in-progress") {
-    return data.filter((owner) => owner.status === "in-progress");
-  }
-  if (type === "completed") {
-    return data.filter((owner) => owner.status === "completed");
-  }
-  if (type === "canceled") {
-    return data.filter((owner) => owner.status === "canceled");
-  }
-  if (type === "cancelRequested") {
-    return data.filter((owner) => owner.status === "cancelRequested");
-  }
-  return data;
-})();
 
     return(
         <SidebarProvider>
             <AppSidebar />
             <main className="p-4">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={filteredData} />
             </main>
         </SidebarProvider>
     )

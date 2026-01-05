@@ -16,13 +16,20 @@ export default function OwnerList({ type }) {
 
   const [actionValue, setActionValue] = useState({});
 
-  const filteredData =
-    type === "newRequest"
-      ? data.filter((owner) => owner.isApproved === false)
-      : data.filter((owner) => owner.isApproved === true)
+  const filteredData = (() => {
+  if (type === "newRequest") {
+    return data.filter((owner) => owner.status === "pending");
+  }
+  if (type === "approved") {
+    return data.filter((owner) => owner.status === "approved");
+  }
+  if (type === "rejected") {
+    return data.filter((owner) => owner.status === "rejected");
+  }
+  return data;
+})();
 
-  const columns = [
-    { accessorKey: "_id", header: "ID" },
+  const columns = [  
     {
       accessorKey: "username",
       header: ({ column }) => (
@@ -71,6 +78,7 @@ export default function OwnerList({ type }) {
     )
   },
 },
+ { accessorKey: "status", header: "Status" }
   ]
 
   if (type === "newRequest") {
@@ -113,8 +121,8 @@ export default function OwnerList({ type }) {
   }}
 >
             <NativeSelectOption value="pending">Pending</NativeSelectOption>
-            <NativeSelectOption value="approve">Approve</NativeSelectOption>
-            <NativeSelectOption value="reject">Reject</NativeSelectOption>
+            <NativeSelectOption value="approved">Approve</NativeSelectOption>
+            <NativeSelectOption value="rejected">Reject</NativeSelectOption>
           </NativeSelect>
         )
       },

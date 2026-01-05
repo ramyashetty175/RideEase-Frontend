@@ -93,8 +93,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function ApprovedVehicle() {
+  const navigate = useNavigate();
   const { data } = useSelector((state) => state.vehicle);
 
   const approvedVehicles = data.filter(
@@ -166,9 +168,15 @@ export default function ApprovedVehicle() {
               </div>
 
               {/* Action */}
-              <Button className="mt-2 w-full bg-gray-700 hover:bg-gray-800">
-                View
-              </Button>
+                <Button
+  className="mt-2 w-full bg-gray-700 hover:bg-gray-800"
+  onClick={() =>
+    navigate(`view/${vehicle._id}`)
+  }
+>
+  View
+</Button>
+
             </CardContent>
           </Card>
         ))}

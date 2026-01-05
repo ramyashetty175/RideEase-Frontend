@@ -17,7 +17,7 @@ import BookingList from "./pages/BookingList";
 import { Navbar }  from "./components/Navbar";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import UserContext from "./context/UserContext";
 import './App.css';
 import { useDispatch } from 'react-redux';
@@ -36,6 +36,8 @@ import OwnerHome from "./pages/Owner/OwnerHome";
 import OwnerProfile from "./pages/Owner/OwnerProfile";
 import AdminProfile from "./pages/Admin/AdminProfile";
 import Users from "./pages/Users";
+import VehicleBooking from "./pages/VehicleBooking";
+import VehicleShow from "./pages/VehicleShow";
 
 function App() {
   const dispatch = useDispatch();
@@ -122,7 +124,7 @@ function App() {
         <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="newRequest" /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="approved" /></PrivateRoute>} />
         <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="rejected" /></PrivateRoute>} />
-
+  
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Pending" /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/approve" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="Approved"/></PrivateRoute>} />
@@ -150,8 +152,9 @@ function App() {
         {/* <Route path="/dashboard/logout" element={<PrivateRoute allowedRoles={['admin']}>< /></PrivateRoute>} /> */}
 
         <Route path="/search" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><SearchPage /></PrivateRoute>} />
-        
+
         <Route path="/vehicles" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><Vehicle /></PrivateRoute>} />
+        <Route path="/view" element={<PrivateRoute allowedRoles={['admin']}><VehicleBooking /></PrivateRoute>} />
 
       </Routes>
     </div>

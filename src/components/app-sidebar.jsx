@@ -132,7 +132,7 @@ const data = {
         },
         {
           title: "Confirm",
-          url: "/dashboard/admin/bookings/reject",
+          url: "/dashboard/admin/bookings/confirm",
         },
         {
           title: "In-Progress",
@@ -140,7 +140,7 @@ const data = {
         },
         {
           title: "Complete",
-          url: "/dashboard/admin/bookings/reject",
+          url: "/dashboard/admin/bookings/complete",
         },
         {
           title: "Canceled",
@@ -152,6 +152,21 @@ const data = {
         },
       ],
     },
+    {
+      title: "Vehicle Tracking",
+      url: "/dashboard/admin/vehicleTracking",
+      icon: Bot,
+      items: [
+        {
+          title: "Live Map",
+          url: "/dashboard/admin/vehicleTracking/map",
+        },
+        {
+          title: "Vehicle List",
+          url: "/dashboard/admin/vehicleTracking/table",
+        }
+      ]
+    }
   ],
   navMainOwner: [
     {

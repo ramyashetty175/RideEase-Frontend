@@ -23,35 +23,35 @@ export const createBooking = createAsyncThunk("booking/createBooking", async ({ 
     }
 })
 
+export const bookingApprove = createAsyncThunk("Booking/bookingApprove", async({ editId }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        // handleReset();
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
+export const bookingCancel = createAsyncThunk("Booking/bookingCancel", async({ editId }, { rejectWithValue }) => {
+    try {
+        const response = await axios.put(`/api/vehicles/reject/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        // handleReset();
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
 export const updateBooking = createAsyncThunk("booking/updateBooking", async ({ editId, formData }, { rejectWithValue }) => {
     try {
         const response = await axios.put(`/api/bookings/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         handleReset();
-        return response.data;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
-    }
-})
-
-export const bookingApprove = createAsyncThunk("booking/bookingApprove", async({ editId }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        // handleReset();
-        return response.data;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
-    }
-})
-
-export const bookingCancel = createAsyncThunk("booking/bookingCancel", async({ editId }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);

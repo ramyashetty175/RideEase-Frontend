@@ -37,6 +37,7 @@ import OwnerProfile from "./pages/Owner/OwnerProfile";
 import AdminProfile from "./pages/Admin/AdminProfile";
 import Users from "./pages/Users";
 import VehicleBooking from "./pages/VehicleBooking";
+import Bookings from "./pages/Bookings";
 import VehicleShow from "./pages/VehicleShow";
 
 function App() {
@@ -156,7 +157,13 @@ function App() {
         <Route path="/search" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><SearchPage /></PrivateRoute>} />
 
         <Route path="/vehicles" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><Vehicle /></PrivateRoute>} />
+
+        <Route path="/bookings" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><Bookings /></PrivateRoute>} />
+
         <Route path="vehicles/view/:id" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><VehicleBooking /></PrivateRoute>} />
+       
+        <Route path="/dashboard/admin/vehicleTracking/map" element={<PrivateRoute allowedRoles={['admin']}><Vehicle /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicleTracking/table" element={<PrivateRoute allowedRoles={['admin']}><Vehicle /></PrivateRoute>} />
 
       </Routes>
     </div>

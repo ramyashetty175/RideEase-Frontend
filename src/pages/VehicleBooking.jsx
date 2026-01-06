@@ -2,10 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createBooking } from "@/slices/bookingSlice";
 
 export default function VehicleBooking() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams(); // vehicle id from URL
   const { data } = useSelector((state) => state.vehicle);
 
@@ -73,10 +75,16 @@ export default function VehicleBooking() {
             </div>
           </div>
 
-          {/* Book Now */}
-          <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
-            Book Now
-          </Button>
+          <Button
+  className="w-full bg-blue-600 text-white hover:bg-blue-700"
+  onClick={() => {
+    dispatch(createBooking({ vehicle, pickupDate, returnDate }));
+    navigate("/bookings");
+  }}
+>
+  Book Now
+</Button>
+
         </div>
       </div>
     </div>

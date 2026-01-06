@@ -84,6 +84,7 @@ const ownerSlice = createSlice({
                 state.errors = action.payload;
                 state.loading = false;
             })
+            
             .addCase(OwnerApprove.pending, (state) => {
                 state.loading = true;
                 // state.data = [];
@@ -110,6 +111,7 @@ const ownerSlice = createSlice({
             .addCase(OwnerReject.rejected, (state, action) => {
                 state.errors = action.payload;
             })
+
             .addCase(removeOwner.pending, (state) => {
                 state.loading = true;
                 state.data = [];

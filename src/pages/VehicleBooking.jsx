@@ -5,6 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createBooking } from "@/slices/bookingSlice";
 
+import { useState } from "react";
+
+const [startDateTime, setStartDateTime] = useState("");
+const [endDateTime, setEndDateTime] = useState("");
+
 export default function VehicleBooking() {
   const navigate = useNavigate();
   const dispatch = useDispatch();

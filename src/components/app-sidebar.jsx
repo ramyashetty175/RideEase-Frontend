@@ -143,11 +143,11 @@ const data = {
           url: "/dashboard/admin/bookings/complete",
         },
         {
-          title: "Canceled",
+          title: "Cancel",
           url: "/dashboard/admin/bookings/cancel",
         },
         {
-          title: "CancelRequested",
+          title: "CancelRequest",
           url: "/dashboard/admin/bookings/cancel-request",
         },
       ],
@@ -231,11 +231,11 @@ const data = {
           url: "/dashboard/owner/bookings/complete",
         },
          {
-          title: "Reject",
-          url: "/dashboard/owner/bookings/reject",
+          title: "Cancel",
+          url: "/dashboard/owner/bookings/cancel",
         },
         {
-          title: "Cancel Request",
+          title: "CancelRequest",
           url: "/dashboard/owner/bookings/cancel-request",
         },
       ],

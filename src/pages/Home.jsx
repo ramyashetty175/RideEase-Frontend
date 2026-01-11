@@ -7,17 +7,18 @@ import { Checkbox } from "@/components/ui/checkbox"
 export default function Home() {
   return (
     <div className="w-full flex justify-center mt-16">
-      <Card className="w-full max-w-6xl p-6 rounded-2xl shadow-lg">
+      <Card className="w-full max-w-4xl p-4 rounded-2xl shadow-lg">
     
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
-        
-          <div className="md:col-span-2 space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+          <div className="flex flex-col space-y-2">
             <Label>Pickup and return location</Label>
             <Input
               placeholder="City, address, point of interest"
               className="h-11"
             />
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-2 mt-1">
               <Checkbox id="same-location" />
               <Label
                 htmlFor="same-location"
@@ -28,29 +29,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Pickup date</Label>
-            <Input type="date" className="h-11" />
+          <div className="flex flex-col space-y-2">
+            <Label>Pickup Date & Time</Label>
+            <Input type="datetime-local" className="h-11" />
           </div>
 
-          <div className="space-y-2">
-            <Label>Time</Label>
-            <Input type="time" className="h-11" />
+          <div className="flex flex-col space-y-2">
+            <Label>Return Date & Time</Label>
+            <Input type="datetime-local" className="h-11" />
           </div>
 
-          <div className="space-y-2">
-            <Label>Return date</Label>
-            <Input type="date" className="h-11" />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Time</Label>
-            <Input type="time" className="h-11" />
-          </div>
         </div>
-        
         <div className="flex justify-end mt-6">
-           <Button className="bg-black text-white h-11">
+           <Button className="bg-black text-white h-11 px-6">
               Search
            </Button>
         </div>

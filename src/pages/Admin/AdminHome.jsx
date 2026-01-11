@@ -42,12 +42,8 @@ const vehicles = [
 export default function AdminHome() {
   return (
     <div className="w-full flex flex-col items-center mt-10 space-y-8">
-
-      {/* WELCOME MESSAGE */}
       <Card className="w-full max-w-5xl bg-white/70 shadow-sm border">
         <div className="flex flex-col md:flex-row items-center justify-between p-8">
-
-          {/* Left */}
           <div className="flex-1">
             <CardHeader className="p-0 mb-4">
               <CardTitle className="text-4xl font-bold">
@@ -57,7 +53,6 @@ export default function AdminHome() {
                 Manage your fleet, bookings, and owners easily.
               </CardDescription>
             </CardHeader>
-
             <CardContent className="p-0">
               <p className="text-gray-500 mb-5">
                 You have <strong>2 pending approvals</strong> today.
@@ -68,8 +63,6 @@ export default function AdminHome() {
               </Button>
             </CardContent>
           </div>
-
-          {/* Right Image */}
           <div className="w-full md:w-1/3 mt-8 md:mt-0 flex justify-center">
             <img
               src="https://cdn-icons-png.flaticon.com/512/993/993769.png"
@@ -77,19 +70,12 @@ export default function AdminHome() {
               className="w-48 h-48 object-contain"
             />
           </div>
-
         </div>
       </Card>
-
-      {/* SEPARATOR 1 */}
       <Separator className="w-full max-w-5xl" />
-
-      {/* ONE-LINE TEXT */}
       <h1 className="text-3xl font-bold text-gray-900">
         Quick overview of your platform activity
       </h1>
-
-      {/* QUICK STATS ROW */}
       <div className="w-full max-w-5xl flex gap-4">
         <Card className="min-w-[200px]">
           <CardHeader className="pb-2">
@@ -136,8 +122,6 @@ export default function AdminHome() {
           </CardContent>
         </Card>
       </div>
-
-      {/* SEPARATOR 2 — AFTER quick stats */}
       <Separator className="w-full max-w-5xl" />
 
       <h1 className="text-3xl font-bold text-gray-900 w-full max-w-5xl">
@@ -149,22 +133,18 @@ export default function AdminHome() {
             key={index}
             className="flex flex-col items-center justify-center p-4 text-center"
           >
-            {/* Circular Avatar with first letter */}
             <div className="w-12 h-12 rounded-full bg-gray-800 text-white flex items-center justify-center text-lg font-bold mb-2">
               {owner.name.charAt(0)}
             </div>
 
-            {/* Name */}
             <CardHeader className="p-0 mb-1">
               <CardTitle className="text-lg font-semibold">{owner.name}</CardTitle>
             </CardHeader>
 
-            {/* Verified badge */}
             {owner.verified && (
               <p className="text-green-600 text-sm mb-2">Verified</p>
             )}
 
-            {/* View Profile Button */}
             <Button size="sm">View Profile</Button>
           </Card>
         ))}
@@ -200,34 +180,28 @@ export default function AdminHome() {
       </div>
       <Separator className="w-full max-w-5xl" />
 
-      {/* H1 for All Users */}
       <h1 className="text-3xl font-bold text-gray-900 w-full max-w-5xl">
         All Users
       </h1>
 
-      {/* Users Grid */}
       <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4">
         {users.map((user, index) => (
           <Card
             key={index}
             className="flex flex-col items-center justify-center p-4 text-center"
           >
-            {/* Circular Avatar with first letter */}
             <div className="w-12 h-12 rounded-full bg-gray-800 text-white flex items-center justify-center text-lg font-bold mb-2">
               {user.name.charAt(0)}
             </div>
 
-            {/* Name */}
             <CardHeader className="p-0 mb-1">
               <CardTitle className="text-lg font-semibold">{user.name}</CardTitle>
             </CardHeader>
 
-            {/* Verified badge */}
             {user.verified && (
               <p className="text-green-600 text-sm mb-2">Verified</p>
             )}
 
-            {/* View Profile Button */}
             <Button size="sm">View Profile</Button>
           </Card>
         ))}
@@ -262,35 +236,30 @@ export default function AdminHome() {
         </Pagination>
       </div>
        <Separator className="w-full max-w-5xl" />
-       {/* H1 for All Vehicles */}
       <h1 className="text-3xl font-bold text-gray-900 w-full max-w-5xl">
         All Vehicles
       </h1>
 
-      {/* Vehicles Grid */}
       <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4">
         {vehicles.map((vehicle, index) => (
           <Card
             key={index}
             className="flex flex-col items-center justify-center p-4 text-center"
           >
-            {/* Circular Avatar with first letter of vehicle name */}
+    
             <div className="w-12 h-12 rounded-full bg-gray-800 text-white flex items-center justify-center text-lg font-bold mb-2">
               {vehicle.name.charAt(0)}
             </div>
 
-            {/* Vehicle Name */}
             <CardHeader className="p-0 mb-1">
               <CardTitle className="text-lg font-semibold">{vehicle.name}</CardTitle>
             </CardHeader>
 
-            {/* Vehicle Type/Status */}
             <CardContent className="p-0 mb-2">
               <p className="text-gray-500 text-sm">{vehicle.type}</p>
               <p className="text-gray-500 text-sm">{vehicle.status}</p>
             </CardContent>
 
-            {/* View Button */}
             <Button size="sm">View</Button>
           </Card>
         ))}

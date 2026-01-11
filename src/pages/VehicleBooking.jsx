@@ -7,16 +7,14 @@ import { createBooking } from "@/slices/bookingSlice";
 
 import { useState } from "react";
 
-const [startDateTime, setStartDateTime] = useState("");
-const [endDateTime, setEndDateTime] = useState("");
-
 export default function VehicleBooking() {
+  const [startDateTime, setStartDateTime] = useState("");
+  const [endDateTime, setEndDateTime] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { id } = useParams(); // vehicle id from URL
+  const { id } = useParams(); 
   const { data } = useSelector((state) => state.vehicle);
 
-  // Find the vehicle by id
   const vehicle = data.find((v) => v._id === id);
 
   if (!vehicle) {
@@ -25,7 +23,6 @@ export default function VehicleBooking() {
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-4">
-      {/* Back Button */}
       <Button
         variant="default"
         className="bg-black text-white mb-6 hover:bg-gray-800"
@@ -34,9 +31,8 @@ export default function VehicleBooking() {
         ← Back to all vehicles
       </Button>
 
-      {/* Vehicle Card */}
       <div className="border rounded-2xl shadow-md p-6 flex flex-col md:flex-row gap-6">
-        {/* Vehicle Image */}
+
         <div className="w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
           {vehicle.image ? (
             <img
@@ -51,9 +47,8 @@ export default function VehicleBooking() {
           )}
         </div>
 
-        {/* Vehicle Info + Booking */}
         <div className="flex-1 flex flex-col justify-between">
-          {/* Vehicle Info */}
+  
           <div className="mb-4">
             <h2 className="text-xl font-semibold text-gray-800">
               {vehicle.name}
@@ -62,34 +57,51 @@ export default function VehicleBooking() {
             <p className="text-2xl font-bold mt-2">₹{vehicle.price} 1000 / day</p>
           </div>
 
-          {/* Date Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div className="flex flex-col">
               <label className="text-gray-700 mb-1">Pickup Date & Time</label>
               <input
-                type="datetime-local"
-                className="border rounded p-2 w-full"
-              />
+  type="datetime-local"
+  value={startDateTime}
+  onChange={(e) => setStartDateTime(e.target.value)}
+  className="border rounded p-2 w-full"
+/>
             </div>
             <div className="flex flex-col">
               <label className="text-gray-700 mb-1">Return Date & Time</label>
               <input
-                type="datetime-local"
-                className="border rounded p-2 w-full"
-              />
+  type="datetime-local"
+  value={endDateTime}
+  onChange={(e) => setEndDateTime(e.target.value)}
+  className="border rounded p-2 w-full"
+/>
             </div>
           </div>
 
           <Button
   className="w-full bg-blue-600 text-white hover:bg-blue-700"
   onClick={() => {
-    dispatch(createBooking({ vehicle, pickupDate, returnDate }));
+    if (!startDateTime || !endDateTime) {
+      alert("Please select start and end dates");
+      return;
+    }
+
+    dispatch(
+      createBooking({
+        vehicle: vehicle._id,
+        startDateTime,
+        endDateTime,
+        totalAmount: Math.ceil(
+          (new Date(endDateTime) - new Date(startDateTime)) / (1000*60*60*24)
+        ) * vehicle.price,
+      })
+    );
+
     navigate("/bookings");
   }}
 >
   Book Now
 </Button>
-
         </div>
       </div>
     </div>

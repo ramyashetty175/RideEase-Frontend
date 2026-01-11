@@ -15,7 +15,6 @@ export const createBooking = createAsyncThunk("booking/createBooking", async (fo
     try {
         const response = await axios.post('/api/bookings', formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data.booking;
     } catch(err) {
         console.log(err);
@@ -27,7 +26,6 @@ export const bookingApprove = createAsyncThunk("Booking/bookingApprove", async({
     try {
         const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
@@ -39,7 +37,6 @@ export const bookingCancel = createAsyncThunk("Booking/bookingCancel", async({ e
     try {
         const response = await axios.put(`/api/vehicles/reject/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
@@ -51,7 +48,6 @@ export const updateBooking = createAsyncThunk("booking/updateBooking", async ({ 
     try {
         const response = await axios.put(`/api/bookings/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data.booking;
     } catch(err) {
         console.log(err);
@@ -119,7 +115,6 @@ const bookingSlice = createSlice({
             
             .addCase(bookingApprove.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(bookingApprove.fulfilled, (state, action) => {
@@ -134,7 +129,6 @@ const bookingSlice = createSlice({
             })
             .addCase(bookingCancel.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(bookingCancel.fulfilled, (state, action) => {

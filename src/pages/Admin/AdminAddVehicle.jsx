@@ -27,22 +27,22 @@ export default function OwnerAddVehicle() {
   const { errors, editId, data } = useSelector((state) => state.vehicle);
 
   const [formData, setFormData] = useState({
-    vehicleName: "",
-    brand: "",
-    type: "",
-    registrationNumber: "",
-    fuelType: "",
-    transmission: "",
-    seats: "",
-    pricePerDay: "",
-    availabilityStatus: "",
-    location: "",
+        vehicleName: "",
+        brand: "",
+        type: "",
+        registrationNumber: "",
+        fuelType: "",
+        transmission: "",
+        seats: "",
+        pricePerDay: "",
+        availabilityStatus: "",
+        location: "",
   })
 
   const [files, setFiles] = useState({
-    image: null,
-    licenseDoc: null,
-    insuranceDoc: null,
+        image: null,
+        licenseDoc: null,
+        insuranceDoc: null,
   })
 
   const [previewImage, setPreviewImage] = useState(null);

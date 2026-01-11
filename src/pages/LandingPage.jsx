@@ -6,15 +6,7 @@ import { Footer } from "../components/Footer";
 export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col font-inter bg-[#fafafa]">
-
-      {/* Navbar */}
-    
-
-      {/* Simple Separator */}
       <Separator />
-
-      {/* Hero Section */}
-    
 <section className="flex-1 flex flex-col items-center justify-center text-center px-6 md:px-12 py-32 bg-blue-50/30">
   
   <p className="text-lg text-black mb-4 uppercase tracking-wide">

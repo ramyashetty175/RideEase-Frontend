@@ -1,9 +1,3 @@
-// import Bookings from "../Bookings";
-// import UsersList from "../UsersList";
-// import OwnerMain from "./OwnerMain";
-// import BookingCancel from "../BookingCancel";
-// import Vehicle from "../Vehicle";
-
 import { AppSidebar } from "@/components/app-sidebar"
 import UsersList from "../UsersList";
 import {

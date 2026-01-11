@@ -15,7 +15,6 @@ export const OwnerApprove = createAsyncThunk("owner/OwnerApprove", async({ editI
     try {
         const response = await axios.put(`/users/owner/approve/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
@@ -27,7 +26,6 @@ export const OwnerReject = createAsyncThunk("owner/OwnerReject", async({ editId,
     try {
         const response = await axios.put(`/users/owner/reject/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
@@ -87,7 +85,6 @@ const ownerSlice = createSlice({
             
             .addCase(OwnerApprove.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(OwnerApprove.fulfilled, (state, action) => {
@@ -100,7 +97,6 @@ const ownerSlice = createSlice({
             })
             .addCase(OwnerReject.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(OwnerReject.fulfilled, (state, action) => {

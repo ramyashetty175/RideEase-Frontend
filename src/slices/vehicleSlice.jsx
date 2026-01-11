@@ -15,7 +15,6 @@ export const createVehicle = createAsyncThunk("vehicle/createVehicle", async({ f
     try {
         const response = await axios.post('/api/vehicles', formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data.vehicle;
     } catch(err) {
         console.log(err);
@@ -38,7 +37,6 @@ export const vehicleApprove = createAsyncThunk("vehicle/vehicleApprove", async({
     try {
         const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
@@ -50,7 +48,6 @@ export const vehicleReject = createAsyncThunk("vehicle/vehicleReject", async({ e
     try {
         const response = await axios.put(`/api/vehicles/reject/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
-        // handleReset();
         return response.data;
     } catch(err) {
         console.log(err);
@@ -109,11 +106,9 @@ const vehicleSlice = createSlice({
             })
             .addCase(createVehicle.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(createVehicle.fulfilled, (state, action) => {
-                // state.data.push(action.payload);
                 state.data.push(action.payload);
                 state.loading = false;
                 state.errors = null;
@@ -124,7 +119,6 @@ const vehicleSlice = createSlice({
             })
             .addCase(removeVehicle.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(removeVehicle.fulfilled, (state, action) => {
@@ -136,7 +130,6 @@ const vehicleSlice = createSlice({
             })
             .addCase(updateVehicle.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(updateVehicle.fulfilled, (state, action) => {
@@ -150,7 +143,6 @@ const vehicleSlice = createSlice({
 
             .addCase(vehicleApprove.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(vehicleApprove.fulfilled, (state, action) => {
@@ -165,7 +157,6 @@ const vehicleSlice = createSlice({
             })
             .addCase(vehicleReject.pending, (state) => {
                 state.loading = true;
-                // state.data = [];
                 state.errors = null;
             })
             .addCase(vehicleReject.fulfilled, (state, action) => {

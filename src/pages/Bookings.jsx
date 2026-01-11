@@ -24,7 +24,7 @@ export default function Bookings() {
             key={booking._id}
             className="border rounded-2xl shadow-md p-6 flex flex-col md:flex-row gap-6"
           >
-            {/* Vehicle Image */}
+  
             <div className="w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
               {booking.vehicle.image ? (
                 <img
@@ -39,7 +39,6 @@ export default function Bookings() {
               )}
             </div>
 
-            {/* Booking Info */}
             <div className="flex-1 flex flex-col justify-between">
               <div>
                 <h2 className="text-xl font-semibold text-gray-800">
@@ -64,8 +63,7 @@ export default function Bookings() {
                   ₹{booking.totalPrice}
                 </p>
               </div>
-
-              {/* Status */}
+              
               <div className="mt-4 flex justify-between items-center">
                 <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">
                   {booking.status}

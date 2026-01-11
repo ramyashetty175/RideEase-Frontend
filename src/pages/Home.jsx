@@ -9,10 +9,8 @@ export default function Home() {
     <div className="w-full flex justify-center mt-16">
       <Card className="w-full max-w-6xl p-6 rounded-2xl shadow-lg">
     
-        {/* TOP ROW */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
-          
-          {/* Location */}
+        
           <div className="md:col-span-2 space-y-2">
             <Label>Pickup and return location</Label>
             <Input
@@ -30,32 +28,27 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Pickup Date */}
           <div className="space-y-2">
             <Label>Pickup date</Label>
             <Input type="date" className="h-11" />
           </div>
 
-          {/* Pickup Time */}
           <div className="space-y-2">
             <Label>Time</Label>
             <Input type="time" className="h-11" />
           </div>
 
-          {/* Return Date */}
           <div className="space-y-2">
             <Label>Return date</Label>
             <Input type="date" className="h-11" />
           </div>
 
-          {/* Return Time */}
           <div className="space-y-2">
             <Label>Time</Label>
             <Input type="time" className="h-11" />
           </div>
         </div>
-
-        {/* SEARCH BUTTON */}
+        
         <div className="flex justify-end mt-6">
            <Button className="bg-black text-white h-11">
               Search

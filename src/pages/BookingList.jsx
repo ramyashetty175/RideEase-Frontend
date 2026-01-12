@@ -20,7 +20,7 @@ export default function BookingList({ status }) {
   const baseColumns = [
     { accessorKey: "_id", header: "Booking ID" },
     { accessorKey: "userName", header: "User Name" },
-    { accessorKey: "userEmail", header: "Email" },
+    { accessorKey: "email", header: "Email" },
     { accessorKey: "vehicleName", header: "Vehicle" },
     { accessorKey: "ownerName", header: "Owner" },
     { accessorKey: "pickupLocation", header: "Pickup" },

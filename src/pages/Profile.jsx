@@ -44,9 +44,9 @@ export default function Profile() {
         useEffect(() => {
           if (user) {
             setForm({ 
-              username: user.username, 
-              email: user.email, 
-              bio: user.bio });
+              username: user.username || "", 
+              email: user.email || "", 
+              bio: user.bio || "" });
             setPreviewAvatar(user.avatar);
             setFiles({ 
               avatar: null, 
@@ -80,7 +80,7 @@ export default function Profile() {
           try {
               const data = new FormData();
               data.append("avatar", file);
-              const response = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+              const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
               return response.data.avatarUrl;
           } catch (err) {
               console.log("Avatar upload failed:", err);
@@ -95,7 +95,7 @@ export default function Profile() {
           try {
               const data = new FormData();
               data.append("licenceDoc", file);
-              const response = await axios.post('/api/upload/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
+              const response = await axios.post('/api/upload/user/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
               return response.data.licenceDoc;
           } catch (err) {
               console.log("Licence upload failed:", err);
@@ -110,7 +110,7 @@ export default function Profile() {
           try {
               const data = new FormData();
               data.append("insuranceDoc", file);
-              const res = await axios.post('/api/upload/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
+              const res = await axios.post('/api/upload/user/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
               return res.data.insuranceDoc;
           } catch (err) {
               console.log("Insurance upload failed:", err);

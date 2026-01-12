@@ -24,7 +24,7 @@ export const createBooking = createAsyncThunk("booking/createBooking", async (fo
 
 export const bookingApprove = createAsyncThunk("Booking/bookingApprove", async({ editId }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/api/bookings/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         return response.data;
     } catch(err) {
@@ -35,7 +35,7 @@ export const bookingApprove = createAsyncThunk("Booking/bookingApprove", async({
 
 export const bookingCancel = createAsyncThunk("Booking/bookingCancel", async({ editId }, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/api/vehicles/reject/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/api/bookings/cancel/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         return response.data;
     } catch(err) {

@@ -48,7 +48,7 @@ export function Navbar() {
         </NavigationMenuItem> */}
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link to="/search">Search</Link>
+            <Link to="/vehicle/search">Search</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem className="hidden md:block">

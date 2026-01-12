@@ -33,6 +33,17 @@ export const updateVehicle = createAsyncThunk("vehicle/updateVehicle", async ({ 
     }
 })
 
+export const searchVehicle = createAsyncThunk("vehicle/searchVehicle", async (keyword, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`/api/vehicles/search?keyword=${keyword}`, { headers: { Authorization: localStorage.getItem('token')}});
+        console.log(response.data);
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
 export const vehicleApprove = createAsyncThunk("vehicle/vehicleApprove", async({ editId }, { rejectWithValue }) => {
     try {
         const response = await axios.put(`/api/vehicles/approve/${editId}`, null, { headers: { Authorization: localStorage.getItem('token')}});
@@ -117,6 +128,20 @@ const vehicleSlice = createSlice({
                 state.loading = false;
                 state.errors = action.payload;
             })
+
+            .addCase(searchVehicle.pending, (state) => {
+                state.loading = true;
+                state.errors = null;
+            })
+            .addCase(searchVehicle.fulfilled, (state, action) => {
+                state.loading = false;
+                state.data = action.payload;
+            })
+            .addCase(searchVehicle.rejected, (state, action) => {
+                state.loading = false;
+                state.errors = action.payload;
+            })
+            
             .addCase(removeVehicle.pending, (state) => {
                 state.loading = true;
                 state.errors = null;

@@ -80,6 +80,27 @@ export default function BookingList({ status }) {
           },
         },
       ]
+    : status === "in-progress"
+    ? [
+        {
+          id: "action",
+          header: "Action",
+          cell: ({ row }) => {
+            const booking = row.original;
+
+            return (
+              <Button
+                size="sm"
+                onClick={() => {
+                  handleTrack(booking._id, booking.vehicle);
+                }}
+              >
+                Track
+              </Button>
+            );
+          },
+        },
+      ]
     : [];
 
   const columns = [...baseColumns, ...actionColumn];

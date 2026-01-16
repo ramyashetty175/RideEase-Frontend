@@ -33,19 +33,36 @@ export default function UserBookings() {
           <NativeSelect
             defaultValue=""
             onChange={(e) => {
-              const action = e.target.value;
+  const action = e.target.value;
+  if (action === "start") {
+    dispatch(
+      bookingStartTrip({
+        editId: booking._id,
+        formData: {} 
+      })
+    );
+  }
 
-              if (action === "start") {
-                dispatch(bookingStartTrip(booking._id));
-              }
-              if (action === "end") {
-                dispatch(bookingEndTrip(booking._id));
-              }
-              if (action === "extend") {
-                dispatch(bookingExtendTrip(booking._id));
-              }
-              e.target.value = "";
-            }}
+  if (action === "end") {
+    dispatch(
+      bookingEndTrip({
+        editId: booking._id,
+        formData: {}
+      })
+    );
+  }
+
+  if (action === "extend") {
+    dispatch(
+      bookingExtendTrip({
+        editId: booking._id,
+        formData: {}
+      })
+    );
+  }
+
+  e.target.value = "";
+}}
             className="w-36"
           >
             <NativeSelectOption value="" disabled>

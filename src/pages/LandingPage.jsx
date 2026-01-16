@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer";
 
 export default function LandingPage() {
-  return (
-    <div className="min-h-screen flex flex-col font-inter bg-[#fafafa]">
+      return (
+          <div className="min-h-screen flex flex-col font-inter bg-[#fafafa]">
       <Separator />
 <section className="flex-1 flex flex-col items-center justify-center text-center px-6 md:px-12 py-32 bg-blue-50/30">
   

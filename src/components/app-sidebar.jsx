@@ -151,21 +151,6 @@ const data = {
         },
       ],
     },
-    {
-      title: "Vehicle Tracking",
-      url: "/dashboard/admin/vehicleTracking",
-      icon: Bot,
-      items: [
-        {
-          title: "Live Map",
-          url: "/dashboard/admin/vehicleTracking/map",
-        },
-        {
-          title: "Vehicle List",
-          url: "/dashboard/admin/vehicleTracking/table",
-        }
-      ]
-    }
   ],
   navMainOwner: [
     {
@@ -250,6 +235,12 @@ const data = {
     {
       title: "Bookings",
       url: "/dashboard/bookings",
+      icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Vehilce Map",
+      url: "/dashboard/vehicle/map",
       icon: SquareTerminal,
       isActive: true,
     },

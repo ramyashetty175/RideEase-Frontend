@@ -126,11 +126,10 @@ export default function OwnerAddVehicle() {
 
     resetForm();
   } catch (err) {
-    console.error("Submit error:", err);
-    alert("Failed to submit vehicle. Check console.");
+    console.log("Submit error:", err);
+    alert("Failed to submit vehicle");
   }
 };
-
 
       return(
             <SidebarProvider>

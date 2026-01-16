@@ -41,6 +41,7 @@ import Bookings from "./pages/Bookings";
 import VehicleShow from "./pages/VehicleShow";
 import MyBookings from "./pages/MyBookings";
 import UserBookings from "./pages/UserBookings";
+import VehicleTracking from './pages/VehicleTracking';
 
 function App() {
   const dispatch = useDispatch();
@@ -153,6 +154,9 @@ function App() {
         <Route path="/dashboard/profile" element={<PrivateRoute allowedRoles={['user']}><Profile /></PrivateRoute>} />
         <Route path="/dashboard/bookings" element={<PrivateRoute allowedRoles={['user']}><UserBookings /></PrivateRoute>} />
         <Route path="/dashboard/transactions" element={<PrivateRoute allowedRoles={['user']}><Transactions /></PrivateRoute>} />
+
+        <Route path="/dashboard/vehicle/map" element={<PrivateRoute allowedRoles={['user']}><VehicleTracking /></PrivateRoute>} />
+
         <Route path="/dashboard/change-password" element={<PrivateRoute allowedRoles={['user']}><ChangePassword /></PrivateRoute>} />
         {/* <Route path="/dashboard/logout" element={<PrivateRoute allowedRoles={['admin']}>< /></PrivateRoute>} /> */}
 
@@ -164,9 +168,6 @@ function App() {
 
         <Route path="vehicles/view/:id" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><VehicleBooking /></PrivateRoute>} />
        
-        <Route path="/dashboard/admin/vehicleTracking/map" element={<PrivateRoute allowedRoles={['admin']}><Vehicle /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicleTracking/table" element={<PrivateRoute allowedRoles={['admin']}><Vehicle /></PrivateRoute>} />
-
       </Routes>
     </div>
   )

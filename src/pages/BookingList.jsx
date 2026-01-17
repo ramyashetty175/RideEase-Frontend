@@ -90,13 +90,14 @@ export default function BookingList({ status }) {
 
             return (
               <Button
-                size="sm"
-                onClick={() => {
-                  handleTrack(booking._id, booking.vehicle);
-                }}
-              >
-                Track
-              </Button>
+  size="sm"
+  onClick={() => {
+    // Navigate to VehicleTracking page
+    window.location.href = `/vehicle-tracking/${booking.vehicle}`;
+  }}
+>
+  Track
+</Button>
             );
           },
         },

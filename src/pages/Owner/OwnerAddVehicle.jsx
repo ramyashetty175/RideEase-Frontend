@@ -18,13 +18,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 export default function OwnerAddVehicle() {
   const dispatch = useDispatch();
-  const { errors, editId, data } = useSelector((state) => state.vehicle);
+  const { editId, data } = useSelector((state) => state.vehicle);
 
   const [formData, setFormData] = useState({
     vehicleName: "",
@@ -46,6 +52,8 @@ export default function OwnerAddVehicle() {
   })
 
   const [previewImage, setPreviewImage] = useState(null);
+  const [alert, setAlert] = useState(null);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (editId && data) {
@@ -75,7 +83,9 @@ export default function OwnerAddVehicle() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFiles({ ...files, [e.target.name]: file });
-    if (e.target.name === "image") setPreviewImage(URL.createObjectURL(file));
+    if (e.target.name === "image") {
+      setPreviewImage(URL.createObjectURL(file));
+    }
   }
 
   const resetForm = () => {
@@ -97,10 +107,59 @@ export default function OwnerAddVehicle() {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-
+  const errors = {};
+  if(!files.image) {
+    errors.image = "Vehicle Image is required";
+  }
+  if(!files.licenseDoc) {
+    errors.licenseDoc = "Vehicle LicenceDoc is required";
+  }
+  if(!files.insuranceDoc) {
+    errors.insuranceDoc = "Vehicle InsuranceDoc is required";
+  }
+  if(!formData.type) {
+    errors.type = "Vehicle Type is required";
+  }
+  if(!formData.fuelType) {
+    errors.fuelType = "Vehicle Fuel Type is required";
+  }
+  if(!formData.transmission) {
+    errors.transmission = "Vehicle  Transmission is required";
+  }
+  if(!formData.availabilityStatus) {
+    errors.availabilityStatus = "Vehicle Availability Status is required";
+  }
+  if(formData.vehicleName.trim().length == 0) {
+    errors.vehicleName = "Vehicle Name is required";
+  }else if (formData.vehicleName.length < 6) {
+  errors.vehicleName = "Vehicle Name is too short";
+  }
+  if(formData.brand.trim().length == 0) {
+     errors.brand = "Vehicle Brand is required";
+  }
+  if(formData.registrationNumber.trim().length == 0) {
+     errors.registrationNumber = "Vehicle Registration Number is required";
+  }else if (formData.registrationNumber.length < 6) {
+  errors.registrationNumber = "Invalid registration number";
+  } 
+  if(formData.seats.trim().length == 0) {
+     errors.seats = "Vehicle Seats is required";
+  }else if (isNaN(formData.seats) || Number(formData.seats) <= 0) {
+  errors.seats = "Seats must be a valid positive number";
+  }
+  if(formData.pricePerDay.trim().length == 0) {
+     errors.pricePerDay = "Vehicle Price Per Day is required";
+  }else if (isNaN(form.pricePerDay) || Number(form.pricePerDay) <= 0) {
+  errors.pricePerDay = "Price per day must be a valid amount";
+  }
+  if(formData.location.trim().length == 0) {
+     errors.location = "Vehicle location is required";
+  }
+  if(Object.keys(errors).length > 0) {
+           setErrors(errors);
+        }
   try {
     const form = new FormData();
-
     Object.keys(formData).forEach((key) => {
       if (key === "seats" || key === "pricePerDay") {
         form.append(key, Number(formData[key]));
@@ -130,8 +189,6 @@ export default function OwnerAddVehicle() {
     alert("Failed to submit vehicle. Check console.");
   }
 };
-
-
       return(
             <SidebarProvider>
             <AppSidebar />
@@ -139,7 +196,21 @@ export default function OwnerAddVehicle() {
                   <h1 className="text-xl font-semibold mb-4">
                      {editId ? "Edit Vehicle" : "Add Vehicle"}
                   </h1>
-                  {errors && <p>{ errors }</p>}
+                  {alert && (
+  <Alert
+    variant={alert.type === "error" ? "destructive" : "default"}
+    className="mb-4 flex items-start gap-2"
+  >
+    {alert.type === "error" ? (
+      <AlertCircleIcon />
+    ) : (
+      <CheckCircle2Icon />
+    )}
+    <AlertTitle>
+      {alert.message}
+</AlertTitle>
+  </Alert>
+)}
                   <form onSubmit={handleSubmit}>
                         <div className="grid grid-cols-12 gap-6">
                         <div className="col-span-4 flex flex-col gap-6">
@@ -151,6 +222,9 @@ export default function OwnerAddVehicle() {
                            />
                         )}
                        <div className="flex flex-col gap-2">
+                        {errors.image && (
+        <span style={{ color: "red" }}>{errors.image}</span>
+  )}
                            <Label htmlFor="image">Vehicle Image</Label>
                            <Input id="image" 
                                    name="image" 
@@ -159,6 +233,9 @@ export default function OwnerAddVehicle() {
                                    onChange={handleFileChange} 
                            />
                        </div>
+                       {errors.licenseDoc && (
+        <span style={{ color: "red" }}>{errors.licenseDoc}</span>
+  )}
                     <div className="grid w-full max-w-sm items-center gap-3">
                            <Label htmlFor="licenseDoc">LicenseDoc</Label>
                            <div className="flex items-center gap-3 w-full">
@@ -182,6 +259,9 @@ export default function OwnerAddVehicle() {
                         ) : null}
                     </div>
                 </div>
+                {errors.insuranceDoc && (
+        <span style={{ color: "red" }}>{errors.insuranceDoc}</span>
+  )}
                 <div className="grid w-full max-w-sm items-center gap-3">
                     <Label htmlFor="insuranceDoc">InsuranceDoc</Label>
                     <div className="flex items-center gap-3 w-full">
@@ -203,6 +283,9 @@ export default function OwnerAddVehicle() {
                 </div>
                  </div>
                 <div className="col-span-4 flex flex-col gap-8">
+                {errors.vehicleName && (
+        <span style={{ color: "red" }}>{errors.vehicleName}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="vehicleName" className="text-foreground">
@@ -220,7 +303,7 @@ export default function OwnerAddVehicle() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Vehicle Name</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -231,6 +314,9 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
+                {errors.brand && (
+        <span style={{ color: "red" }}>{errors.brand}</span>
+  )}
                  <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="Brand" className="text-foreground">
@@ -248,7 +334,7 @@ export default function OwnerAddVehicle() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Brand</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -259,6 +345,9 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
+                {errors.registrationNumber && (
+        <span style={{ color: "red" }}>{errors.registrationNumber}</span>
+  )}
                  <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="registrationNumber" className="text-foreground">
@@ -276,7 +365,7 @@ export default function OwnerAddVehicle() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Registration Number</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -287,6 +376,9 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
+                {errors.type && (
+        <span style={{ color: "red" }}>{errors.type}</span>
+  )}
                  <NativeSelect
   name="type"
   value={formData.type}
@@ -296,6 +388,9 @@ export default function OwnerAddVehicle() {
   <NativeSelectOption value="Car">Car</NativeSelectOption>
   <NativeSelectOption value="Bike">Bike</NativeSelectOption>
 </NativeSelect>
+{errors.fuelType && (
+        <span style={{ color: "red" }}>{errors.fuelType}</span>
+  )}
 <NativeSelect
   name="fuelType"
   value={formData.fuelType}
@@ -308,6 +403,9 @@ export default function OwnerAddVehicle() {
 </NativeSelect>
                 </div>
                 <div className="col-span-4 flex flex-col gap-8">
+                  {errors.transmission && (
+        <span style={{ color: "red" }}>{errors.transmission}</span>
+  )}
 <NativeSelect
   name="transmission"
   value={formData.transmission}
@@ -317,6 +415,9 @@ export default function OwnerAddVehicle() {
   <NativeSelectOption value="Manual">Manual</NativeSelectOption>
   <NativeSelectOption value="Electric">Electric</NativeSelectOption>
 </NativeSelect>
+{errors.seats && (
+        <span style={{ color: "red" }}>{errors.seats}</span>
+  )}
                   <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="seats" className="text-foreground">
@@ -334,7 +435,7 @@ export default function OwnerAddVehicle() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Seats</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -345,6 +446,9 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
+                {errors.pricePerDay && (
+        <span style={{ color: "red" }}>{errors.pricePerDay}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="pricePerDay" className="text-foreground">
@@ -362,7 +466,7 @@ export default function OwnerAddVehicle() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Price Per Day</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -373,6 +477,9 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
+                {errors.availabilityStatus && (
+        <span style={{ color: "red" }}>{errors.availabilityStatus}</span>
+  )}
                 <NativeSelect
   name="availabilityStatus"
   value={formData.availabilityStatus}
@@ -387,6 +494,9 @@ export default function OwnerAddVehicle() {
   <NativeSelectOption value="unAvailable">Unavailable</NativeSelectOption>
 </NativeSelect>
 
+{errors.location && (
+        <span style={{ color: "red" }}>{errors.location}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="location" className="text-foreground">
@@ -404,7 +514,7 @@ export default function OwnerAddVehicle() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Location</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>

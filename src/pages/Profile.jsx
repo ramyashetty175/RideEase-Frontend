@@ -72,7 +72,7 @@ export default function Profile() {
     const handleFileChange = (e) => {
         const { name, files: selectedFiles } = e.target;
         const file = selectedFiles[0];
-        setFiles((prev) => ({ ...prev, [name]: file }));
+        setFiles({ ...files, [name]: file });
         if (name === "avatar") {
             setPreviewAvatar(URL.createObjectURL(file));
         }

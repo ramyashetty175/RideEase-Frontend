@@ -8,6 +8,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert"
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
+import { passwordFormat } from "../utils/Format";
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import UserContext from "../context/UserContext";
@@ -30,15 +31,32 @@ export default function ChangePassword() {
             window.alert("No changes to update");
         }
         const errors = {};
-        if(form.oldpassword.length == 0) {
+        if(form.oldpassword.trim().length == 0) {
             errors.oldpassword = "Old Password is required";
         }
-        if(form.newpassword.length == 0) {
+        if(form.newpassword.trim().length == 0) {
             errors.newpassword = "New Password is required";
+        }else if(!passwordFormat.test(form.password)) {
+            errors.password = "New Password should contain atleast 1 uppercase, 1 lowercase, 1 numeric, 1 symbol, length 5-10";
         }
-        if(form.confirmnewpassword.length == 0) {
+        if(form.confirmnewpassword.trim().length == 0) {
             errors.confirmnewpassword = "Confirm Password is required";
-        }
+        } 
+        if (
+  form.newpassword.length > 0 &&
+  form.confirmnewpassword.length > 0 &&
+  form.newpassword !== form.confirmnewpassword
+) {
+  errors.confirmnewpassword = "Passwords do not match";
+}
+
+if (
+  form.oldpassword.length > 0 &&
+  form.newpassword.length > 0 &&
+  form.oldpassword === form.newpassword
+) {
+  errors.newpassword = "New Password must be different from Old Password";
+}
         if(Object.keys(errors).length > 0) {
            setErrors(errors);
         }

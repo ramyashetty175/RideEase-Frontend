@@ -70,7 +70,7 @@ export default function AdminProfile() {
         const handleFileChange = (e) => {
           const { name, files: selectedFiles } = e.target;
           const file = selectedFiles[0];
-          setFiles((prev) => ({ ...prev, [name]: file }));
+          setFiles({ ...files, [name]: file });
           if (name === "avatar") {
               setPreviewAvatar(URL.createObjectURL(file));
           }
@@ -139,7 +139,7 @@ export default function AdminProfile() {
         setAlert({ type: "error", message: "Avatar upload failed" });
         setTimeout(() => setAlert(null), 3000);
         }
-      }
+      } 
       if (files.licenceDoc) {
         try {
         licenceDoc = await uploadLicence(files.licenceDoc);

@@ -21,6 +21,12 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "@/config/axios";
 
@@ -40,6 +46,8 @@ export default function AdminProfile() {
         });
 
         const [previewAvatar, setPreviewAvatar] = useState(null);
+        const [alert, setAlert] = useState(null);
+        const [errors, setErrors] = useState({});
 
         useEffect(() => {
           if (user) {
@@ -73,14 +81,10 @@ export default function AdminProfile() {
         }
 
         const uploadAvatar = async (file) => {
-          if (!file) {
-              alert("Profile image is not uploaded");
-              return null;
-          }
           try {
               const data = new FormData();
               data.append("avatar", file);
-              const response = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+              const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
               return response.data.avatarUrl;
           } catch (err) {
               console.log("Avatar upload failed:", err);
@@ -88,14 +92,10 @@ export default function AdminProfile() {
         }
 
         const uploadLicence = async (file) => {
-          if (!file) {
-              alert("Licence is not uploaded");
-              return null;
-          }
           try {
               const data = new FormData();
               data.append("licenceDoc", file);
-              const response = await axios.post('/api/upload/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
+              const response = await axios.post('/api/upload/user/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
               return response.data.licenceDoc;
           } catch (err) {
               console.log("Licence upload failed:", err);
@@ -103,14 +103,10 @@ export default function AdminProfile() {
         }
 
         const uploadInsurance = async (file) => {
-          if (!file) {
-              alert("Insurance is not uploaded");
-              return null;
-          }
           try {
               const data = new FormData();
               data.append("insuranceDoc", file);
-              const res = await axios.post('/api/upload/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
+              const res = await axios.post('/api/upload/user/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
               return res.data.insuranceDoc;
           } catch (err) {
               console.log("Insurance upload failed:", err);
@@ -119,26 +115,73 @@ export default function AdminProfile() {
 
         const handleSubmit = async (e) => {
           e.preventDefault();
-          try {
-              const uploads = await Promise.all([
-                  files.avatar ? uploadAvatar(files.avatar) : null,
-                  files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
-                  files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
-              ]);
-              const [avatarUrl, licenceUrl, insuranceUrl] = uploads;
-              const payload = {
-                  username: form.username,
-                  bio: form.bio
+          const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar;
+          if(isUnChanged) {
+            window.alert("No changes to update");
+          }
+          const errors = {};
+          if(form.username.length < 5 || form.username.length >= 25) {
+            errors.username = "username should be minimum 5 characters and maximum 25 characters";
+        }
+        if(form.bio.length < 10 || form.bio.length >= 128) {
+            errors.bio = "Bio length should be minimum 10 characters and maximum 128 characters";
+        }
+        if(Object.keys(errors).length > 0) {
+           setErrors(errors);
+        }
+        let avatarUrl = null;
+        let licenceDoc = null;
+        let insuranceDoc = null;
+        if (files.avatar) {
+        try {
+        avatarUrl = await uploadAvatar(files.avatar);
+        } catch (err) {
+        setAlert({ type: "error", message: "Avatar upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
+      if (files.licenceDoc) {
+        try {
+        licenceDoc = await uploadLicence(files.licenceDoc);
+        } catch (err) {
+        setAlert({ type: "error", message: "Licence upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
+      if (files.insuranceDoc) {
+        try {
+        insuranceDoc = await uploadInsurance(files.insuranceDoc);
+        } catch (err) {
+        setAlert({ type: "error", message: "Insurance upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
+        const payload = {
+            username: form.username,
+            bio: form.bio
+        }
+        if (avatarUrl) {
+          payload.avatar = avatarUrl;
+        }
+              if (licenceDoc) {
+                payload.licenceDoc = licenceUrl;
               }
-              if (avatarUrl) payload.avatar = avatarUrl;
-              if (licenceUrl) payload.licenceDoc = licenceUrl;
-              if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
+              if (insuranceDoc) { 
+                payload.insuranceDoc = insuranceUrl;
+              }
+          try {
+            if(!isUnChanged) {
               const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
               dispatch({ type: "SET_USER", payload: response.data });
-              alert("Profile updated successfully");
+              setErrors({});
+            setAlert({ type: "success", message: "Profile updated!" });
+            setTimeout(() => setAlert(null), 3000);
+            }
           } catch (err) {
               console.log(err);
-              alert("Profile update failed");
+              setAlert({ type: "error", message: "Profile update failed" });
+            setTimeout(() => setAlert(null), 3000);
+              
           }
         }
 
@@ -151,6 +194,21 @@ export default function AdminProfile() {
                     <h1 className="text-black font-bold text-3xl">Profile</h1>
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
                 </div>
+                {alert && (
+  <Alert
+    variant={alert.type === "error" ? "destructive" : "default"}
+    className="mb-4 flex items-start gap-2"
+  >
+    {alert.type === "error" ? (
+      <AlertCircleIcon />
+    ) : (
+      <CheckCircle2Icon />
+    )}
+    <AlertTitle>
+      {alert.message}
+</AlertTitle>
+  </Alert>
+)}
                <form onSubmit={handleSubmit} className="space-y-6">
                <div className="flex items-center gap-6 mb-6">
               <Avatar className="h-14 w-14">
@@ -171,6 +229,9 @@ export default function AdminProfile() {
                 />
               </div>
             </div>
+            {errors.username && (
+        <span style={{ color: "red" }}>{errors.username}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
@@ -188,7 +249,7 @@ export default function AdminProfile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>UserName</p>
                     </TooltipContent>
                     </Tooltip>
                 </InputGroupAddon>
@@ -216,7 +277,7 @@ export default function AdminProfile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Email</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -225,8 +286,12 @@ export default function AdminProfile() {
                         value={form.email}
                         placeholder="Enter Email"
                         onChange={handleChange}
+                        readOnly
                 />
                 </InputGroup>
+                {errors.bio && (
+        <span style={{ color: "red" }}>{errors.bio}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="bio" className="text-foreground">
@@ -244,7 +309,7 @@ export default function AdminProfile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Bio</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>

@@ -23,9 +23,22 @@ export default function Login() {
            email: "",
            password: ""
         }, 
-        onSubmit: (values, {resetForm}) => {
+        validate: (values) => {
+          const errors = {};
+           if(values.email.trim().length == 0) {
+                errors.email = "Email is required";
+            }
+            if(values.password.trim().length == 0) {
+                errors.password = "Password is required";
+            }
+            // if(!values.email || !values.password) {
+            //     = "Invalid Email or Password";
+            // }
+            return errors;
+        },
+        onSubmit: async (values, {resetForm}) => {
             console.log(values);
-            handleLogin(values, resetForm);
+               handleLogin(values, resetForm);
         }
     })
 
@@ -37,17 +50,24 @@ export default function Login() {
                 <CardDescription>
                   Login with your Email and Password
                 </CardDescription>
+                {formik.status && (
+        <span style={{ color: "red" }}>{formik.status}</span>
+  )}
             </CardHeader>
             <CardContent>
             <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
                 <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label> 
                 <Input type="email"
-                        id="email"
+                        name="email"
                         placeholder="Enter Email"
                         value={formik.values.email}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                 />
+                {formik.touched.email && formik.errors.email && (
+                    <span style={{ color: "red" }}>{formik.errors.email}</span>
+                )}
                 </div>
                 <div className="grid gap-2">
                 <div className="flex items-center"></div>
@@ -59,11 +79,15 @@ export default function Login() {
                   Forgot your password?
                 </a>
                 <Input  type="password"
-                        id="password"
+                        name="password"
                         placeholder="Enter Password"
                         value={formik.values.password}
                         onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                 />
+                {formik.touched.password && formik.errors.password && (
+                    <span style={{ color: "red" }}>{formik.errors.password}</span>
+                )}
                 </div>
                 <CardFooter className="flex-col gap-2">
                    <Button type="submit" className="w-full">

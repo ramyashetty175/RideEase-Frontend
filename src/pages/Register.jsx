@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import { Link } from "react-router-dom";
+import { emailFormat, passwordFormat } from "../utils/Format";
 
 export default function Register() {
     const { handleRegister } = useContext(UserContext);
@@ -24,6 +25,28 @@ export default function Register() {
             email: "",
             password: "",
             confirmPassword: ""
+        },
+        validate: (values) => {
+            const errors = {};
+            if(values.username.trim().length == 0) {
+                errors.username = "Username is required";
+            }
+            if(values.email.trim().length == 0) {
+                errors.email = "Email is required";
+            } else if(!emailFormat.test(values.email)) {
+                errors.email = "Invalid Email Address";
+            }
+            if(values.password.trim().length == 0) {
+                errors.password = "Password is required";
+            } else if(!passwordFormat.test(values.password)) {
+                errors.password = "Password should contain atleast 1 uppercase, 1 lowercase, 1 numeric, 1 symbol, length 5-10";
+            }
+            if(values.confirmPassword.trim().length == 0) {
+                errors.confirmPassword = "Confirm Password is required";
+            } else if(values.password !== values.confirmPassword) {
+                errors.confirmPassword = "password do not match";
+            }
+            return errors;
         },
         onSubmit:(values, {resetForm}) => {
             console.log(values);
@@ -48,7 +71,11 @@ export default function Register() {
                           placeholder="Enter Username"
                           value={formik.values.username}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
+                        {formik.touched.username && formik.errors.username && (
+                            <span style={{ color: "red" }}>{formik.errors.username}</span>
+                        )}
                    </div>
                    <div className="grid gap-2">
                    <Label htmlFor="email">Email</Label>
@@ -57,7 +84,11 @@ export default function Register() {
                           placeholder="Enter Email"
                           value={formik.values.email}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
+                        {formik.touched.email && formik.errors.email && (
+                            <span style={{ color: "red" }}>{formik.errors.email}</span>
+                        )}
                     </div>
                     <div className="flex gap-4">
                    <div className="grid gap-2">
@@ -66,7 +97,11 @@ export default function Register() {
                           name="password"
                           value={formik.values.password}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
+                        {formik.touched.password && formik.errors.password && (
+                            <span style={{ color: "red" }}>{formik.errors.password}</span>
+                        )}
                     </div>
                     <div className="grid gap-2">
                     <Label htmlFor="password">Confirm Password</Label>
@@ -74,7 +109,11 @@ export default function Register() {
                           name="confirmPassword"
                           value={formik.values.confirmPassword}
                           onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
                         />
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                            <span style={{ color: "red" }}>{formik.errors.confirmPassword}</span>
+                        )}
                     </div>
                     </div>
                     <CardFooter className="flex-col gap-2">
@@ -87,7 +126,7 @@ export default function Register() {
                     </CardFooter>
                     </form>
                 </CardContent>
-        </Card>
+           </Card>
         </div>
     )
 }

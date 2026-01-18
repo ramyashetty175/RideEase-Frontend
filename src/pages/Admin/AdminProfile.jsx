@@ -2,22 +2,28 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../../context/UserContext";
 import { InfoIcon } from "lucide-react"
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
 } from "@/components/ui/input-group"
 import { Label } from "@/components/ui/label"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from "@/components/ui/tooltip"
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
 } from "@/components/ui/avatar";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SidebarProvider } from "../../components/ui/sidebar";
@@ -31,10 +37,10 @@ export default function AdminProfile() {
         email: '',
         bio: ''
     }) 
-
     const [avatarFile, setAvatarFile] = useState(null);
-
     const [previewAvatar, setPreviewAvatar] = useState(null);
+    const [alert, setAlert] = useState(null);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         if (user) {
@@ -66,14 +72,10 @@ export default function AdminProfile() {
     }
     
     const uploadAvatar = async (file) => {
-        if (!file) {
-            alert("Profile image is not uploaded");
-            return null;
-        }
         try {
             const data = new FormData();
             data.append("avatar", file);
-            const response = await axios.post('/api/upload/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+            const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
             return response.data.avatarUrl;
         } catch (err) {
             console.log(err);
@@ -82,20 +84,49 @@ export default function AdminProfile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let avatarUrl = avatarFile ? await uploadAvatar(avatarFile) : null;
+        const isUnChanged = form.username === user.username && form.bio === user.bio && !avatarFile;
+        if(isUnChanged) {
+            window.alert("No changes to update");
+        }
+        const errors = {};
+        if(form.username.length < 5 || form.username.length >= 25) {
+            errors.username = "username should be minimum 5 characters and maximum 25 characters";
+        }
+        if(form.bio.length < 10 || form.bio.length >= 128) {
+            errors.bio = "Bio length should be minimum 10 characters and maximum 128 characters";
+        }
+        if(Object.keys(errors).length > 0) {
+           setErrors(errors);
+        }
+        let avatarUrl = null;
+        if (avatarFile) {
+        try {
+        avatarUrl = await uploadAvatar(avatarFile);
+        } catch (err) {
+        setAlert({ type: "error", message: "Avatar upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
         const payload = {
             username: form.username,
             bio: form.bio
         }
-        if (avatarUrl) payload.avatar = avatarUrl;
+        if (avatarUrl) {
+            payload.avatar = avatarUrl;
+        }
         try {
-            const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem('token')}});
+            if(!isUnChanged) {
+                const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem('token')}});
             console.log(response.data);
             dispatch({ type: "SET_USER", payload: response.data });
-            alert("Profile updated successfully");
+            setErrors({});
+            setAlert({ type: "success", message: "Profile updated!" });
+            setTimeout(() => setAlert(null), 3000);
+            }
         } catch(err) {
             console.log(err);
-            alert("Profile update failed");
+            setAlert({ type: "error", message: "Profile update failed" });
+            setTimeout(() => setAlert(null), 3000);
         }
     }
 
@@ -104,17 +135,36 @@ export default function AdminProfile() {
         <SidebarProvider>
            <AppSidebar />
            <main className="p-4">
+        
                <div className="text-left pl-2 mb-6">
+                
                     <h1 className="text-black font-bold text-3xl">Profile</h1>
+                    
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
+                    
                 </div>
+                    {alert && (
+  <Alert
+    variant={alert.type === "error" ? "destructive" : "default"}
+    className="mb-4 flex items-start gap-2"
+  >
+    {alert.type === "error" ? (
+      <AlertCircleIcon />
+    ) : (
+      <CheckCircle2Icon />
+    )}
+    <AlertTitle>
+      {alert.message}
+</AlertTitle>
+  </Alert>
+)}
                <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="flex items-center gap-6 mb-6">
                   <Avatar className="h-14 w-14">
                     {previewAvatar ? (
                       <AvatarImage src={previewAvatar} alt="avatar" />
                     ) : (
-                      <AvatarFallback>CN</AvatarFallback>
+                      <AvatarFallback>Profile Picture</AvatarFallback>
                     )}
                   </Avatar>
                   <div className="flex flex-col gap-2">
@@ -128,6 +178,9 @@ export default function AdminProfile() {
                     />
                   </div>
                 </div>
+                {errors.username && (
+        <span style={{ color: "red" }}>{errors.username}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
@@ -145,7 +198,7 @@ export default function AdminProfile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>UserName</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -173,7 +226,7 @@ export default function AdminProfile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Email</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -182,8 +235,12 @@ export default function AdminProfile() {
                         value={form.email}
                         placeholder="Enter Email"
                         onChange={handleChange}
+                        readOnly
                 />
                 </InputGroup>
+                {errors.bio && (
+        <span style={{ color: "red" }}>{errors.bio}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="bio" className="text-foreground">
@@ -201,7 +258,7 @@ export default function AdminProfile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Bio</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -213,7 +270,7 @@ export default function AdminProfile() {
                 />
                 </InputGroup>
                 <div className="text-left">
-                    <Button>Save Profile</Button>
+                    <Button type="submit">Save Profile</Button>
                 </div>
                </form>
            </main>

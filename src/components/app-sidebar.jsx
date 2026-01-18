@@ -95,10 +95,6 @@ const data = {
           url: "/dashboard/admin/vehicles/all",
         },
         {
-          title: "Add Vehicles",
-          url: "/dashboard/admin/vehicles/add",
-        },
-        {
           title: "New Request",
           url: "/dashboard/admin/vehicles/new-request",
         },

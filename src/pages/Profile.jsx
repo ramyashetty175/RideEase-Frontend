@@ -21,58 +21,68 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "@/config/axios";
 
 export default function Profile() {
-        const { user, dispatch } = useContext(UserContext);
+    const { user, dispatch } = useContext(UserContext);
 
-        const [form, setForm] = useState({
-            username: "",
-            email: "",
-            bio: "",
-        });
+    const [form, setForm] = useState({
+        username: "",
+        email: "",
+        bio: "",
+    });
 
-        const [files, setFiles] = useState({
-            avatar: null,
-            licenceDoc: null,
-            insuranceDoc: null,
-        });
+    const [files, setFiles] = useState({
+        avatar: null,
+        licenceDoc: null,
+        insuranceDoc: null,
+    });
 
-        const [previewAvatar, setPreviewAvatar] = useState(null);
+    const [previewAvatar, setPreviewAvatar] = useState(null);
+    const [alert, setAlert] = useState(null);
+    const [errors, setErrors] = useState({});
 
-        useEffect(() => {
-          if (user) {
+    useEffect(() => {
+        if (user) {
             setForm({ 
-              username: user.username || "", 
-              email: user.email || "", 
-              bio: user.bio || "" });
+                username: user.username || "", 
+                email: user.email || "", 
+                bio: user.bio || "" 
+            });
             setPreviewAvatar(user.avatar);
             setFiles({ 
-              avatar: null, 
-              licenceDoc: null, 
-              insuranceDoc: null });
-            }
-        }, [user]);
-
-        if (!user) {
-          return <p>Loading profile...</p>;
+                avatar: null, 
+                licenceDoc: null, 
+                insuranceDoc: null 
+            });
         }
+    }, [user]);
 
-        const handleFileChange = (e) => {
-          const { name, files: selectedFiles } = e.target;
-          const file = selectedFiles[0];
-          setFiles((prev) => ({ ...prev, [name]: file }));
-          if (name === "avatar") {
-              setPreviewAvatar(URL.createObjectURL(file));
-          }
-        };
+    if (!user) {
+        return <p>Loading profile...</p>;
+    }
 
-        const handleChange = (e) => {
-          setForm({ ...form, [e.target.name] : e.target.value });
+    const handleFileChange = (e) => {
+        const { name, files: selectedFiles } = e.target;
+        const file = selectedFiles[0];
+        setFiles((prev) => ({ ...prev, [name]: file }));
+        if (name === "avatar") {
+            setPreviewAvatar(URL.createObjectURL(file));
         }
+    };
 
-        const uploadAvatar = async (file) => {
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name] : e.target.value });
+    }
+
+    const uploadAvatar = async (file) => {
           if (!file) {
               alert("Profile image is not uploaded");
               return null;
@@ -85,9 +95,9 @@ export default function Profile() {
           } catch (err) {
               console.log("Avatar upload failed:", err);
           }
-        }
+    }
 
-        const uploadLicence = async (file) => {
+    const uploadLicence = async (file) => {
           if (!file) {
               alert("Licence is not uploaded");
               return null;
@@ -100,9 +110,9 @@ export default function Profile() {
           } catch (err) {
               console.log("Licence upload failed:", err);
           }
-        }
+    }
 
-        const uploadInsurance = async (file) => {
+    const uploadInsurance = async (file) => {
           if (!file) {
               alert("Insurance is not uploaded");
               return null;
@@ -115,30 +125,76 @@ export default function Profile() {
           } catch (err) {
               console.log("Insurance upload failed:", err);
           }
-        };
+    };
 
-        const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
           e.preventDefault();
-          try {
-              const uploads = await Promise.all([
-                  files.avatar ? uploadAvatar(files.avatar) : null,
-                  files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
-                  files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
-              ]);
-              const [avatarUrl, licenceUrl, insuranceUrl] = uploads;
-              const payload = {
-                  username: form.username,
-                  bio: form.bio
+          const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar;
+          if(isUnChanged) {
+            window.alert("No changes to update");
+          }
+          const errors = {};
+          if(form.username.length < 5 || form.username.length >= 25) {
+            errors.username = "username should be minimum 5 characters and maximum 25 characters";
+        }
+        if(form.bio.length < 10 || form.bio.length >= 128) {
+            errors.bio = "Bio length should be minimum 10 characters and maximum 128 characters";
+        }
+        if(Object.keys(errors).length > 0) {
+           setErrors(errors);
+        }
+        let avatarUrl = null;
+        let licenceDoc = null;
+        let insuranceDoc = null;
+        if (files.avatar) {
+        try {
+        avatarUrl = await uploadAvatar(files.avatar);
+        } catch (err) {
+        setAlert({ type: "error", message: "Avatar upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
+      if (files.licenceDoc) {
+        try {
+        licenceDoc = await uploadLicence(files.licenceDoc);
+        } catch (err) {
+        setAlert({ type: "error", message: "Licence upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
+      if (files.insuranceDoc) {
+        try {
+        insuranceDoc = await uploadInsurance(files.insuranceDoc);
+        } catch (err) {
+        setAlert({ type: "error", message: "Insurance upload failed" });
+        setTimeout(() => setAlert(null), 3000);
+        }
+      }
+        const payload = {
+            username: form.username,
+            bio: form.bio
+        }
+        if (avatarUrl) {
+          payload.avatar = avatarUrl;
+        }
+              if (licenceDoc) {
+                payload.licenceDoc = licenceUrl;
               }
-              if (avatarUrl) payload.avatar = avatarUrl;
-              if (licenceUrl) payload.licenceDoc = licenceUrl;
-              if (insuranceUrl) payload.insuranceDoc = insuranceUrl;
+              if (insuranceDoc) { 
+                payload.insuranceDoc = insuranceUrl;
+              }
+          try {
+            if(!isUnChanged) {
               const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
               dispatch({ type: "SET_USER", payload: response.data });
-              alert("Profile updated successfully");
+              setErrors({});
+            setAlert({ type: "success", message: "Profile updated!" });
+            setTimeout(() => setAlert(null), 3000);
+            }
           } catch (err) {
               console.log(err);
-              alert("Profile update failed");
+              setAlert({ type: "error", message: "Profile update failed" });
+            setTimeout(() => setAlert(null), 3000);
           }
         }
 
@@ -151,6 +207,21 @@ export default function Profile() {
                     <h1 className="text-black font-bold text-3xl">Profile</h1>
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
                 </div>
+                {alert && (
+  <Alert
+    variant={alert.type === "error" ? "destructive" : "default"}
+    className="mb-4 flex items-start gap-2"
+  >
+    {alert.type === "error" ? (
+      <AlertCircleIcon />
+    ) : (
+      <CheckCircle2Icon />
+    )}
+    <AlertTitle>
+      {alert.message}
+</AlertTitle>
+  </Alert>
+)}
                <form onSubmit={handleSubmit} className="space-y-6">
                <div className="flex items-center gap-6 mb-6">
               <Avatar className="h-14 w-14">
@@ -171,6 +242,9 @@ export default function Profile() {
                 />
               </div>
             </div>
+            {errors.username && (
+        <span style={{ color: "red" }}>{errors.username}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
@@ -188,7 +262,7 @@ export default function Profile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>UserName</p>
                     </TooltipContent>
                     </Tooltip>
                 </InputGroupAddon>
@@ -216,7 +290,7 @@ export default function Profile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Email</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -225,8 +299,12 @@ export default function Profile() {
                         value={form.email}
                         placeholder="Enter Email"
                         onChange={handleChange}
+                        readOnly
                 />
                 </InputGroup>
+                {errors.bio && (
+        <span style={{ color: "red" }}>{errors.bio}</span>
+  )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="bio" className="text-foreground">
@@ -244,7 +322,7 @@ export default function Profile() {
                     </InputGroupButton>
                     </TooltipTrigger>
                     <TooltipContent>
-                       <p>We&apos;ll use this to send you notifications</p>
+                       <p>Bio</p>
                     </TooltipContent>
                 </Tooltip>
                 </InputGroupAddon>
@@ -294,7 +372,7 @@ export default function Profile() {
                     </div>
                 </div>
                 <div className="text-left">
-                    <Button>Save Profile</Button>
+                    <Button type="submit">Save Profile</Button>
                 </div>
                </form>
            </main>

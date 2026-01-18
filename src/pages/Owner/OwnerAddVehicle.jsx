@@ -37,6 +37,7 @@ export default function OwnerAddVehicle() {
     brand: "",
     type: "",
     registrationNumber: "",
+    owner: "",
     fuelType: "",
     transmission: "",
     seats: "",
@@ -64,6 +65,7 @@ export default function OwnerAddVehicle() {
           brand: vehicle.brand || "",
           type: vehicle.type || "",
           registrationNumber: vehicle.registrationNumber || "",
+          owner: vehicle.owner || "",
           fuelType: vehicle.fuelType || "",
           transmission: vehicle.transmission || "",
           seats: vehicle.seats || "",
@@ -94,6 +96,7 @@ export default function OwnerAddVehicle() {
       brand: "",
       type: "",
       registrationNumber: "",
+      owner: "",
       fuelType: "",
       transmission: "",
       seats: "",
@@ -117,18 +120,6 @@ export default function OwnerAddVehicle() {
   if(!files.insuranceDoc) {
     errors.insuranceDoc = "Vehicle InsuranceDoc is required";
   }
-  if(!formData.type) {
-    errors.type = "Vehicle Type is required";
-  }
-  if(!formData.fuelType) {
-    errors.fuelType = "Vehicle Fuel Type is required";
-  }
-  if(!formData.transmission) {
-    errors.transmission = "Vehicle  Transmission is required";
-  }
-  if(!formData.availabilityStatus) {
-    errors.availabilityStatus = "Vehicle Availability Status is required";
-  }
   if(formData.vehicleName.trim().length == 0) {
     errors.vehicleName = "Vehicle Name is required";
   }else if (formData.vehicleName.length < 6) {
@@ -141,7 +132,22 @@ export default function OwnerAddVehicle() {
      errors.registrationNumber = "Vehicle Registration Number is required";
   }else if (formData.registrationNumber.length < 6) {
   errors.registrationNumber = "Invalid registration number";
-  } 
+  }
+  if(formData.owner.trim().length == 0) {
+     errors.owner = "Owner Name is required";
+  }
+  if(!formData.type) {
+    errors.type = "Vehicle Type is required";
+  }
+  if(!formData.fuelType) {
+    errors.fuelType = "Vehicle Fuel Type is required";
+  }
+  if(!formData.transmission) {
+    errors.transmission = "Vehicle  Transmission is required";
+  }
+  if(!formData.availabilityStatus) {
+    errors.availabilityStatus = "Vehicle Availability Status is required";
+  }
   if(formData.seats.trim().length == 0) {
      errors.seats = "Vehicle Seats is required";
   }else if (isNaN(formData.seats) || Number(formData.seats) <= 0) {
@@ -376,6 +382,24 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
+
+
+{errors.owner && (
+        <span style={{ color: "red" }}>{errors.owner}</span>
+  )}
+                <NativeSelect
+  name="owner"
+  value={formData.owner}
+  onChange={handleChange}
+>
+  <NativeSelectOption value="">Select Owner Name</NativeSelectOption>
+  {data.owner.map((owner) => (
+    <NativeSelectOption key={owner._id} value={owner._id}>
+      {owner.username}
+    </NativeSelectOption>
+  ))}
+</NativeSelect>
+
                 {errors.type && (
         <span style={{ color: "red" }}>{errors.type}</span>
   )}

@@ -11,6 +11,16 @@ export const fetchBooking = createAsyncThunk("booking/fetchBooking", async (unde
     }
 })
 
+export const checkAvailabilityBooking = createAsyncThunk("booking/checkAvailabilityBooking", async ({ editId, formData }, { rejectWithValue }) => {
+    try {
+        const response = await axios.post(`/api/bookings/check/${editId}`, { startDateTime: formData.startDateTime, endDateTime: formData.endDateTime }, { headers: { Authorization: localStorage.getItem('token')}});
+        return response.data;
+    } catch(err) {
+        console.log(err);
+        return rejectWithValue(err.message);
+    }
+})
+
 export const createBooking = createAsyncThunk("booking/createBooking", async (formData, { rejectWithValue }) => {
     try {
         const response = await axios.post('/api/bookings', formData, { headers: { Authorization: localStorage.getItem('token')}});
@@ -105,6 +115,7 @@ const bookingSlice = createSlice({
     name: "booking",
     initialState: {
         data: [],
+        availability: null,
         errors: null,
         loading: false,
         editId: null
@@ -115,6 +126,9 @@ const bookingSlice = createSlice({
             state.errors = null,
             state.loading = false
         },
+        resetAvailability: (state) => {
+      state.availability = null;
+    },
         assignEditId: (state, action) => {
             state.editId = action.payload;
         },
@@ -136,6 +150,21 @@ const bookingSlice = createSlice({
             })
             .addCase(fetchBooking.rejected,(state,action)=> {
                 state.data = [];
+                state.errors = action.payload;
+                state.loading = false;
+            })
+
+            .addCase(checkAvailabilityBooking.pending,(state)=> {
+                state.loading = true;
+                state.availability = null;
+                state.errors = null;
+            })
+            .addCase(checkAvailabilityBooking.fulfilled, (state, action) => {
+                state.loading = false;
+                state.availability = action.payload;
+            })
+            .addCase(checkAvailabilityBooking.rejected,(state,action)=> {
+                state.availability = null;
                 state.errors = action.payload;
                 state.loading = false;
             })
@@ -250,6 +279,6 @@ const bookingSlice = createSlice({
     }
 })
 
-export const { resetBooking, assignEditId, resetEditId } = bookingSlice.actions;
+export const { resetBooking, assignEditId, resetAvailability, resetEditId } = bookingSlice.actions;
 
 export default bookingSlice.reducer;

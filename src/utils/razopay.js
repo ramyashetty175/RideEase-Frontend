@@ -47,7 +47,7 @@ export default function useRazorpayPayment() {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
               });
-              if (verifyRes.data.status === "ok") {
+              if (verifyRes.data.success) {
                 resolve(true);
               } else {
                 alert("Payment verification failed");

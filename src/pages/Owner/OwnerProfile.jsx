@@ -115,7 +115,7 @@ export default function AdminProfile() {
 
         const handleSubmit = async (e) => {
           e.preventDefault();
-          const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar;
+          const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar && !files.licenceDoc && !files.insuranceDoc;
           if(isUnChanged) {
             window.alert("No changes to update");
           }
@@ -164,10 +164,10 @@ export default function AdminProfile() {
           payload.avatar = avatarUrl;
         }
               if (licenceDoc) {
-                payload.licenceDoc = licenceUrl;
+                payload.licenceDoc = licenceDoc;
               }
               if (insuranceDoc) { 
-                payload.insuranceDoc = insuranceUrl;
+                payload.insuranceDoc = insuranceDoc;
               }
           try {
             if(!isUnChanged) {

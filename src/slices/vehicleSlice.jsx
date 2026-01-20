@@ -184,12 +184,21 @@ const vehicleSlice = createSlice({
                 state.loading = true;
                 state.errors = null;
             })
+            // .addCase(vehicleReject.fulfilled, (state, action) => {
+            //     const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle._id);
+            //     state.data[idx] = action.payload.vehicle.vehicle; 
+            //     state.editId = null;
+            //     state.loading = false; 
+            // })
             .addCase(vehicleReject.fulfilled, (state, action) => {
-                const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle._id);
-                state.data[idx] = action.payload.vehicle.vehicle; 
-                state.editId = null;
-                state.loading = false; 
-            })
+    const idx = state.data.findIndex(ele => ele._id == action.payload.vehicle._id);
+    if (idx !== -1) {
+        state.data[idx] = action.payload.vehicle; 
+    }
+    state.editId = null;
+    state.loading = false; 
+})
+
             .addCase(vehicleReject.rejected, (state, action) => {
                 state.errors = action.payload;
                 state.loading = false;

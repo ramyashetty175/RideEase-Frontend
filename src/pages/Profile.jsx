@@ -1,30 +1,30 @@
 import { InfoIcon } from "lucide-react";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
 } from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
 } from "@/components/ui/avatar";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
+    Alert,
+    AlertDescription,
+    AlertTitle,
 } from "@/components/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -76,127 +76,90 @@ export default function Profile() {
         if (name === "avatar") {
             setPreviewAvatar(URL.createObjectURL(file));
         }
-    };
+    }
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name] : e.target.value });
     }
 
     const uploadAvatar = async (file) => {
-          if (!file) {
-              alert("Profile image is not uploaded");
-              return null;
-          }
-          try {
-              const data = new FormData();
-              data.append("avatar", file);
-              const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
-              return response.data.avatarUrl;
-          } catch (err) {
-              console.log("Avatar upload failed:", err);
-          }
+        try {
+            const data = new FormData();
+            data.append("avatar", file);
+            const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return response.data.avatarUrl;
+        } catch (err) {
+            console.log("Avatar upload failed", err);
+        }
     }
 
     const uploadLicence = async (file) => {
-          if (!file) {
-              alert("Licence is not uploaded");
-              return null;
-          }
-          try {
-              const data = new FormData();
-              data.append("licenceDoc", file);
-              const response = await axios.post('/api/upload/user/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
-              return response.data.licenceDoc;
-          } catch (err) {
-              console.log("Licence upload failed:", err);
-          }
+        try {
+            const data = new FormData();
+            data.append("licenceDoc", file);
+            const response = await axios.post('/api/upload/user/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return response.data.licenceDoc;
+        } catch (err) {
+            console.log("Licence upload failed", err);
+        }
     }
 
     const uploadInsurance = async (file) => {
-          if (!file) {
-              alert("Insurance is not uploaded");
-              return null;
-          }
-          try {
-              const data = new FormData();
-              data.append("insuranceDoc", file);
-              const res = await axios.post('/api/upload/user/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
-              return res.data.insuranceDoc;
-          } catch (err) {
-              console.log("Insurance upload failed:", err);
-          }
-    };
+        try {
+            const data = new FormData();
+            data.append("insuranceDoc", file);
+            const res = await axios.post('/api/upload/user/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return res.data.insuranceDoc;
+        } catch (err) {
+            console.log("Insurance upload failed", err);
+        }
+    }
 
     const handleSubmit = async (e) => {
-          e.preventDefault();
-          const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar;
-          if(isUnChanged) {
+        e.preventDefault();
+        const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar && !form.licenceDoc && !form.insuranceDoc;
+        if(isUnChanged) {
             window.alert("No changes to update");
-          }
-          const errors = {};
-          if(form.username.length < 5 || form.username.length >= 25) {
+        }
+        const errors = {};
+        if(form.username.length < 5 || form.username.length >= 25) {
             errors.username = "username should be minimum 5 characters and maximum 25 characters";
         }
         if(form.bio.length < 10 || form.bio.length >= 128) {
             errors.bio = "Bio length should be minimum 10 characters and maximum 128 characters";
         }
         if(Object.keys(errors).length > 0) {
-           setErrors(errors);
+            setErrors(errors);
         }
-        let avatarUrl = null;
-        let licenceDoc = null;
-        let insuranceDoc = null;
-        if (files.avatar) {
         try {
-        avatarUrl = await uploadAvatar(files.avatar);
-        } catch (err) {
-        setAlert({ type: "error", message: "Avatar upload failed" });
-        setTimeout(() => setAlert(null), 3000);
-        }
-      }
-      if (files.licenceDoc) {
-        try {
-        licenceDoc = await uploadLicence(files.licenceDoc);
-        } catch (err) {
-        setAlert({ type: "error", message: "Licence upload failed" });
-        setTimeout(() => setAlert(null), 3000);
-        }
-      }
-      if (files.insuranceDoc) {
-        try {
-        insuranceDoc = await uploadInsurance(files.insuranceDoc);
-        } catch (err) {
-        setAlert({ type: "error", message: "Insurance upload failed" });
-        setTimeout(() => setAlert(null), 3000);
-        }
-      }
-        const payload = {
-            username: form.username,
-            bio: form.bio
-        }
-        if (avatarUrl) {
-          payload.avatar = avatarUrl;
-        }
-              if (licenceDoc) {
-                payload.licenceDoc = licenceUrl;
-              }
-              if (insuranceDoc) { 
-                payload.insuranceDoc = insuranceUrl;
-              }
-          try {
             if(!isUnChanged) {
-              const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
-              dispatch({ type: "SET_USER", payload: response.data });
-              setErrors({});
-            setAlert({ type: "success", message: "Profile updated!" });
-            setTimeout(() => setAlert(null), 3000);
+                const [avatarUrl, licenceDocUrl, insuranceDocUrl] = await Promise.all([
+                    files.avatar ? uploadAvatar(files.avatar) : null,
+                    files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
+                    files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
+                ])
+                const payload = { username: form.username, bio: form.bio };
+                if (avatarUrl) {
+                    payload.avatar = avatarUrl;
+                }
+                if (licenceDocUrl) {
+                    payload.licenceDoc = licenceDocUrl;
+                }
+                if (insuranceDocUrl) {
+                    payload.insuranceDoc = insuranceDocUrl;
+                }
+                const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
+                dispatch({ type: "SET_USER", payload: response.data });
+                setErrors({});
+                setAlert({ type: "success", message: "Profile updated!" });
+                setTimeout(() => setAlert(null), 3000);
             }
-          } catch (err) {
+        } catch (err) {
               console.log(err);
               setAlert({ type: "error", message: "Profile update failed" });
-            setTimeout(() => setAlert(null), 3000);
-          }
+              setTimeout(() => setAlert(null), 3000);
         }
+    }
 
     return(
         <div>

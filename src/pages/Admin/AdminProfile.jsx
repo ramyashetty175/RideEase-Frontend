@@ -19,9 +19,9 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
+    Alert,
+    AlertDescription,
+    AlertTitle,
 } from "@/components/ui/alert"
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react"
 import { Input } from "@/components/ui/input";
@@ -100,13 +100,13 @@ export default function AdminProfile() {
         }
         let avatarUrl = null;
         if (avatarFile) {
-        try {
-        avatarUrl = await uploadAvatar(avatarFile);
-        } catch (err) {
-        setAlert({ type: "error", message: "Avatar upload failed" });
-        setTimeout(() => setAlert(null), 3000);
+            try {
+            avatarUrl = await uploadAvatar(avatarFile);
+            } catch (err) {
+            setAlert({ type: "error", message: "Avatar upload failed" });
+            setTimeout(() => setAlert(null), 3000);
+            }
         }
-      }
         const payload = {
             username: form.username,
             bio: form.bio
@@ -135,13 +135,9 @@ export default function AdminProfile() {
         <SidebarProvider>
            <AppSidebar />
            <main className="p-4">
-        
                <div className="text-left pl-2 mb-6">
-                
                     <h1 className="text-black font-bold text-3xl">Profile</h1>
-                    
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
-                    
                 </div>
                     {alert && (
   <Alert

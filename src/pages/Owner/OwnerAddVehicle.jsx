@@ -8,20 +8,20 @@ import { AppSidebar } from "../../components/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { InfoIcon } from "lucide-react";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
 } from "@/components/ui/input-group";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
+    Alert,
+    AlertDescription,
+    AlertTitle,
 } from "@/components/ui/alert";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -29,53 +29,54 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 export default function OwnerAddVehicle() {
-  const dispatch = useDispatch();
-  const { editId, data } = useSelector((state) => state.vehicle);
+    const dispatch = useDispatch();
+    const { data, editId } = useSelector((state) => {
+        return state.vehicle;
+    })
+ 
+    const [formData, setFormData] = useState({
+        vehicleName: "",
+        brand: "",
+        type: "",
+        registrationNumber: "",
+        fuelType: "",
+        transmission: "",
+        seats: "",
+        pricePerDay: "",
+        availabilityStatus: "",
+        location: "",
+    })
 
-  const [formData, setFormData] = useState({
-    vehicleName: "",
-    brand: "",
-    type: "",
-    registrationNumber: "",
-    owner: "",
-    fuelType: "",
-    transmission: "",
-    seats: "",
-    pricePerDay: "",
-    availabilityStatus: "",
-    location: "",
-  })
+    const [files, setFiles] = useState({
+        image: null,
+        licenseDoc: null,
+        insuranceDoc: null,
+    })
 
-  const [files, setFiles] = useState({
-    image: null,
-    licenseDoc: null,
-    insuranceDoc: null,
-  })
+    const [previewImage, setPreviewImage] = useState(null);
+    const [alert, setAlert] = useState(null);
+    const [errors, setErrors] = useState({});
 
-  const [previewImage, setPreviewImage] = useState(null);
-  const [alert, setAlert] = useState(null);
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    if (editId && data) {
-      const vehicle = data.find((v) => v._id === editId);
-      if (vehicle) {
-        setFormData({
-          vehicleName: vehicle.vehicleName || "",
-          brand: vehicle.brand || "",
-          type: vehicle.type || "",
-          registrationNumber: vehicle.registrationNumber || "",
-          owner: vehicle.owner || "",
-          fuelType: vehicle.fuelType || "",
-          transmission: vehicle.transmission || "",
-          seats: vehicle.seats || "",
-          pricePerDay: vehicle.pricePerDay || "",
-          availabilityStatus: vehicle.availabilityStatus || "",
-          location: vehicle.location || "",
-        })
-        setPreviewImage(vehicle.image || null);
+    useEffect(() => {
+        if (editId && data) {
+            const vehicle = data.find((v) => v._id === editId);
+            if (vehicle) {
+            setFormData({
+                vehicleName: vehicle.vehicleName || "",
+                brand: vehicle.brand || "",
+                type: vehicle.type || "",
+                registrationNumber: vehicle.registrationNumber || "",
+                fuelType: vehicle.fuelType || "",
+                transmission: vehicle.transmission || "",
+                seats: vehicle.seats || "",
+                pricePerDay: vehicle.pricePerDay || "",
+                availabilityStatus: vehicle.availabilityStatus || "",
+                location: vehicle.location || "",
+            })
+            setFiles({ image: null, licenseDoc: null, insuranceDoc: null });
+            setPreviewImage(vehicle.image || null);
+        }
       }
-    }
   }, [editId, data])
 
   const handleChange = (e) => {
@@ -96,7 +97,6 @@ export default function OwnerAddVehicle() {
       brand: "",
       type: "",
       registrationNumber: "",
-      owner: "",
       fuelType: "",
       transmission: "",
       seats: "",
@@ -107,17 +107,16 @@ export default function OwnerAddVehicle() {
     setFiles({ image: null, licenseDoc: null, insuranceDoc: null });
     setPreviewImage(null);
   };
-
   const handleSubmit = async (e) => {
   e.preventDefault();
   const errors = {};
-  if(!files.image) {
+  if(!editId || !files.image) {
     errors.image = "Vehicle Image is required";
   }
-  if(!files.licenseDoc) {
+  if(!editId || !files.licenseDoc) {
     errors.licenseDoc = "Vehicle LicenceDoc is required";
   }
-  if(!files.insuranceDoc) {
+  if(!editId || !files.insuranceDoc) {
     errors.insuranceDoc = "Vehicle InsuranceDoc is required";
   }
   if(formData.vehicleName.trim().length == 0) {
@@ -132,9 +131,6 @@ export default function OwnerAddVehicle() {
      errors.registrationNumber = "Vehicle Registration Number is required";
   }else if (formData.registrationNumber.length < 6) {
   errors.registrationNumber = "Invalid registration number";
-  }
-  if(formData.owner.trim().length == 0) {
-     errors.owner = "Owner Name is required";
   }
   if(!formData.type) {
     errors.type = "Vehicle Type is required";
@@ -155,7 +151,7 @@ export default function OwnerAddVehicle() {
   }
   if(formData.pricePerDay.trim().length == 0) {
      errors.pricePerDay = "Vehicle Price Per Day is required";
-  }else if (isNaN(form.pricePerDay) || Number(form.pricePerDay) <= 0) {
+  }else if (isNaN(formData.pricePerDay) || Number(formData.pricePerDay) <= 0) {
   errors.pricePerDay = "Price per day must be a valid amount";
   }
   if(formData.location.trim().length == 0) {
@@ -166,33 +162,33 @@ export default function OwnerAddVehicle() {
         }
   try {
     const form = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === "seats" || key === "pricePerDay") {
-        form.append(key, Number(formData[key]));
-      } else {
-        form.append(key, formData[key]);
-      }
-    })
-
-    if (!files.image || !files.licenseDoc || !files.insuranceDoc) {
-      return alert("Please upload all required files!");
+    Object.keys(formData).forEach(key => {
+  form.append(key, formData[key]);
+})
+    if (files.image) {
+      form.append("image", files.image);
     }
-    form.append("image", files.image);
-    form.append("licenseDoc", files.licenseDoc);
-    form.append("insuranceDoc", files.insuranceDoc);
-
+    if (files.licenseDoc) {
+      form.append("licenseDoc", files.licenseDoc);
+    }
+    if (files.insuranceDoc) {
+      form.append("insuranceDoc", files.insuranceDoc);
+    }
     if (editId) {
-      await dispatch(updateVehicle({ editId, formData: form })).unwrap();
-      alert("Vehicle updated successfully!");
+      dispatch(updateVehicle({ editId, formData: form }));
+      setErrors({});
+      setAlert({ type: "success", message: "Vehicle updated successfully!" });
     } else {
-      await dispatch(createVehicle({ formData: form })).unwrap();
-      alert("Vehicle added successfully!");
+         dispatch(createVehicle({ formData: form }));
+      setErrors({});
+      setAlert({ type: "success", message: "Vehicle added successfully!" });
+      resetForm();
     }
-
-    resetForm();
+    setTimeout(() => setAlert(null), 3000);
   } catch (err) {
-    console.error("Submit error:", err);
-    alert("Failed to submit vehicle. Check console.");
+    console.error(err);
+    setAlert({ type: "error", message: "Something went wrong!" });
+    setTimeout(() => setAlert(null), 3000);
   }
 };
       return(
@@ -382,24 +378,6 @@ export default function OwnerAddVehicle() {
                         onChange={handleChange}
                 />
                 </InputGroup>
-
-
-{errors.owner && (
-        <span style={{ color: "red" }}>{errors.owner}</span>
-  )}
-                <NativeSelect
-  name="owner"
-  value={formData.owner}
-  onChange={handleChange}
->
-  <NativeSelectOption value="">Select Owner Name</NativeSelectOption>
-  {data.owner.map((owner) => (
-    <NativeSelectOption key={owner._id} value={owner._id}>
-      {owner.username}
-    </NativeSelectOption>
-  ))}
-</NativeSelect>
-
                 {errors.type && (
         <span style={{ color: "red" }}>{errors.type}</span>
   )}

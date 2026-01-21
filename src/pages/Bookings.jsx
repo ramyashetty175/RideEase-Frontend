@@ -9,7 +9,7 @@ export default function Bookings() {
   if (!bookings || bookings.length === 0) {
     return (
       <p className="text-center mt-10 text-gray-500">
-        No bookings found.
+        No bookings found
       </p>
     );
   }
@@ -24,7 +24,6 @@ export default function Bookings() {
             key={booking._id}
             className="border rounded-2xl shadow-md p-6 flex flex-col md:flex-row gap-6"
           >
-  
             <div className="w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0">
               {booking.vehicle.image ? (
                 <img

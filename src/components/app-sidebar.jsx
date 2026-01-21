@@ -235,20 +235,20 @@ const data = {
       isActive: true,
     },
     {
-      title: "Vehilce Map",
-      url: "/dashboard/vehicle/map",
+      title: "Change Password",
+      url: "/dashboard/change-password",
       icon: SquareTerminal,
       isActive: true,
     },
-    {
+     {
       title: "Transactions",
       url: "/dashboard/transactions",
       icon: SquareTerminal,
       isActive: true,
     },
     {
-      title: "Change Password",
-      url: "/dashboard/change-password",
+      title: "Vehilce Map",
+      url: "/dashboard/vehicle/map",
       icon: SquareTerminal,
       isActive: true,
     },

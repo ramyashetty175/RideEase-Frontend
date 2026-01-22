@@ -5,7 +5,7 @@ import { useContext } from "react";
 export default function useRazorpayPayment() {
   const { user } = useContext(UserContext);
 
-  const handlePayment = async (amount) => {
+  const handlePayment = async (amount, bookingId) => {
     return new Promise(async (resolve) => {
       try {
         if (amount < 1) {
@@ -15,13 +15,16 @@ export default function useRazorpayPayment() {
 
         const { data } = await axios.post("http://localhost:3020/api/payments/createOrder", {
           amount: amount,
+          bookingId: bookingId
           // currency: "INR",
           // receipt: bookingId, // send bookingId as receipt
           // notes: {},
-        }, {
+        },
+  {
     headers: {
-      Authorization: localStorage.getItem("token")
-    }
+      Authorization: localStorage.getItem("token"),
+      "Content-Type": "application/json",
+    },
   });
 
         console.log("Backend response:", data);
@@ -49,11 +52,13 @@ export default function useRazorpayPayment() {
               const verifyRes = await axios.post("http://localhost:3020/api/payments/verify", {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }, {
+                razorpay_signature: response.razorpay_signature
+                },
+  {
     headers: {
-      Authorization: localStorage.getItem("token")
-    }
+      Authorization: localStorage.getItem("token"),
+      "Content-Type": "application/json",
+    },
   })
               if (verifyRes.data.success) {
                 resolve(true);

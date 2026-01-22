@@ -637,11 +637,13 @@ export default function VehicleBooking() {
         })
       ).unwrap();
 
+      const bookingId = bookingResponse._id;
+
       // Step 2: If backend returns success, proceed to payment
       showAlert("success", "Vehicle available! Proceeding to payment...");
 
       const amount = vehicle.pricePerDay * 100; // amount in paise
-      const success = await handlePayment(amount);
+      const success = await handlePayment(amount, bookingId);
 
       if (!success) {
         showAlert("error", "Payment failed or cancelled.");

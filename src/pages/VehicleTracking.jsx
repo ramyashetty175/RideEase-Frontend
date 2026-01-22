@@ -2,7 +2,6 @@ import "leaflet/dist/leaflet.css";
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import { io } from "socket.io-client";
-import "leaflet/dist/leaflet.css";
 
 export default function VehicleTracking() {
   const mapRef = useRef(null);

@@ -117,22 +117,23 @@ function App() {
   
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="pending" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/approve" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="approved"/></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/confirm" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="confirmed"/></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/in-progress" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="in-progress"/></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/complete" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="completed"/></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/cancel" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="canceled"/></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/cancel-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="cancelRequested"/></PrivateRoute>} />
+        <Route path="/dashboard/admin/bookings/approve" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/bookings/in-progress" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="in-progress" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/bookings/complete" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="completed" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/bookings/cancel" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="canceled" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/bookings/cancel-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="cancelRequested" /></PrivateRoute>} />
  
         <Route path="/dashboard/owner/profile" element={<PrivateRoute allowedRoles={['owner']}><OwnerProfile /></PrivateRoute>} /> 
         <Route path="/dashboard/owner/users/user/all" element={<PrivateRoute allowedRoles={['owner']}><Users /></PrivateRoute>} />
+        <Route path="/dashboard/owner/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList /></PrivateRoute>} />
         
         <Route path="/dashboard/owner/bookings/all" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/new-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/approve" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/in-progress" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/reject" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/cancel-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/new-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="pending" /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/approve" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/in-progress" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="in-progress" /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/complete" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="completed" /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/cancel" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="canceled" /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/cancel-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="cancelRequested" /></PrivateRoute>} />
 
         <Route path="/dashboard/owner/vehicles/all" element={<PrivateRoute allowedRoles={['owner']}><VehicleList /></PrivateRoute>} />
         <Route path="/dashboard/owner/vehicles/add" element={<PrivateRoute allowedRoles={['owner']}><OwnerAddVehicle /></PrivateRoute>} />

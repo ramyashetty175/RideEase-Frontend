@@ -72,16 +72,16 @@ const data = {
           url: "/dashboard/admin/users/user",
         },
         {
+          title: "New Request",
+          url: "/dashboard/admin/users/new-request",
+        },
+        {
           title: "Owners",
           url: "/dashboard/admin/users/owners/approve",
         },
         {
           title: "Reject Owner",
           url: "/dashboard/admin/users/owners/reject",
-        },
-        {
-          title: "New Request",
-          url: "/dashboard/admin/users/new-request",
         },
       ],
     },
@@ -126,10 +126,6 @@ const data = {
           url: "/dashboard/admin/bookings/approve",
         },
         {
-          title: "Confirm",
-          url: "/dashboard/admin/bookings/confirm",
-        },
-        {
           title: "In-Progress",
           url: "/dashboard/admin/bookings/in-progress",
         },
@@ -162,12 +158,8 @@ const data = {
       items: [
         {
           title: "Users",
-          url: "/dashboard/owner/users/all",
-        },
-        {
-          title: "New Request",
-          url: "/dashboard/owner/users/new-requests",
-        },
+          url: "/dashboard/owner/users/user/all",
+        }
       ],
     },
     {

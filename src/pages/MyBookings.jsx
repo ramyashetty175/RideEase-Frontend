@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBooking } from "@/slices/bookingSlice";
+import { requestBookingCancel } from "@/slices/bookingCancellationSlice";
 import { Button } from "@/components/ui/button";
 
 export default function MyBookings() {
@@ -43,13 +44,20 @@ export default function MyBookings() {
           </div>
 
           {(booking.bookingStatus === "pending" ||
-            booking.bookingStatus === "approved") && (
+            booking.bookingStatus === "confirmed") && (
+            // <Button
+            //   variant="destructive"
+            //   onClick={() => dispatch(requestBookingCancel(booking._id))}
+            // >
+            //   Cancel
+            // </Button>
             <Button
-              variant="destructive"
-              onClick={() => dispatch(cancelBooking(booking._id))}
-            >
-              Cancel
-            </Button>
+    variant="destructive"
+    disabled={booking.bookingStatus === "cancelRequested"}
+    onClick={() => dispatch(requestBookingCancel(booking._id))}
+  >
+    Cancel
+  </Button>
           )}
         </div>
       ))}

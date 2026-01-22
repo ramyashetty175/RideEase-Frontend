@@ -2,7 +2,7 @@
 
 import { useSelector, useDispatch } from "react-redux";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { bookingStartTrip, bookingEndTrip, bookingExtendTrip } from "../slices/bookingSlice";
+import { bookingStartTrip, bookingEndTrip } from "../slices/bookingSlice";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
@@ -51,17 +51,6 @@ export default function UserBookings() {
       })
     );
   }
-
-  if (action === "extend") {
-    dispatch(
-      bookingExtendTrip({
-        editId: booking._id,
-        formData: {}
-      })
-    );
-  }
-
-  e.target.value = "";
 }}
             className="w-36"
           >
@@ -70,7 +59,6 @@ export default function UserBookings() {
             </NativeSelectOption>
             <NativeSelectOption value="start">Start Trip</NativeSelectOption>
             <NativeSelectOption value="end">End Trip</NativeSelectOption>
-            <NativeSelectOption value="extend">Extend Trip</NativeSelectOption>
           </NativeSelect>
         );
       },

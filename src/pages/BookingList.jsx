@@ -122,6 +122,7 @@ import { Button } from "@/components/ui/button";
 import { useSelector, useDispatch } from "react-redux";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { bookingApprove, bookingCancel } from "../slices/bookingSlice";
+import { approveBookingCancel, rejectBookingCancel } from "../slices/bookingCancellationSlice";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
@@ -210,7 +211,39 @@ export default function BookingList({ status }) {
             },
           },
         ]
-      : baseColumns;
+      : status === "cancelRequested"
+    ? [
+        ...baseColumns,
+        {
+          id: "action",
+          header: "Action",
+          cell: ({ row }) => {
+            const booking = row.original;
+            return (
+              <NativeSelect
+                value="pending"
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  if (value === "approved") {
+                    dispatch(approveBookingCancel({ id: booking._id }));
+                  }
+                  if (value === "rejected") {
+                    dispatch(rejectBookingCancel({ id: booking._id }));
+                  }
+                }}
+                className="w-32"
+              >
+                <NativeSelectOption value="pending">Pending</NativeSelectOption>
+                <NativeSelectOption value="approved">Approve</NativeSelectOption>
+                <NativeSelectOption value="rejected">Reject</NativeSelectOption>
+              </NativeSelect>
+            );
+          },
+        },
+      ]
+    : baseColumns;
+
 
   return (
     <SidebarProvider>

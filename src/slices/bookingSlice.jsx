@@ -11,16 +11,6 @@ export const fetchBooking = createAsyncThunk("booking/fetchBooking", async (unde
     }
 })
 
-export const checkAvailabilityBooking = createAsyncThunk("booking/checkAvailabilityBooking", async ({ editId, formData }, { rejectWithValue }) => {
-    try {
-        const response = await axios.post(`/api/bookings/check/${editId}`, { startDateTime: formData.startDateTime, endDateTime: formData.endDateTime }, { headers: { Authorization: localStorage.getItem('token')}});
-        return response.data;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
-    }
-})
-
 export const createBooking = createAsyncThunk("booking/createBooking", async (formData, { rejectWithValue }) => {
     try {
         const response = await axios.post('/api/bookings', formData, { headers: { Authorization: localStorage.getItem('token')}});
@@ -88,18 +78,6 @@ export const bookingEndTrip = createAsyncThunk("booking/bookingEndTrip", async (
     }
 })
 
-export const bookingExtendTrip = createAsyncThunk("booking/bookingExtendTrip", async ({ editId, formData }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/api/bookings/extend/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        return response.data.booking;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
-    }
-})
-
-
 export const removeBooking = createAsyncThunk("booking/removeBooking", async (id, { rejectWithValue }) => {
     try {
         const response = await axios.delete(`/api/bookings/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
@@ -115,7 +93,6 @@ const bookingSlice = createSlice({
     name: "booking",
     initialState: {
         data: [],
-        availability: null,
         errors: null,
         loading: false,
         editId: null
@@ -153,22 +130,6 @@ const bookingSlice = createSlice({
                 state.errors = action.payload;
                 state.loading = false;
             })
-
-            .addCase(checkAvailabilityBooking.pending,(state)=> {
-                state.loading = true;
-                state.availability = null;
-                state.errors = null;
-            })
-            .addCase(checkAvailabilityBooking.fulfilled, (state, action) => {
-                state.loading = false;
-                state.availability = action.payload;
-            })
-            .addCase(checkAvailabilityBooking.rejected,(state,action)=> {
-                state.availability = null;
-                state.errors = action.payload;
-                state.loading = false;
-            })
-
             .addCase(createBooking.fulfilled, (state, action) => {
                 state.data.push(action.payload);
                 state.errors = null;
@@ -249,25 +210,6 @@ const bookingSlice = createSlice({
                 state.loading = false;
                 state.errors = action.payload;
             })
-
-
-            .addCase(bookingExtendTrip.pending, (state) => {
-                state.loading = true;
-                state.errors = null;
-            })
-            .addCase(bookingExtendTrip.fulfilled, (state, action) => {
-                state.loading = false;
-                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
-                if (idx !== -1) {
-                    state.data[idx] = action.payload;
-                }
-                state.editId = null;
-            })
-            .addCase(bookingExtendTrip.rejected, (state, action) => {
-                state.loading = false;
-                state.errors = action.payload;
-            })
-
 
             .addCase(removeBooking.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);

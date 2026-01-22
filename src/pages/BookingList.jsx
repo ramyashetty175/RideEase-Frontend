@@ -116,7 +116,6 @@
 // }
 
 
-
 "use client"
 
 import { Button } from "@/components/ui/button";
@@ -141,55 +140,46 @@ export default function BookingList({ status }) {
     { accessorKey: "vehicleName", header: "Vehicle" },
     { accessorKey: "pickupLocation", header: "Pickup" },
     { accessorKey: "returnLocation", header: "Return" },
-
-    // ✅ Licence View Button
-    {
-      header: "Licence",
-      cell: ({ row }) => {
-        const booking = row.original;
-        const licence = booking.user?.licenceDoc;
-
-        return (
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!licence}
-            onClick={() => window.open(licence, "_blank")}
-          >
-            {licence ? "View" : "Not Uploaded"}
-          </Button>
-        );
-      },
-    },
-
-    // ✅ Insurance View Button
-    {
-      header: "Insurance",
-      cell: ({ row }) => {
-        const booking = row.original;
-        const insurance = booking.user?.insuranceDoc;
-
-        return (
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!insurance}
-            onClick={() => window.open(insurance, "_blank")}
-          >
-            {insurance ? "View" : "Not Uploaded"}
-          </Button>
-        );
-      },
-    },
-
     { accessorKey: "totalAmount", header: "Amount" },
     { accessorKey: "paymentStatus", header: "Payment" },
     { accessorKey: "bookingStatus", header: "Status" },
   ];
 
-  const actionColumn =
+  // Only push License, Insurance, and Action columns if status is "pending"
+  const columns =
     status === "pending"
       ? [
+          ...baseColumns,
+          {
+            header: "License",
+            cell: ({ row }) => {
+              const booking = row.original;
+              return booking.user?.licenceDoc ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(booking.user.licenceDoc, "_blank")}
+                >
+                  View
+                </Button>
+              ) : null;
+            },
+          },
+          {
+            header: "Insurance",
+            cell: ({ row }) => {
+              const booking = row.original;
+              return booking.user?.insuranceDoc ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.open(booking.user.insuranceDoc, "_blank")}
+                >
+                  View
+                </Button>
+              ) : null;
+            },
+          },
           {
             id: "action",
             header: "Action",
@@ -212,44 +202,15 @@ export default function BookingList({ status }) {
                   }}
                   className="w-32"
                 >
-                  <NativeSelectOption value="pending">
-                    Pending
-                  </NativeSelectOption>
-                  <NativeSelectOption value="approved">
-                    Approve
-                  </NativeSelectOption>
-                  <NativeSelectOption value="canceled">
-                    Cancel
-                  </NativeSelectOption>
+                  <NativeSelectOption value="pending">Pending</NativeSelectOption>
+                  <NativeSelectOption value="approved">Approve</NativeSelectOption>
+                  <NativeSelectOption value="canceled">Cancel</NativeSelectOption>
                 </NativeSelect>
               );
             },
           },
         ]
-      : status === "in-progress"
-      ? [
-          {
-            id: "action",
-            header: "Action",
-            cell: ({ row }) => {
-              const booking = row.original;
-
-              return (
-                <Button
-                  size="sm"
-                  onClick={() =>
-                    (window.location.href = `/vehicle-tracking/${booking.vehicle}`)
-                  }
-                >
-                  Track
-                </Button>
-              );
-            },
-          },
-        ]
-      : [];
-
-  const columns = [...baseColumns, ...actionColumn];
+      : baseColumns;
 
   return (
     <SidebarProvider>

@@ -68,7 +68,7 @@ export default function OwnerList({ status }) {
                   dispatch(OwnerApprove({ editId: owner._id }));
                 }
                 if (value === "rejected") {
-                  dispatch(OwnerReject(owner._id));
+                  dispatch(OwnerReject({ editId: owner._id }));
                 }
               }}
             >

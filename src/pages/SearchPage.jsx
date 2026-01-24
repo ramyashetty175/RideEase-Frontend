@@ -30,7 +30,7 @@ export default function SearchPage() {
         <h1 className="text-3xl font-bold text-gray-900">Search Vehicles</h1>
         <h2 className="text-gray-600 text-lg">Find the vehicle you want quickly</h2>
             <div className="flex w-full max-w-sm items-center gap-2 justify-center mt-4">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="flex gap-2">
                   { error && (
                     <span style={{ color: "red" }}>{error}</span>
                   )}
@@ -39,6 +39,7 @@ export default function SearchPage() {
                     placeholder="Search Vehicle"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
+                    className="w-80"
                   />
                   <Button type="submit">Search</Button>
                 </form>

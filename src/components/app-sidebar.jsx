@@ -249,7 +249,6 @@ const data = {
       url: "/dashboard/logout",
       icon: SquareTerminal,
       isActive: true,
-      // onClick: handleLogout
     },
   ]
 }

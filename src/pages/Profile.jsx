@@ -126,7 +126,7 @@ export default function Profile() {
         }
         if(Object.keys(errors).length > 0) {
             setErrors(errors);
-        }
+        } else {
         try {
             const [avatarUrl, licenceDocUrl, insuranceDocUrl] = await Promise.all([
                 files.avatar ? uploadAvatar(files.avatar) : null,
@@ -153,6 +153,7 @@ export default function Profile() {
                 setAlert({ type: "error", message: "Profile update failed" });
                 setTimeout(() => setAlert(null), 3000);
         }
+    }
     }
 
     return(
@@ -333,7 +334,7 @@ export default function Profile() {
                 </div>
                </form>
            </main>
-        </SidebarProvider>
+        </SidebarProvider> cancel
         </div>
     )
 }

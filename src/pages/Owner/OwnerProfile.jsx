@@ -124,9 +124,18 @@ export default function OwnerProfile() {
         if(form.bio.length < 10 || form.bio.length >= 128) {
             errors.bio = "Bio length should be minimum 10 characters and maximum 128 characters";
         }
+        if(!files.avatar) {
+            errors.avatar = "Profile picture is required";
+        }
+        if(!files.licenceDoc) {
+            errors.licenceDoc = "LicenceDoc is required";
+        }
+        if(!files.insuranceDoc) {
+            errors.insuranceDoc = "InsuranceDoc is required";
+        }
         if(Object.keys(errors).length > 0) {
             setErrors(errors);
-        }
+        } else {
         let avatarUrl = null;
         let licenceDoc = null;
         let insuranceDoc = null;
@@ -178,6 +187,7 @@ export default function OwnerProfile() {
             setAlert({ type: "error", message: "Profile update failed" });
             setTimeout(() => setAlert(null), 3000);
         }
+    }
     }
 
     return(

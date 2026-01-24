@@ -62,16 +62,16 @@ export default function OwnerAddVehicle() {
             const vehicle = data.find((v) => v._id === editId);
             if (vehicle) {
                 setFormData({
-                    vehicleName: vehicle.vehicleName || "",
-                    brand: vehicle.brand || "",
-                    type: vehicle.type || "",
-                    registrationNumber: vehicle.registrationNumber || "",
-                    fuelType: vehicle.fuelType || "",
-                    transmission: vehicle.transmission || "",
-                    seats: vehicle.seats || "",
-                    pricePerDay: vehicle.pricePerDay || "",
-                    availabilityStatus: vehicle.availabilityStatus || "",
-                    location: vehicle.location || "",
+                    vehicleName: vehicle.vehicleName,
+                    brand: vehicle.brand,
+                    type: vehicle.type,
+                    registrationNumber: vehicle.registrationNumber,
+                    fuelType: vehicle.fuelType,
+                    transmission: vehicle.transmission,
+                    seats: vehicle.seats,
+                    pricePerDay: vehicle.pricePerDay,
+                    availabilityStatus: vehicle.availabilityStatus,
+                    location: vehicle.location,
                 })
                 setFiles({ image: null, licenseDoc: null, insuranceDoc: null });
                 setPreviewImage(vehicle.image || null);
@@ -110,13 +110,13 @@ export default function OwnerAddVehicle() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const errors = {};
-        if(!editId || !files.image) {
+        if(!files.image) {
             errors.image = "Vehicle Image is required";
         }
-        if(!editId || !files.licenseDoc) {
+        if(!files.licenseDoc) {
             errors.licenseDoc = "Vehicle LicenceDoc is required";
         }
-        if(!editId || !files.insuranceDoc) {
+        if(!files.insuranceDoc) {
             errors.insuranceDoc = "Vehicle InsuranceDoc is required";
         }
         if(formData.vehicleName.trim().length == 0) {
@@ -159,7 +159,7 @@ export default function OwnerAddVehicle() {
         }
         if(Object.keys(errors).length > 0) {
             setErrors(errors);
-        }
+        } else {
         try {
             const form = new FormData();
             Object.keys(formData).forEach(key => {
@@ -190,7 +190,8 @@ export default function OwnerAddVehicle() {
             setAlert({ type: "error", message: "Something went wrong!" });
             setTimeout(() => setAlert(null), 3000);
         }
-    };
+    }
+  }
     return(
             <SidebarProvider>
             <AppSidebar />
@@ -528,9 +529,6 @@ export default function OwnerAddVehicle() {
                   </div>
                   <div className="flex justify-start mt-18 gap-4">
                      <Button type="submit">Submit</Button>
-                     <Button variant="outline" type="button">
-                        Cancel
-                     </Button>
                   </div>
             </form>
           </main>

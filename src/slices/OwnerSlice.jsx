@@ -22,9 +22,9 @@ export const OwnerApprove = createAsyncThunk("owner/OwnerApprove", async({ editI
     }
 })
 
-export const OwnerReject = createAsyncThunk("owner/OwnerReject", async(id, { rejectWithValue }) => {
+export const OwnerReject = createAsyncThunk("owner/OwnerReject", async({ editId, formData}, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/users/owner/reject/${id}`, {}, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/users/owner/reject/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         return response.data;
     } catch(err) {

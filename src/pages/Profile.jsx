@@ -52,9 +52,9 @@ export default function Profile() {
     useEffect(() => {
         if (user) {
             setForm({ 
-                username: user.username || "", 
-                email: user.email || "", 
-                bio: user.bio || "" 
+                username: user.username, 
+                email: user.email,
+                bio: user.bio
             });
             setPreviewAvatar(user.avatar);
             setFiles({ 
@@ -117,10 +117,6 @@ export default function Profile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar && !form.licenceDoc && !form.insuranceDoc;
-        if(isUnChanged) {
-            window.alert("No changes to update");
-        }
         const errors = {};
         if(form.username.length < 5 || form.username.length >= 25) {
             errors.username = "username should be minimum 5 characters and maximum 25 characters";
@@ -132,13 +128,12 @@ export default function Profile() {
             setErrors(errors);
         }
         try {
-            if(!isUnChanged) {
-                const [avatarUrl, licenceDocUrl, insuranceDocUrl] = await Promise.all([
-                    files.avatar ? uploadAvatar(files.avatar) : null,
-                    files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
-                    files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
-                ])
-                const payload = { username: form.username, bio: form.bio };
+            const [avatarUrl, licenceDocUrl, insuranceDocUrl] = await Promise.all([
+                files.avatar ? uploadAvatar(files.avatar) : null,
+                files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
+                files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
+            ])
+            const payload = { username: form.username, bio: form.bio };
                 if (avatarUrl) {
                     payload.avatar = avatarUrl;
                 }
@@ -153,11 +148,10 @@ export default function Profile() {
                 setErrors({});
                 setAlert({ type: "success", message: "Profile updated!" });
                 setTimeout(() => setAlert(null), 3000);
-            }
         } catch (err) {
-              console.log(err);
-              setAlert({ type: "error", message: "Profile update failed" });
-              setTimeout(() => setAlert(null), 3000);
+                console.log(err);
+                setAlert({ type: "error", message: "Profile update failed" });
+                setTimeout(() => setAlert(null), 3000);
         }
     }
 
@@ -171,20 +165,20 @@ export default function Profile() {
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
                 </div>
                 {alert && (
-  <Alert
-    variant={alert.type === "error" ? "destructive" : "default"}
-    className="mb-4 flex items-start gap-2"
-  >
-    {alert.type === "error" ? (
-      <AlertCircleIcon />
-    ) : (
-      <CheckCircle2Icon />
-    )}
-    <AlertTitle>
-      {alert.message}
-</AlertTitle>
-  </Alert>
-)}
+                    <Alert
+                        variant={alert.type === "error" ? "destructive" : "default"}
+                        className="mb-4 flex items-start gap-2"
+                    >
+                    {alert.type === "error" ? (
+                        <AlertCircleIcon />
+                            ) : (
+                        <CheckCircle2Icon />
+                        )}
+                        <AlertTitle>
+                           {alert.message}
+                        </AlertTitle>
+                    </Alert>
+                )}
                <form onSubmit={handleSubmit} className="space-y-6">
                <div className="flex items-center gap-6 mb-6">
               <Avatar className="h-14 w-14">
@@ -205,9 +199,9 @@ export default function Profile() {
                 />
               </div>
             </div>
-            {errors.username && (
-        <span style={{ color: "red" }}>{errors.username}</span>
-  )}
+                {errors.username && (
+                    <span style={{ color: "red" }}>{errors.username}</span>
+                )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
@@ -266,8 +260,8 @@ export default function Profile() {
                 />
                 </InputGroup>
                 {errors.bio && (
-        <span style={{ color: "red" }}>{errors.bio}</span>
-  )}
+                    <span style={{ color: "red" }}>{errors.bio}</span>
+                )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="bio" className="text-foreground">

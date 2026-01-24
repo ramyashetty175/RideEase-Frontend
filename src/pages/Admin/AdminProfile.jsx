@@ -84,10 +84,6 @@ export default function AdminProfile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const isUnChanged = form.username === user.username && form.bio === user.bio && !avatarFile;
-        if(isUnChanged) {
-            window.alert("No changes to update");
-        }
         const errors = {};
         if(form.username.length < 5 || form.username.length >= 25) {
             errors.username = "username should be minimum 5 characters and maximum 25 characters";
@@ -101,10 +97,10 @@ export default function AdminProfile() {
         let avatarUrl = null;
         if (avatarFile) {
             try {
-            avatarUrl = await uploadAvatar(avatarFile);
+                avatarUrl = await uploadAvatar(avatarFile);
             } catch (err) {
-            setAlert({ type: "error", message: "Avatar upload failed" });
-            setTimeout(() => setAlert(null), 3000);
+                setAlert({ type: "error", message: "Avatar upload failed" });
+                setTimeout(() => setAlert(null), 3000);
             }
         }
         const payload = {
@@ -115,14 +111,12 @@ export default function AdminProfile() {
             payload.avatar = avatarUrl;
         }
         try {
-            if(!isUnChanged) {
-                const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem('token')}});
+            const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem('token')}});
             console.log(response.data);
             dispatch({ type: "SET_USER", payload: response.data });
             setErrors({});
             setAlert({ type: "success", message: "Profile updated!" });
             setTimeout(() => setAlert(null), 3000);
-            }
         } catch(err) {
             console.log(err);
             setAlert({ type: "error", message: "Profile update failed" });
@@ -140,20 +134,20 @@ export default function AdminProfile() {
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
                 </div>
                     {alert && (
-  <Alert
-    variant={alert.type === "error" ? "destructive" : "default"}
-    className="mb-4 flex items-start gap-2"
-  >
-    {alert.type === "error" ? (
-      <AlertCircleIcon />
-    ) : (
-      <CheckCircle2Icon />
-    )}
-    <AlertTitle>
-      {alert.message}
-</AlertTitle>
-  </Alert>
-)}
+                        <Alert
+                            variant={alert.type === "error" ? "destructive" : "default"}
+                            className="mb-4 flex items-start gap-2"
+                        >
+                            {alert.type === "error" ? (
+                                <AlertCircleIcon />
+                                ) : (
+                                <CheckCircle2Icon />
+                                )}
+                                <AlertTitle>
+                                    {alert.message}
+                                </AlertTitle>
+                        </Alert>
+                    )}
                <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="flex items-center gap-6 mb-6">
                   <Avatar className="h-14 w-14">
@@ -175,12 +169,12 @@ export default function AdminProfile() {
                   </div>
                 </div>
                 {errors.username && (
-        <span style={{ color: "red" }}>{errors.username}</span>
-  )}
+                    <span style={{ color: "red" }}>{errors.username}</span>
+                )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
-                     User Name
+                    User Name
                    </Label>
                 <Tooltip>
                    <TooltipTrigger asChild>
@@ -235,8 +229,8 @@ export default function AdminProfile() {
                 />
                 </InputGroup>
                 {errors.bio && (
-        <span style={{ color: "red" }}>{errors.bio}</span>
-  )}
+                    <span style={{ color: "red" }}>{errors.bio}</span>
+                )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="bio" className="text-foreground">

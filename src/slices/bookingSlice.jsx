@@ -44,18 +44,6 @@ export const bookingCancel = createAsyncThunk("Booking/bookingCancel", async({ e
     }
 })
 
-export const updateBooking = createAsyncThunk("booking/updateBooking", async ({ editId, formData }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/api/bookings/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        return response.data.booking;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
-    }
-})
-
-
 export const bookingStartTrip = createAsyncThunk("booking/bookingStartTrip", async ({ editId, formData }, { rejectWithValue }) => {
     try {
         const response = await axios.put(`/api/bookings/start/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
@@ -166,16 +154,6 @@ const bookingSlice = createSlice({
                 state.errors = action.payload;
                 state.loading = false;
             })
-
-            .addCase(updateBooking.fulfilled, (state, action) => {
-                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
-                state.data[idx] = action.payload;
-                state.editId = null;
-            })
-            .addCase(updateBooking.rejected, (state, action) => {
-                state.errors = action.payload;
-            })
-
             .addCase(bookingStartTrip.pending, (state) => {
                 state.loading = true;
                 state.errors = null;
@@ -192,8 +170,6 @@ const bookingSlice = createSlice({
                 state.loading = false;
                 state.errors = action.payload;
             })
-
-
             .addCase(bookingEndTrip.pending, (state) => {
                 state.loading = true;
                 state.errors = null;
@@ -210,7 +186,6 @@ const bookingSlice = createSlice({
                 state.loading = false;
                 state.errors = action.payload;
             })
-
             .addCase(removeBooking.fulfilled, (state, action) => {
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);
                 state.data.splice(idx, 1);

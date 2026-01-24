@@ -31,9 +31,6 @@ export default function Login() {
             if(values.password.trim().length == 0) {
                 errors.password = "Password is required";
             }
-            // if(!values.email || !values.password) {
-            //     = "Invalid Email or Password";
-            // }
             return errors;
         },
         onSubmit: async (values, {resetForm}) => {
@@ -51,8 +48,8 @@ export default function Login() {
                   Login with your Email and Password
                 </CardDescription>
                 {formik.status && (
-        <span style={{ color: "red" }}>{formik.status}</span>
-  )}
+                    <span style={{ color: "red" }}>{formik.status}</span>
+                )}
             </CardHeader>
             <CardContent>
             <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">

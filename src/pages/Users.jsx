@@ -1,13 +1,10 @@
+"use client"
+import { ArrowUpDown } from "lucide-react";
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../context/UserContext";
 import axios from "../config/axios";
-
-"use client"
-import { MoreHorizontal } from "lucide-react";
-import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "../components/data-table-column-header";
-import { useDispatch, useSelector } from "react-redux";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";

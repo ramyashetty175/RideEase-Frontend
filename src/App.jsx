@@ -47,13 +47,24 @@ function App() {
   const dispatch = useDispatch();
   const { isLoggedIn, handleLogout, user } = useContext(UserContext);
 
-  useEffect(() => {
-    if(localStorage.getItem('token')) {
-      dispatch(fetchOwner());
-      dispatch(fetchBooking());
-      dispatch(fetchVehicles());
-    }
-  },[dispatch])
+  // useEffect(() => {
+  //   if(localStorage.getItem('token')) {
+  //     dispatch(fetchOwner());
+  //     dispatch(fetchBooking());
+  //     dispatch(fetchVehicles());
+  //   }
+  // },[dispatch])
+
+  const token = localStorage.getItem("token");
+
+useEffect(() => {
+  if (token) {
+    dispatch(fetchOwner());
+    dispatch(fetchBooking());
+    dispatch(fetchVehicles());
+  }
+}, [token, dispatch]);
+
 
   return(
       <div>
@@ -142,9 +153,9 @@ function App() {
         <Route path="/dashboard/bookings" element={<PrivateRoute allowedRoles={['user']}><UserBookings /></PrivateRoute>} />
         <Route path="/dashboard/transactions" element={<PrivateRoute allowedRoles={['user']}><Transactions /></PrivateRoute>} />
 
-        <Route path="/dashboard/vehicle/map" element={<PrivateRoute allowedRoles={['user']}><VehicleTracking /></PrivateRoute>} />
+        <Route path="/dashboard/user/vehicle/map" element={<PrivateRoute allowedRoles={['user']}><VehicleTracking /></PrivateRoute>} />
  
-        <Route path="/vehicle-tracking/:id" element={<PrivateRoute allowedRoles={['admin']}><VehicleMapTracking /></PrivateRoute>} />
+        <Route path="/vehicle-tracking/:id" element={<PrivateRoute allowedRoles={['admin']}><VehicleTracking /></PrivateRoute>} />
 
         <Route path="/dashboard/change-password" element={<PrivateRoute allowedRoles={['user']}><ChangePassword /></PrivateRoute>} />
         {/* <Route path="/dashboard/logout" element={<PrivateRoute allowedRoles={['admin']}>< /></PrivateRoute>} /> */}

@@ -30,132 +30,130 @@ import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "@/config/axios";
 
-export default function AdminProfile() {
-        const { user, dispatch } = useContext(UserContext);
+export default function OwnerProfile() {
+    const { user, dispatch } = useContext(UserContext);
 
-        const [form, setForm] = useState({
-            username: "",
-            email: "",
-            bio: "",
-        });
+    const [form, setForm] = useState({
+        username: "",
+        email: "",
+        bio: "",
+    });
 
-        const [files, setFiles] = useState({
-            avatar: null,
-            licenceDoc: null,
-            insuranceDoc: null,
-        });
+    const [files, setFiles] = useState({
+        avatar: null,
+        licenceDoc: null,
+        insuranceDoc: null,
+    });
 
-        const [previewAvatar, setPreviewAvatar] = useState(null);
-        const [alert, setAlert] = useState(null);
-        const [errors, setErrors] = useState({});
+    const [previewAvatar, setPreviewAvatar] = useState(null);
+    const [alert, setAlert] = useState(null);
+    const [errors, setErrors] = useState({});
 
-        useEffect(() => {
-          if (user) {
+    useEffect(() => {
+        if (user) {
             setForm({ 
-              username: user.username, 
-              email: user.email, 
-              bio: user.bio });
+                username: user.username, 
+                email: user.email, 
+                bio: user.bio 
+            });
             setPreviewAvatar(user.avatar);
             setFiles({ 
-              avatar: null, 
-              licenceDoc: null, 
-              insuranceDoc: null });
-            }
-        }, [user]);
-
-        if (!user) {
-          return <p>Loading profile...</p>;
+                avatar: null, 
+                licenceDoc: null, 
+                insuranceDoc: null 
+            });
         }
+    }, [user]);
 
-        const handleFileChange = (e) => {
-          const { name, files: selectedFiles } = e.target;
-          const file = selectedFiles[0];
-          setFiles({ ...files, [name]: file });
-          if (name === "avatar") {
-              setPreviewAvatar(URL.createObjectURL(file));
-          }
-        };
+    if (!user) {
+        return <p>Loading profile...</p>;
+    }
 
-        const handleChange = (e) => {
-          setForm({ ...form, [e.target.name] : e.target.value });
+    const handleFileChange = (e) => {
+        const { name, files: selectedFiles } = e.target;
+        const file = selectedFiles[0];
+        setFiles({ ...files, [name]: file });
+        if (name === "avatar") {
+            setPreviewAvatar(URL.createObjectURL(file));
         }
+    };
 
-        const uploadAvatar = async (file) => {
-          try {
-              const data = new FormData();
-              data.append("avatar", file);
-              const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
-              return response.data.avatarUrl;
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name] : e.target.value });
+    }
+
+    const uploadAvatar = async (file) => {
+        try {
+            const data = new FormData();
+            data.append("avatar", file);
+            const response = await axios.post('/api/upload/user/avatar', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return response.data.avatarUrl;
           } catch (err) {
               console.log("Avatar upload failed:", err);
-          }
         }
+    }
 
-        const uploadLicence = async (file) => {
-          try {
-              const data = new FormData();
-              data.append("licenceDoc", file);
-              const response = await axios.post('/api/upload/user/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
-              return response.data.licenceDoc;
-          } catch (err) {
-              console.log("Licence upload failed:", err);
-          }
+    const uploadLicence = async (file) => {
+        try {
+            const data = new FormData();
+            data.append("licenceDoc", file);
+            const response = await axios.post('/api/upload/user/licence', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return response.data.licenceDoc;
+        } catch (err) {
+            console.log("Licence upload failed:", err);
         }
+    }
 
-        const uploadInsurance = async (file) => {
-          try {
-              const data = new FormData();
-              data.append("insuranceDoc", file);
-              const res = await axios.post('/api/upload/user/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
-              return res.data.insuranceDoc;
-          } catch (err) {
-              console.log("Insurance upload failed:", err);
-          }
-        };
+    const uploadInsurance = async (file) => {
+        try {
+            const data = new FormData();
+            data.append("insuranceDoc", file);
+            const res = await axios.post('/api/upload/user/insurance', data, { headers: { Authorization: localStorage.getItem("token")}});
+            return res.data.insuranceDoc;
+        } catch (err) {
+            console.log("Insurance upload failed:", err);
+        }
+    };
 
-        const handleSubmit = async (e) => {
-          e.preventDefault();
-          const isUnChanged = form.username === user.username && form.bio === user.bio && !form.avatar && !files.licenceDoc && !files.insuranceDoc;
-          if(isUnChanged) {
-            window.alert("No changes to update");
-          }
-          const errors = {};
-          if(form.username.length < 5 || form.username.length >= 25) {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const errors = {};
+        if(form.username.length < 5 || form.username.length >= 25) {
             errors.username = "username should be minimum 5 characters and maximum 25 characters";
         }
         if(form.bio.length < 10 || form.bio.length >= 128) {
             errors.bio = "Bio length should be minimum 10 characters and maximum 128 characters";
         }
         if(Object.keys(errors).length > 0) {
-           setErrors(errors);
+            setErrors(errors);
         }
         let avatarUrl = null;
         let licenceDoc = null;
         let insuranceDoc = null;
         if (files.avatar) {
-        try {
-        avatarUrl = await uploadAvatar(files.avatar);
-        } catch (err) {
-        setAlert({ type: "error", message: "Avatar upload failed" });
-        setTimeout(() => setAlert(null), 3000);
+            try {
+                avatarUrl = await uploadAvatar(files.avatar);
+            } catch (err) {
+                setAlert({ type: "error", message: "Avatar upload failed" });
+                setTimeout(() => setAlert(null), 3000);
+            }
+        } 
+        if (files.licenceDoc) {
+            try {
+                licenceDoc = await uploadLicence(files.licenceDoc);
+            } catch (err) {
+                setAlert({ type: "error", message: "Licence upload failed" });
+                setTimeout(() => setAlert(null), 3000);
+            }
         }
-      } 
-      if (files.licenceDoc) {
-        try {
-        licenceDoc = await uploadLicence(files.licenceDoc);
-        } catch (err) {
-        setAlert({ type: "error", message: "Licence upload failed" });
-        setTimeout(() => setAlert(null), 3000);
+        if (files.insuranceDoc) {
+            try {
+                insuranceDoc = await uploadInsurance(files.insuranceDoc);
+            } catch (err) {
+                setAlert({ type: "error", message: "Insurance upload failed" });
+                setTimeout(() => setAlert(null), 3000);
+            }
         }
-      }
-      if (files.insuranceDoc) {
-        try {
-        insuranceDoc = await uploadInsurance(files.insuranceDoc);
-        } catch (err) {
-        setAlert({ type: "error", message: "Insurance upload failed" });
-        setTimeout(() => setAlert(null), 3000);
-        }
-      }
         const payload = {
             username: form.username,
             bio: form.bio
@@ -163,27 +161,24 @@ export default function AdminProfile() {
         if (avatarUrl) {
           payload.avatar = avatarUrl;
         }
-              if (licenceDoc) {
-                payload.licenceDoc = licenceDoc;
-              }
-              if (insuranceDoc) { 
-                payload.insuranceDoc = insuranceDoc;
-              }
-          try {
-            if(!isUnChanged) {
-              const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
-              dispatch({ type: "SET_USER", payload: response.data });
-              setErrors({});
+        if (licenceDoc) {
+            payload.licenceDoc = licenceDoc;
+        }
+        if (insuranceDoc) { 
+            payload.insuranceDoc = insuranceDoc;
+        }
+        try {
+            const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
+            dispatch({ type: "SET_USER", payload: response.data });
+            setErrors({});
             setAlert({ type: "success", message: "Profile updated!" });
             setTimeout(() => setAlert(null), 3000);
-            }
-          } catch (err) {
-              console.log(err);
-              setAlert({ type: "error", message: "Profile update failed" });
+        } catch (err) {
+            console.log(err);
+            setAlert({ type: "error", message: "Profile update failed" });
             setTimeout(() => setAlert(null), 3000);
-              
-          }
         }
+    }
 
     return(
         <div>
@@ -195,23 +190,23 @@ export default function AdminProfile() {
                     <p className="text-black font-semibold text-lg">View and Edit Profile</p>
                 </div>
                 {alert && (
-  <Alert
-    variant={alert.type === "error" ? "destructive" : "default"}
-    className="mb-4 flex items-start gap-2"
-  >
-    {alert.type === "error" ? (
-      <AlertCircleIcon />
-    ) : (
-      <CheckCircle2Icon />
-    )}
-    <AlertTitle>
-      {alert.message}
-</AlertTitle>
-  </Alert>
-)}
+                    <Alert
+                        variant={alert.type === "error" ? "destructive" : "default"}
+                        className="mb-4 flex items-start gap-2"
+                    >
+                      {alert.type === "error" ? (
+                          <AlertCircleIcon />
+                          ) : (
+                          <CheckCircle2Icon />
+                      )}
+                          <AlertTitle>
+                              {alert.message}
+                          </AlertTitle>
+                    </Alert>
+                )}
                <form onSubmit={handleSubmit} className="space-y-6">
                <div className="flex items-center gap-6 mb-6">
-              <Avatar className="h-14 w-14">
+               <Avatar className="h-14 w-14">
                 {previewAvatar ? (
                   <AvatarImage src={previewAvatar} alt="avatar" />
                 ) : (
@@ -229,9 +224,9 @@ export default function AdminProfile() {
                 />
               </div>
             </div>
-            {errors.username && (
-        <span style={{ color: "red" }}>{errors.username}</span>
-  )}
+                {errors.username && (
+                    <span style={{ color: "red" }}>{errors.username}</span>
+                )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="username" className="text-foreground">
@@ -290,8 +285,8 @@ export default function AdminProfile() {
                 />
                 </InputGroup>
                 {errors.bio && (
-        <span style={{ color: "red" }}>{errors.bio}</span>
-  )}
+                    <span style={{ color: "red" }}>{errors.bio}</span>
+                )}
                 <InputGroup>
                 <InputGroupAddon align="block-start">
                    <Label htmlFor="bio" className="text-foreground">
@@ -359,7 +354,7 @@ export default function AdminProfile() {
                     </div>
                 </div>
                 <div className="text-left">
-                    <Button>Save Profile</Button>
+                    <Button type="submit">Save Profile</Button>
                 </div>
                </form>
            </main>

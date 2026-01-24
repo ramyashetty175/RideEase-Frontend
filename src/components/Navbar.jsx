@@ -67,9 +67,9 @@ export function Navbar() {
                 <Button onClick={handleLogout}>
                    Sign Out
                  </Button>
-                <NavigationMenuLink asChild>
+                {/* <NavigationMenuLink asChild>
                   <Link href="#">Blocks</Link>
-                </NavigationMenuLink>
+                </NavigationMenuLink> */}
               </li>
             </ul>
           </NavigationMenuContent>

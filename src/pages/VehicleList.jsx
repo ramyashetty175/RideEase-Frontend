@@ -1,6 +1,4 @@
 "use client"
-
-import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/data-table"
 import { SidebarProvider } from "../components/ui/sidebar"
@@ -13,14 +11,12 @@ import { useContext, useState } from "react"
 import UserContext from "@/context/UserContext"
 
 export default function VehicleList({ type }) {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { user } = useContext(UserContext)
-  const { data } = useSelector(state => state.vehicle)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  const { data } = useSelector(state => state.vehicle);
+  const [actionValue, setActionValue] = useState({});
 
-  const [actionValue, setActionValue] = useState({})
-
-  // Safe filtered data with optimistic updates
   const filteredData = (() => {
     if (!data) return [];
     return data.filter(vehicle => {
@@ -99,7 +95,6 @@ export default function VehicleList({ type }) {
     { accessorKey: "status", header: "Status" },
   ]
 
-  // Only owner can see Edit button
   if (user?.role === "owner") {
     columns.push({
       id: "edit",
@@ -122,7 +117,6 @@ export default function VehicleList({ type }) {
     })
   }
 
-  // Action column for pending vehicles
   if (type === "newRequest") {
     columns.push({
       id: "action",

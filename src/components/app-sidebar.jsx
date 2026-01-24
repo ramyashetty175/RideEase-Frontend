@@ -240,7 +240,7 @@ const data = {
     },
     {
       title: "Vehilce Map",
-      url: "/dashboard/vehicle/map",
+      url: "/dashboard/user/vehicle/map",
       icon: SquareTerminal,
       isActive: true,
     },
@@ -249,6 +249,7 @@ const data = {
       url: "/dashboard/logout",
       icon: SquareTerminal,
       isActive: true,
+      // onClick: handleLogout
     },
   ]
 }

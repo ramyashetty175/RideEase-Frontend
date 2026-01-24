@@ -22,9 +22,9 @@ export const OwnerApprove = createAsyncThunk("owner/OwnerApprove", async({ editI
     }
 })
 
-export const OwnerReject = createAsyncThunk("owner/OwnerReject", async({ editId, formData }, { rejectWithValue }) => {
+export const OwnerReject = createAsyncThunk("owner/OwnerReject", async(id, { rejectWithValue }) => {
     try {
-        const response = await axios.put(`/users/owner/reject/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
+        const response = await axios.put(`/users/owner/reject/${id}`, {}, { headers: { Authorization: localStorage.getItem('token')}});
         console.log(response.data);
         return response.data;
     } catch(err) {
@@ -107,19 +107,14 @@ const ownerSlice = createSlice({
             .addCase(OwnerReject.rejected, (state, action) => {
                 state.errors = action.payload;
             })
-
             .addCase(removeOwner.pending, (state) => {
                 state.loading = true;
-                state.data = [];
                 state.errors = null;
             })
             .addCase(removeOwner.fulfilled, (state, action) => {
-                /*
-                    return { ...state, data: state.data.filter(ele => ele._id != action.payload._id )}
-                */
-                // state.data = state.data.filter(ele => ele._id !== action.payload._id)
                 const idx = state.data.findIndex(ele => ele._id == action.payload._id);
                 state.data.splice(idx, 1);
+                state.loading = false;
             })
             .addCase(removeOwner.rejected, (state, action) => {
                 state.errors = action.payload;

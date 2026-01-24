@@ -3,11 +3,14 @@ export default function vehicleReducer(state, action) {
         case "SET_VEHICLE": {
             return { ...state, vehicle: action.payload }
         }
-        case "CREATE_VEHICLE": {
+        case "ADD_VEHICLE": {
             return { ...state, vehicle: action.payload }
         }
         case "UPDATE_VEHICLE": {
             return { ...state, vehicle: action.payload }
+        }
+        case "SET_VEHICLE_SEARCH": {
+            return { ...state, vehicles: action.payload }
         }
         case "APPROVE_VEHICLE": {
             return { ...state, vehicle: action.payload }

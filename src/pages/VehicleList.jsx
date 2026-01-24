@@ -1,168 +1,131 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { DataTable } from "@/components/data-table"
-import { SidebarProvider } from "../components/ui/sidebar"
-import { AppSidebar } from "../components/app-sidebar"
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
-import { useSelector, useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { assignEditId, vehicleApprove, vehicleReject } from "../slices/vehicleSlice"
-import { useContext, useState } from "react"
-import UserContext from "@/context/UserContext"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/data-table";
+import { SidebarProvider } from "../components/ui/sidebar";
+import { AppSidebar } from "../components/app-sidebar";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { assignEditId, vehicleApprove, vehicleReject } from "../slices/vehicleSlice";
+import { useContext } from "react";
+import UserContext from "@/context/UserContext";
 
-export default function VehicleList({ type }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { user } = useContext(UserContext);
-  const { data } = useSelector(state => state.vehicle);
-  const [actionValue, setActionValue] = useState({});
+export default function VehicleList({ status }) { 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
+    const { data } = useSelector(state => state.vehicle);
 
-  const filteredData = (() => {
-    if (!data) return [];
-    return data.filter(vehicle => {
-      if (!vehicle) return false
-      const status = actionValue[vehicle._id] || vehicle.status
-      if (type === "newRequest") return status === "pending"
-      if (type === "approved") return status === "approved"
-      if (type === "rejected") return status === "rejected"
-      return true
-    })
-  })()
+    const filteredData = status ? data.filter(vehicle => vehicle.status === status) : data;
 
-  const columns = [
-    { accessorKey: "_id", header: "ID" },
-    {
-      accessorKey: "image",
-      header: "Image",
-      cell: ({ row }) => {
-        const vehicle = row.original
-        return (
-          <img
-            src={vehicle.image}
-            alt="Vehicle"
-            className="w-40 h-24 object-cover rounded border"
-          />
-        )
-      },
-    },
-    { accessorKey: "vehicleName", header: "Vehicle Name" },
-    { accessorKey: "type", header: "Type" },
-    { accessorKey: "brand", header: "Brand" },
-    { accessorKey: "registrationNumber", header: "Registration Number" },
-    {
-      header: "Owner",
-      cell: ({ row }) => {
-        const vehicle = row.original
-        return vehicle.owner?.username || "Unknown"
-      },
-    },
-    {
-      header: "License",
-      cell: ({ row }) => {
-        const vehicle = row.original
-        return (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.open(vehicle.licenseDoc, "_blank")}
-          >
-            View
-          </Button>
-        )
-      },
-    },
-    {
-      header: "Insurance",
-      cell: ({ row }) => {
-        const vehicle = row.original
-        return (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.open(vehicle.insuranceDoc, "_blank")}
-          >
-            View
-          </Button>
-        )
-      },
-    },
-    { accessorKey: "fuelType", header: "Fuel Type" },
-    { accessorKey: "transmission", header: "Transmission" },
-    { accessorKey: "seats", header: "Seats" },
-    { accessorKey: "pricePerDay", header: "Price Per Day" },
-    { accessorKey: "location", header: "Location" },
-    { accessorKey: "availabilityStatus", header: "Availability Status" },
-    { accessorKey: "status", header: "Status" },
-  ]
+    const columns = [
+        { accessorKey: "_id", header: "ID" },
+        {
+          accessorKey: "image",
+          header: "Image",
+          cell: ({ row }) => (
+            <img
+              src={row.original.image}
+              alt="Vehicle"
+              className="w-40 h-24 object-cover rounded border"
+            />
+          )
+        },
+        { accessorKey: "vehicleName", header: "Vehicle Name" },
+        { accessorKey: "type", header: "Type" },
+        { accessorKey: "brand", header: "Brand" },
+        { accessorKey: "registrationNumber", header: "Registration Number" },
+        {
+          header: "Owner",
+          cell: ({ row }) => row.original.owner?.username
+        },
+        {
+          header: "License",
+          cell: ({ row }) => (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.open(row.original.licenseDoc, "_blank")}
+            >
+              View
+            </Button>
+          )
+        },
+        {
+          header: "Insurance",
+          cell: ({ row }) => (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.open(row.original.insuranceDoc, "_blank")}
+            >
+              View
+            </Button>
+          )
+        },
+        { accessorKey: "fuelType", header: "Fuel Type" },
+        { accessorKey: "transmission", header: "Transmission" },
+        { accessorKey: "seats", header: "Seats" },
+        { accessorKey: "pricePerDay", header: "Price Per Day" },
+        { accessorKey: "location", header: "Location" },
+        { accessorKey: "availabilityStatus", header: "Availability Status" },
+        { accessorKey: "status", header: "Status" },
+    ]
 
-  if (user?.role === "owner") {
-    columns.push({
-      id: "edit",
-      header: "Edit Vehicle",
-      cell: ({ row }) => {
-        const vehicle = row.original
-        return (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              dispatch(assignEditId(vehicle._id))
-              navigate(`/dashboard/owner/vehicles/add/${vehicle._id}`)
-            }}
-          >
-            Edit
-          </Button>
-        )
-      },
-    })
-  }
+    if (user?.role === "owner") {
+        columns.push({
+          id: "edit",
+          header: "Edit Vehicle",
+          cell: ({ row }) => (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                dispatch(assignEditId(row.original._id))
+                navigate(`/dashboard/owner/vehicles/add/${row.original._id}`)
+              }}
+            >
+              Edit
+            </Button>
+          )
+        })
+    }
 
-  if (type === "newRequest") {
-    columns.push({
-      id: "action",
-      header: "Action",
-      cell: ({ row }) => {
-        const vehicle = row.original
-        const currentValue =
-          actionValue[vehicle._id] ||
-          (vehicle.status === "pending"
-            ? "pending"
-            : vehicle.status === "approved"
-            ? "approved"
-            : "rejected")
+    if (status === "pending") {
+        columns.push({
+          accessorKey: "action",
+          header: "Action",
+          cell: ({ row }) => {
+          const vehicle = row.original
+            return (
+              <NativeSelect
+                defaultValue="pending"
+                className="h-9 w-32 text-sm"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "approved") {
+                    dispatch(vehicleApprove({ editId: vehicle._id }))
+                  }
+                  if (value === "rejected") {
+                    dispatch(vehicleReject({ editId: vehicle._id }))
+                  }
+                }}
+              >
+                <NativeSelectOption value="pending">Pending</NativeSelectOption>
+                <NativeSelectOption value="approved">Approve</NativeSelectOption>
+                <NativeSelectOption value="rejected">Reject</NativeSelectOption>
+              </NativeSelect>
+            )
+          }
+        })
+    }
 
-        return (
-          <NativeSelect
-            value={currentValue}
-            disabled={vehicle.status !== "pending"}
-            className="h-9 w-32 text-sm"
-            onChange={e => {
-              const value = e.target.value
-              setActionValue(prev => ({ ...prev, [vehicle._id]: value }))
-
-              if (value === "approved") {
-                dispatch(vehicleApprove({ editId: vehicle._id }))
-              }
-              if (value === "rejected") {
-                dispatch(vehicleReject({ editId: vehicle._id }))
-              }
-            }}
-          >
-            <NativeSelectOption value="pending">Pending</NativeSelectOption>
-            <NativeSelectOption value="approved">Approve</NativeSelectOption>
-            <NativeSelectOption value="rejected">Reject</NativeSelectOption>
-          </NativeSelect>
-        )
-      },
-    })
-  }
-
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="p-4">
-        <DataTable columns={columns} data={filteredData} />
-      </main>
-    </SidebarProvider>
-  )
+    return (
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="p-4">
+          <DataTable columns={columns} data={filteredData} />
+        </main>
+      </SidebarProvider>
+    )
 }

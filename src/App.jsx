@@ -4,7 +4,6 @@ import { Separator } from "@/components/ui/separator"
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Account from './pages/Account';
 import ForgotPassword from "./pages/ForgotPassword";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import OwnerDashboard from "./pages/Owner/OwnerDashboard";
@@ -36,12 +35,9 @@ import OwnerProfile from "./pages/Owner/OwnerProfile";
 import AdminProfile from "./pages/Admin/AdminProfile";
 import Users from "./pages/Users";
 import VehicleBooking from "./pages/VehicleBooking";
-import Bookings from "./pages/Bookings";
-import VehicleShow from "./pages/VehicleShow";
 import MyBookings from "./pages/MyBookings";
 import UserBookings from "./pages/UserBookings";
 import VehicleTracking from './pages/VehicleTracking';
-import VehicleMapTracking from './pages/Admin/VehicleMapTracking';
 
 function App() {
   const dispatch = useDispatch();
@@ -104,7 +100,6 @@ useEffect(() => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgotpassword" element={<ForgotPassword/>} />
-        <Route path="/users/account" element={<PrivateRoute allowedRoles={['admin', 'user']}><Account /></PrivateRoute>} />
 
         <Route path="/dashboard/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/dashboard/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerDashboard /></PrivateRoute>} />
@@ -117,14 +112,14 @@ useEffect(() => {
         <Route path="/dashboard/admin/profile" element={<PrivateRoute allowedRoles={['admin']}><AdminProfile /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/all" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><Users /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/owners/approve" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="approved" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/owners/reject" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="rejected" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList type="newRequest" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/new-request" element={<PrivateRoute allowedRoles={['admin']}><OwnerList status="pending" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/owners/approve" element={<PrivateRoute allowedRoles={['admin']}><OwnerList status="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/users/owners/reject" element={<PrivateRoute allowedRoles={['admin']}><OwnerList status="rejected" /></PrivateRoute>} />
       
         <Route path="/dashboard/admin/vehicles/all" element={<PrivateRoute allowedRoles={['admin']}><VehicleList /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="newRequest" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="approved" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList type="rejected" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/new-request" element={<PrivateRoute allowedRoles={['admin']}><VehicleList status="pending" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/approve" element={<PrivateRoute allowedRoles={['admin']}><VehicleList status="approved" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicles/reject" element={<PrivateRoute allowedRoles={['admin']}><VehicleList status="rejected" /></PrivateRoute>} />
   
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="pending" /></PrivateRoute>} />

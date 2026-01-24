@@ -14,8 +14,6 @@ import Vehicle from "./pages/Vehicle";
 import VehicleList from "./pages/VehicleList";
 import BookingList from "./pages/BookingList";
 import { Navbar }  from "./components/Navbar";
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import { useContext, useEffect } from "react";
 import UserContext from "./context/UserContext";
 import './App.css';

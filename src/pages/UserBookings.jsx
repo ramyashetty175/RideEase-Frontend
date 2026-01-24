@@ -29,14 +29,15 @@ export default function UserBookings() {
         if (!["approved", "in-progress"].includes(booking.bookingStatus)) return null;
           return (
             <NativeSelect
+            defaultValue="pending"
+            className="h-9 w-32 text-sm"
             onChange={(e) => {
             const action = e.target.value;
               if (action === "start") {
                 dispatch(bookingStartTrip({ editId: booking._id }))};
               if (action === "end") {
-                dispatch(bookingEndTrip({editId: booking._id}))}
+                dispatch(bookingEndTrip({ editId: booking._id }))};
             }}
-            className="w-36"
             >
             <NativeSelectOption value="">
               Select Action

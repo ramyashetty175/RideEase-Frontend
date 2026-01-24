@@ -8,93 +8,39 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2Icon, AlertCircleIcon } from "lucide-react";
 
 export default function VehicleBooking() {
-  const [startDateTime, setStartDateTime] = useState("");
-  const [endDateTime, setEndDateTime] = useState("");
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [returnLocation, setReturnLocation] = useState("");
-  const [errors, setErrors] = useState({});
-  const [alert, setAlert] = useState(null);
-  const [loading, setLoading] = useState(false);
+    const [startDateTime, setStartDateTime] = useState("");
+    const [endDateTime, setEndDateTime] = useState("");
+    const [pickupLocation, setPickupLocation] = useState("");
+    const [returnLocation, setReturnLocation] = useState("");
+    const [errors, setErrors] = useState({});
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { id } = useParams();
-  const { data } = useSelector((state) => state.vehicle);
-
-  const vehicle = data.find((v) => v._id === id);
-  const handlePayment = useRazorpayPayment();
-
-  if (!vehicle) return <p className="text-center mt-10">Vehicle not found.</p>;
-
-  const showAlert = (type, message, duration = 3000) => {
-    setAlert({ type, message });
-    setTimeout(() => setAlert(null), duration);
-  };
-
-  const handleBooking = async () => {
-    // Frontend validation
-    const validationErrors = {};
-    if (!startDateTime || !endDateTime) validationErrors.date = "Pickup and return date/time are required";
-    if (!pickupLocation) validationErrors.pickupLocation = "Pickup location is required";
-    if (!returnLocation) validationErrors.returnLocation = "Return location is required";
-
-    const now = new Date();
-    const start = new Date(startDateTime);
-    const end = new Date(endDateTime);
-
-    if (start <= now) validationErrors.startTime = "Start date/time must be greater than current time";
-    const diffHours = (end - start) / (1000 * 60 * 60);
-    if (diffHours < 24) validationErrors.minBooking = "Booking must be at least 1 day";
-    if (diffHours > 72) validationErrors.maxBooking = "Booking cannot exceed 3 days";
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const errors = {};
+        if (startDateTime.length == 0) {
+            errors.startDateTime = "Pickup date/time are required";
+        }
+        if(endDateTime.length == 0) {
+            errors.endDateTime = "Pickup date/time are required";
+        }
+        if(pickupLocation.length == 0) {
+           errors.pickupLocation = "Pickup location is required";
+        }
+        if(returnLocation.length == 0) {
+          errors.returnLocation = "Return location is required";
+        }
+        try {
+            const response = await axios.get('/api/vehicles/search', { params: { keyword }, headers: { Authorization: localStorage.getItem("token")}});
+            console.log(response.data);
+            setVehicles(response.data);
+        } catch(err) {
+            console.log(err);
+            setError("No vehicles found");
+            setVehicles([]);
+        }
     }
 
-    setErrors({});
-    setLoading(true);
-
-    try {
-      // Step 1: Attempt to create booking in backend (availability check inside backend)
-      const bookingResponse = await dispatch(
-        createBooking({
-          vehicle: vehicle._id,
-          startDateTime,
-          endDateTime,
-          pickupLocation,
-          returnLocation,
-        })
-      ).unwrap();
-
-      const bookingId = bookingResponse._id;
-
-      // Step 2: If backend returns success, proceed to payment
-      showAlert("success", "Vehicle available! Proceeding to payment...");
-
-      const amount = vehicle.pricePerDay * 100; // amount in paise
-      const success = await handlePayment(amount, bookingId);
-
-      if (!success) {
-        showAlert("error", "Payment failed or cancelled.");
-        setLoading(false);
-        return;
-      }
-
-      // Step 3: Payment successful, finalize booking (already created in backend ideally)
-      showAlert("success", "Payment successful! Booking confirmed.");
-      // navigate("/bookings");
-
-    } catch (err) {
-      console.log(err);
-      // Backend returned error, e.g., vehicle not available for these dates
-        showAlert("error", "vehicle already booked for selected dates");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
+return (
     <div className="max-w-3xl mx-auto mt-10 p-4">
       {alert && (
         <Alert
@@ -105,16 +51,15 @@ export default function VehicleBooking() {
           <AlertTitle>{alert.message}</AlertTitle>
         </Alert>
       )}
-
+      
       <Button
         className="bg-black text-white mb-6 hover:bg-gray-800"
         onClick={() => navigate("/vehicles")}
       >
         Back to all vehicles
       </Button>
-
+      <form onSubmit={handleSubmit}>
       <div className="border rounded-2xl shadow-md p-6 flex flex-col md:flex-row gap-6">
-        {/* Image */}
         <div className="w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden">
           {vehicle.image ? (
             <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-cover" />
@@ -122,14 +67,10 @@ export default function VehicleBooking() {
             <div className="h-full flex items-center justify-center text-gray-400">No Image</div>
           )}
         </div>
-
-        {/* Details */}
         <div className="flex-1">
           <h2 className="text-xl font-semibold">{vehicle.name}</h2>
           <p className="text-gray-500">{vehicle.brand} / {vehicle.type} / {vehicle.fuelType}</p>
           <p className="text-2xl font-bold mt-2">₹{vehicle.pricePerDay} / day</p>
-
-          {/* Dates */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
             <input
               type="datetime-local"
@@ -149,7 +90,6 @@ export default function VehicleBooking() {
           {errors.minBooking && <span className="text-red-600">{errors.minBooking}</span>}
           {errors.maxBooking && <span className="text-red-600">{errors.maxBooking}</span>}
 
-          {/* Locations */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
             <input
               type="text"
@@ -166,8 +106,9 @@ export default function VehicleBooking() {
               className="border rounded p-2"
             />
           </div>
-          {errors.pickupLocation && <span className="text-red-600">{errors.pickupLocation}</span>}
-          {errors.returnLocation && <span className="text-red-600">{errors.returnLocation}</span>}
+          
+          { errors.pickupLocation && ( <span style={{ color: "red" }}>{ errors.pickupLocation }</span> )}
+          { errors.returnLocation && ( <span style={{ color: "red" }}>{ errors.returnLocation }</span> )}
 
           <Button
             className="w-full mt-6 bg-blue-600 text-white hover:bg-blue-700"
@@ -178,6 +119,169 @@ export default function VehicleBooking() {
           </Button>
         </div>
       </div>
+      </form>
     </div>
-  );
+  )
 }
+
+
+
+
+
+
+
+
+// export default function VehicleBookig() {
+//     const [startDateTime, setStartDateTime] = useState("");
+//     const [endDateTime, setEndDateTime] = useState("");
+//     const [pickupLocation, setPickupLocation] = useState("");
+//     const [returnLocation, setReturnLocation] = useState("");
+//     const [errors, setErrors] = useState({});
+//     const [alert, setAlert] = useState(null);
+
+//     const navigate = useNavigate();
+//     const dispatch = useDispatch();
+//     const { id } = useParams();
+//     const { data } = useSelector((state) => state.vehicle);
+
+//   const vehicle = data.find((v) => v._id === id);
+//   const handlePayment = useRazorpayPayment();
+
+//   if (!vehicle)  {
+//     return <p>Vehicle not found</p>
+//   }
+
+//   const showAlert = (type, message, duration = 3000) => {
+//     setAlert({ type, message });
+//     setTimeout(() => setAlert(null), duration);
+//   };
+
+//   const handleBooking = async () => {
+//     const validationErrors = {};
+//     if (!startDateTime || !endDateTime) validationErrors.date = "Pickup and return date/time are required";
+//     if (!pickupLocation) validationErrors.pickupLocation = "Pickup location is required";
+//     if (!returnLocation) validationErrors.returnLocation = "Return location is required";
+
+//     const now = new Date();
+//     const start = new Date(startDateTime);
+//     const end = new Date(endDateTime);
+
+//     if (start <= now) validationErrors.startTime = "Start date/time must be greater than current time";
+//     const diffHours = (end - start) / (1000 * 60 * 60);
+//     if (diffHours < 24) validationErrors.minBooking = "Booking must be at least 1 day";
+//     if (diffHours > 72) validationErrors.maxBooking = "Booking cannot exceed 3 days";
+
+//     if (Object.keys(validationErrors).length > 0) {
+//       setErrors(validationErrors);
+//       return;
+//     }
+
+//     setErrors({});
+
+//     try {
+//       const bookingResponse = await dispatch(
+//         createBooking({
+//           vehicle: vehicle._id,
+//           startDateTime,
+//           endDateTime,
+//           pickupLocation,
+//           returnLocation,
+//         })
+//       ).unwrap();
+//       const bookingId = bookingResponse._id;
+//       showAlert("success", "Vehicle available! Proceeding to payment...");
+//       const amount = vehicle.pricePerDay * 100; 
+//       const success = await handlePayment(amount, bookingId);
+//       if (!success) {
+//         showAlert("error", "Payment failed or cancelled.");
+//         setLoading(false);
+//         return;
+//       }
+//       showAlert("success", "Payment successful! Booking confirmed.");
+//     } catch (err) {
+//       console.log(err);
+//         showAlert("error", "vehicle already booked for selected dates");
+//     }
+//   };
+
+//   return (
+//     <div className="max-w-3xl mx-auto mt-10 p-4">
+//       {alert && (
+//         <Alert
+//           variant={alert.type === "error" ? "destructive" : "default"}
+//           className="mb-4 flex items-center gap-2"
+//         >
+//           {alert.type === "error" ? <AlertCircleIcon /> : <CheckCircle2Icon />}
+//           <AlertTitle>{alert.message}</AlertTitle>
+//         </Alert>
+//       )}
+
+//       <Button
+//         className="bg-black text-white mb-6 hover:bg-gray-800"
+//         onClick={() => navigate("/vehicles")}
+//       >
+//         Back to all vehicles
+//       </Button>
+
+//       <div className="border rounded-2xl shadow-md p-6 flex flex-col md:flex-row gap-6">
+//         <div className="w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden">
+//           {vehicle.image ? (
+//             <img src={vehicle.image} alt={vehicle.name} className="w-full h-full object-cover" />
+//           ) : (
+//             <div className="h-full flex items-center justify-center text-gray-400">No Image</div>
+//           )}
+//         </div>
+//         <div className="flex-1">
+//           <h2 className="text-xl font-semibold">{vehicle.name}</h2>
+//           <p className="text-gray-500">{vehicle.brand} / {vehicle.type} / {vehicle.fuelType}</p>
+//           <p className="text-2xl font-bold mt-2">₹{vehicle.pricePerDay} / day</p>
+//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+//             <input
+//               type="datetime-local"
+//               value={startDateTime}
+//               onChange={(e) => setStartDateTime(e.target.value)}
+//               className="border rounded p-2"
+//             />
+//             <input
+//               type="datetime-local"
+//               value={endDateTime}
+//               onChange={(e) => setEndDateTime(e.target.value)}
+//               className="border rounded p-2"
+//             />
+//           </div>
+//           {errors.date && <span className="text-red-600">{errors.date}</span>}
+//           {errors.startTime && <span className="text-red-600">{errors.startTime}</span>}
+//           {errors.minBooking && <span className="text-red-600">{errors.minBooking}</span>}
+//           {errors.maxBooking && <span className="text-red-600">{errors.maxBooking}</span>}
+
+//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+//             <input
+//               type="text"
+//               placeholder="Pickup location"
+//               value={pickupLocation}
+//               onChange={(e) => setPickupLocation(e.target.value)}
+//               className="border rounded p-2"
+//             />
+//             <input
+//               type="text"
+//               placeholder="Return location"
+//               value={returnLocation}
+//               onChange={(e) => setReturnLocation(e.target.value)}
+//               className="border rounded p-2"
+//             />
+//           </div>
+//           {errors.pickupLocation && <span className="text-red-600">{errors.pickupLocation}</span>}
+//           {errors.returnLocation && <span className="text-red-600">{errors.returnLocation}</span>}
+
+//           <Button
+//             className="w-full mt-6 bg-blue-600 text-white hover:bg-blue-700"
+//             onClick={handleBooking}
+//             disabled={loading}
+//           >
+//             {loading ? "Processing..." : "Book Now"}
+//           </Button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

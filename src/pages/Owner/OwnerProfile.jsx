@@ -136,47 +136,62 @@ export default function OwnerProfile() {
         if(Object.keys(errors).length > 0) {
             setErrors(errors);
         } else {
-        let avatarUrl = null;
-        let licenceDoc = null;
-        let insuranceDoc = null;
-        if (files.avatar) {
-            try {
-                avatarUrl = await uploadAvatar(files.avatar);
-            } catch (err) {
-                setAlert({ type: "error", message: "Avatar upload failed" });
-                setTimeout(() => setAlert(null), 3000);
-            }
-        } 
-        if (files.licenceDoc) {
-            try {
-                licenceDoc = await uploadLicence(files.licenceDoc);
-            } catch (err) {
-                setAlert({ type: "error", message: "Licence upload failed" });
-                setTimeout(() => setAlert(null), 3000);
-            }
-        }
-        if (files.insuranceDoc) {
-            try {
-                insuranceDoc = await uploadInsurance(files.insuranceDoc);
-            } catch (err) {
-                setAlert({ type: "error", message: "Insurance upload failed" });
-                setTimeout(() => setAlert(null), 3000);
-            }
-        }
-        const payload = {
-            username: form.username,
-            bio: form.bio
-        }
-        if (avatarUrl) {
-          payload.avatar = avatarUrl;
-        }
-        if (licenceDoc) {
-            payload.licenceDoc = licenceDoc;
-        }
-        if (insuranceDoc) { 
-            payload.insuranceDoc = insuranceDoc;
-        }
+        // let avatarUrl = null;
+        // let licenceDoc = null;
+        // let insuranceDoc = null;
+        // if (files.avatar) {
+        //     try {
+        //         avatarUrl = await uploadAvatar(files.avatar);
+        //     } catch (err) {
+        //         setAlert({ type: "error", message: "Avatar upload failed" });
+        //         setTimeout(() => setAlert(null), 3000);
+        //     }
+        // } 
+        // if (files.licenceDoc) {
+        //     try {
+        //         licenceDoc = await uploadLicence(files.licenceDoc);
+        //     } catch (err) {
+        //         setAlert({ type: "error", message: "Licence upload failed" });
+        //         setTimeout(() => setAlert(null), 3000);
+        //     }
+        // }
+        // if (files.insuranceDoc) {
+        //     try {
+        //         insuranceDoc = await uploadInsurance(files.insuranceDoc);
+        //     } catch (err) {
+        //         setAlert({ type: "error", message: "Insurance upload failed" });
+        //         setTimeout(() => setAlert(null), 3000);
+        //     }
+        // }
+        // const payload = {
+        //     username: form.username,
+        //     bio: form.bio
+        // }
+        // if (avatarUrl) {
+        //   payload.avatar = avatarUrl;
+        // }
+        // if (licenceDoc) {
+        //     payload.licenceDoc = licenceDoc;
+        // }
+        // if (insuranceDoc) { 
+        //     payload.insuranceDoc = insuranceDoc;
+        // }
         try {
+            const [avatarUrl, licenceDocUrl, insuranceDocUrl] = await Promise.all([
+                files.avatar ? uploadAvatar(files.avatar) : null,
+                files.licenceDoc ? uploadLicence(files.licenceDoc) : null,
+                files.insuranceDoc ? uploadInsurance(files.insuranceDoc) : null,
+            ])
+            const payload = { username: form.username, bio: form.bio };
+            if (avatarUrl) {
+                payload.avatar = avatarUrl;
+            }
+            if (licenceDocUrl) {
+                payload.licenceDoc = licenceDocUrl;
+            }
+            if (insuranceDocUrl) {
+                payload.insuranceDoc = insuranceDocUrl;
+            }
             const response = await axios.put('/users/profile', payload, { headers: { Authorization: localStorage.getItem("token")}});
             dispatch({ type: "SET_USER", payload: response.data });
             setErrors({});

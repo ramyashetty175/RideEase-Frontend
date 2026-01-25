@@ -136,46 +136,6 @@ export default function OwnerProfile() {
         if(Object.keys(errors).length > 0) {
             setErrors(errors);
         } else {
-        // let avatarUrl = null;
-        // let licenceDoc = null;
-        // let insuranceDoc = null;
-        // if (files.avatar) {
-        //     try {
-        //         avatarUrl = await uploadAvatar(files.avatar);
-        //     } catch (err) {
-        //         setAlert({ type: "error", message: "Avatar upload failed" });
-        //         setTimeout(() => setAlert(null), 3000);
-        //     }
-        // } 
-        // if (files.licenceDoc) {
-        //     try {
-        //         licenceDoc = await uploadLicence(files.licenceDoc);
-        //     } catch (err) {
-        //         setAlert({ type: "error", message: "Licence upload failed" });
-        //         setTimeout(() => setAlert(null), 3000);
-        //     }
-        // }
-        // if (files.insuranceDoc) {
-        //     try {
-        //         insuranceDoc = await uploadInsurance(files.insuranceDoc);
-        //     } catch (err) {
-        //         setAlert({ type: "error", message: "Insurance upload failed" });
-        //         setTimeout(() => setAlert(null), 3000);
-        //     }
-        // }
-        // const payload = {
-        //     username: form.username,
-        //     bio: form.bio
-        // }
-        // if (avatarUrl) {
-        //   payload.avatar = avatarUrl;
-        // }
-        // if (licenceDoc) {
-        //     payload.licenceDoc = licenceDoc;
-        // }
-        // if (insuranceDoc) { 
-        //     payload.insuranceDoc = insuranceDoc;
-        // }
         try {
             const [avatarUrl, licenceDocUrl, insuranceDocUrl] = await Promise.all([
                 files.avatar ? uploadAvatar(files.avatar) : null,

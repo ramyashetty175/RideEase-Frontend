@@ -20,21 +20,8 @@ export default function VehicleList({ status }) {
 
     const columns = [
         { accessorKey: "_id", header: "ID" },
-        {
-          accessorKey: "image",
-          header: "Image",
-          cell: ({ row }) => (
-            <img
-              src={row.original.image}
-              alt="Vehicle"
-              className="w-40 h-24 object-cover rounded border"
-            />
-          )
-        },
-        { accessorKey: "vehicleName", header: "Vehicle Name" },
-        { accessorKey: "type", header: "Type" },
-        { accessorKey: "brand", header: "Brand" },
-        { accessorKey: "registrationNumber", header: "Registration Number" },
+        { accessorKey: "vehicleName", header: "Name" },
+        { accessorKey: "registrationNumber", header: "Reg" },
         {
           header: "Owner",
           cell: ({ row }) => row.original.owner?.username
@@ -63,12 +50,9 @@ export default function VehicleList({ status }) {
             </Button>
           )
         },
-        { accessorKey: "fuelType", header: "Fuel Type" },
-        { accessorKey: "transmission", header: "Transmission" },
         { accessorKey: "seats", header: "Seats" },
-        { accessorKey: "pricePerDay", header: "Price Per Day" },
-        { accessorKey: "location", header: "Location" },
-        { accessorKey: "availabilityStatus", header: "Availability Status" },
+        { accessorKey: "pricePerDay", header: "Price" },
+        { accessorKey: "availabilityStatus", header: "Availability" },
         { accessorKey: "status", header: "Status" },
     ]
 

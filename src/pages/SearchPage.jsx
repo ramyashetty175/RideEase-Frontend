@@ -17,7 +17,7 @@ export default function SearchPage() {
         try {
             const response = await axios.get('/api/vehicles/search', { params: { keyword }, headers: { Authorization: localStorage.getItem("token")}});
             console.log(response.data);
-            setVehicles(response.data);
+            setVehicles(response.data.vehicles);
         } catch(err) {
             console.log(err);
             setError("No vehicles found");

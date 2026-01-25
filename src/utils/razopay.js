@@ -34,9 +34,9 @@ export default function useRazorpayPayment() {
                 description: "Vehicle Booking Payment",
                 order_id: orderId,
                 prefill: {
-                  name: user.name,
-                  email: user.email,
-                  contact: "99999999888",
+                   name: user.name,
+                   email: user.email,
+                   contact: "99999999888",
                 },
                 handler: async function (response) {
                     try {

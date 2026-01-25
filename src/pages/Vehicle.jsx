@@ -31,28 +31,28 @@ export default function ApprovedVehicle() {
                     />
                   )}
                   </div>
-                  <div className="flex flex-col gap-1 text-sm">
-                    <h2 className="text-lg font-semibold text-gray-800">
+                  <div className="flex flex-col gap-1 text-sm text-black">
+                    <h2 className="text-lg font-semibold">
                       {vehicle.name}
                     </h2>
-                    <p className="text-gray-600">
-                    <span className="font-medium">Brand:</span> {vehicle.brand}
+                    <p>
+                    <span className="font-medium">Brand: </span> {vehicle.brand}
                   </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">Type:</span> {vehicle.type}
+                  <p>
+                    <span className="font-medium">Type: </span> {vehicle.type}
                   </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">Fuel:</span> {vehicle.fuelType}
+                  <p>
+                    <span className="font-medium">Fuel: </span> {vehicle.fuelType}
                   </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">Transmission:</span> {vehicle.transmission}
+                  <p>
+                    <span className="font-medium">Transmission: </span> {vehicle.transmission}
                   </p>
-                  <p className="text-gray-600">
-                    <span className="font-medium">AvailabilityStatus:</span> {vehicle.availabilityStatus}
+                  <p>
+                    <span className="font-medium">Availability: </span> {vehicle.availabilityStatus}
                   </p>
               </div>
               <Button
-                  className="mt-2 w-full bg-gray-700 hover:bg-gray-800"
+                  className="mt-2 w-full bg-black text-white hover:bg-black"
                   onClick={ () => navigate(`view/${vehicle._id}`)}> View </Button>
               </CardContent>
             </Card>

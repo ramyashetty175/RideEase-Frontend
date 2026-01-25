@@ -121,7 +121,7 @@ export default function OwnerAddVehicle() {
         }
         if(formData.vehicleName.trim().length == 0) {
             errors.vehicleName = "Vehicle Name is required";
-        } else if (formData.vehicleName.length < 6) {
+        } else if (formData.vehicleName.length < 3) {
             errors.vehicleName = "Vehicle Name is too short";
         }
         if(formData.brand.trim().length == 0) {
@@ -129,7 +129,7 @@ export default function OwnerAddVehicle() {
         }
         if(formData.registrationNumber.trim().length == 0) {
             errors.registrationNumber = "Vehicle Registration Number is required";
-        }else if (formData.registrationNumber.length < 6) {
+        }else if (formData.registrationNumber.length < 4) {
             errors.registrationNumber = "Invalid registration number";
         }
         if(!formData.type) {

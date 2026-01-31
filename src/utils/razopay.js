@@ -61,8 +61,8 @@ export default function useRazorpayPayment() {
                     }
                 },
                 modal: {
-                    ondismiss: function () {
-                     resolve(false); 
+                    ondismiss: async function () {
+                       resolve(false); 
                     }
                 }
             }   

@@ -17,14 +17,10 @@ import { AppSidebar } from "@/components/app-sidebar";
 export default function Transactions() {
     const [transactions, setTransactions] = useState([]);
 
-    if(!transactions) {
-      return <p>loading</p>
-    }
-
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const response = await axios.get('/api/payments', { headers: { Authorization: localStorage.getItem('token')}});
+                const response = await axios.get('http://localhost:3020/api/payments', { headers: { Authorization: localStorage.getItem('token')}});
                 setTransactions(response.data);
             } catch (err) {
                 console.log(err);
@@ -44,7 +40,7 @@ export default function Transactions() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[120px]">Transaction ID</TableHead>
-                    <TableHead>User</TableHead>
+                    {/* <TableHead>User</TableHead> */}
                     <TableHead>Status</TableHead>
                     <TableHead>Method</TableHead>
                     <TableHead className="text-right">Amount (₹)</TableHead>
@@ -54,7 +50,7 @@ export default function Transactions() {
                 {transactions.map((t) => (
                     <TableRow key={t._id}>
                       <TableCell className="font-medium">{ t.transactionId }</TableCell>
-                      <TableCell>{ t.user?.username }</TableCell>
+                      {/* <TableCell>{ t.user?.username }</TableCell> */}
                       <TableCell>{t.status}</TableCell>
                       <TableCell>Razorpay</TableCell>
                       <TableCell className="text-right">{t.amount / 100}</TableCell>

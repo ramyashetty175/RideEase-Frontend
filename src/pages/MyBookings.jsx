@@ -1,12 +1,8 @@
 "use client";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchBooking } from "@/slices/bookingSlice";
-import { requestBookingCancel } from "@/slices/bookingCancellationSlice";
-import { Button } from "@/components/ui/button";
+
+import { useSelector } from "react-redux";
 
 export default function MyBookings() {
-    const dispatch = useDispatch();
     const { data } = useSelector((state) => state.booking);
 
     if (data.length == 0) {
@@ -22,8 +18,8 @@ export default function MyBookings() {
             className="border rounded-xl p-4 flex gap-4 items-center"
           >
           <img
-            src={booking.vehicle.image}
-            alt={booking.vehicle.name}
+            src={booking.vehicle?.image}
+            alt={booking.vehicle?.name}
             className="w-32 h-24 object-cover rounded-lg"
           />
           <div className="flex-1">
@@ -35,7 +31,7 @@ export default function MyBookings() {
             <p className="text-sm">Status: {booking.bookingStatus}</p>
             <p className="font-semibold mt-1">{booking.totalAmount}</p>
           </div>
-          {(booking.bookingStatus === "pending" || booking.bookingStatus === "confirmed") && (
+          {/* {(booking.bookingStatus === "pending" || booking.bookingStatus === "confirmed") && (
             <Button
               variant="destructive"
               disabled={booking.bookingStatus === "cancelRequested"}
@@ -43,7 +39,7 @@ export default function MyBookings() {
             >
               Cancel
            </Button>
-          )}
+          )} */}
         </div>
       ))}
     </div>

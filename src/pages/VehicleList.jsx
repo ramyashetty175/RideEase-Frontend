@@ -56,25 +56,6 @@ export default function VehicleList({ status }) {
         { accessorKey: "status", header: "Status" },
     ]
 
-    if (user?.role === "owner") {
-        columns.push({
-          id: "edit",
-          header: "Edit Vehicle",
-          cell: ({ row }) => (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                dispatch(assignEditId(row.original._id))
-                navigate(`/dashboard/owner/vehicles/add/${row.original._id}`)
-              }}
-            >
-              Edit
-            </Button>
-          )
-        })
-    }
-
     if (status === "pending") {
         columns.push({
           accessorKey: "action",

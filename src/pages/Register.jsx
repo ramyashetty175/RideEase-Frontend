@@ -23,6 +23,7 @@ export default function Register() {
         initialValues: {
             username: "",
             email: "",
+            role: "",
             password: "",
             confirmPassword: ""
         },
@@ -35,6 +36,11 @@ export default function Register() {
                 errors.email = "Email is required";
             } else if(!emailFormat.test(values.email)) {
                 errors.email = "Invalid Email Address";
+            }
+            if(values.role.trim().length == 0) {
+                errors.role = "Role is required";
+            } else if(values.role !== 'owner' && values.role !== 'user') {
+                errors.role = "Role must be either 'owner' or 'user'";
             }
             if(values.password.trim().length == 0) {
                 errors.password = "Password is required";
@@ -88,6 +94,19 @@ export default function Register() {
                         />
                         {formik.touched.email && formik.errors.email && (
                             <span style={{ color: "red" }}>{formik.errors.email}</span>
+                        )}
+                    </div>
+                    <div className="grid gap-2">
+                   <Label htmlFor="role">Role</Label>
+                       <Input type="role"
+                          name="role"
+                          placeholder="Enter Role"
+                          value={formik.values.role}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.role && formik.errors.role && (
+                            <span style={{ color: "red" }}>{formik.errors.role}</span>
                         )}
                     </div>
                     <div className="flex gap-4">

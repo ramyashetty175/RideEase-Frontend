@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
+import VehicleTracking from "./VehicleTracking";
 
 export default function Login() {
     const { handleLogin } = useContext(UserContext);
@@ -35,7 +36,7 @@ export default function Login() {
         },
         onSubmit: async (values, {resetForm}) => {
             console.log(values);
-               handleLogin(values, resetForm);
+            handleLogin(values, resetForm);
         }
     })
 
@@ -70,7 +71,7 @@ export default function Login() {
                 <div className="flex items-center"></div>
                 <Label htmlFor="password">Password</Label>
                 <a
-                  href="#"
+                  href="/login"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                 >
                   Forgot your password?

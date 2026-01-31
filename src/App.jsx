@@ -26,6 +26,7 @@ import { fetchVehicles } from "./slices/vehicleSlice";
 import Transactions from "./pages/Transactions";
 import ChangePassword from "./pages/ChangePassword";
 import Profile from "./pages/Profile";
+import AdminMap from "./pages/Admin/AdminMap";
 import OwnerAddVehicle from "./pages/Owner/OwnerAddVehicle";
 import AdminHome from "./pages/Admin/AdminHome";
 import OwnerHome from "./pages/Owner/OwnerHome";
@@ -59,12 +60,12 @@ useEffect(() => {
   }
 }, [token, dispatch]);
 
-
   return(
       <div>
           {( isLoggedIn || localStorage.getItem('token')) && (
             <> 
               <Navbar />
+              <VehicleTracking />
               <Separator />
             </>
           )}
@@ -122,8 +123,8 @@ useEffect(() => {
         <Route path="/dashboard/admin/bookings/all" element={<PrivateRoute allowedRoles={['admin']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/new-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="pending" /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/approve" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="confirmed" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/in-progress" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="in-progress" /></PrivateRoute>} />
-        <Route path="/dashboard/admin/bookings/complete" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="completed" /></PrivateRoute>} />
+        {/* <Route path="/dashboard/admin/bookings/in-progress" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="in-progress" /></PrivateRoute>} />
+        <Route path="/dashboard/admin/bookings/complete" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="completed" /></PrivateRoute>} /> */}
         <Route path="/dashboard/admin/bookings/cancel" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="canceled" /></PrivateRoute>} />
         <Route path="/dashboard/admin/bookings/cancel-request" element={<PrivateRoute allowedRoles={['admin']}><BookingList status="cancelRequested" /></PrivateRoute>} />
  
@@ -134,8 +135,8 @@ useEffect(() => {
         <Route path="/dashboard/owner/bookings/all" element={<PrivateRoute allowedRoles={['owner']}><BookingList /></PrivateRoute>} />
         <Route path="/dashboard/owner/bookings/new-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="pending" /></PrivateRoute>} />
         <Route path="/dashboard/owner/bookings/approve" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="confirmed" /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/in-progress" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="in-progress" /></PrivateRoute>} />
-        <Route path="/dashboard/owner/bookings/complete" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="completed" /></PrivateRoute>} />
+        {/* <Route path="/dashboard/owner/bookings/in-progress" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="in-progress" /></PrivateRoute>} />
+        <Route path="/dashboard/owner/bookings/complete" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="completed" /></PrivateRoute>} /> */}
         <Route path="/dashboard/owner/bookings/cancel" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="canceled" /></PrivateRoute>} />
         <Route path="/dashboard/owner/bookings/cancel-request" element={<PrivateRoute allowedRoles={['owner']}><BookingList status="cancelRequested" /></PrivateRoute>} />
 
@@ -146,9 +147,9 @@ useEffect(() => {
         <Route path="/dashboard/bookings" element={<PrivateRoute allowedRoles={['user']}><UserBookings /></PrivateRoute>} />
         <Route path="/dashboard/transactions" element={<PrivateRoute allowedRoles={['user']}><Transactions /></PrivateRoute>} />
 
-        <Route path="/dashboard/user/vehicle/map" element={<PrivateRoute allowedRoles={['user']}><VehicleTracking /></PrivateRoute>} />
+        {/* <Route path="/dashboard/user/vehicle/map" element={<PrivateRoute allowedRoles={['user']}><VehicleTracking /></PrivateRoute>} /> */}
  
-        <Route path="/vehicle-tracking/:id" element={<PrivateRoute allowedRoles={['admin']}><VehicleTracking /></PrivateRoute>} />
+        <Route path="/dashboard/admin/vehicle/tracking" element={<PrivateRoute allowedRoles={['admin']}><AdminMap /></PrivateRoute>} />
 
         <Route path="/dashboard/change-password" element={<PrivateRoute allowedRoles={['user']}><ChangePassword /></PrivateRoute>} />
         {/* <Route path="/dashboard/logout" element={<PrivateRoute allowedRoles={['admin']}>< /></PrivateRoute>} /> */}

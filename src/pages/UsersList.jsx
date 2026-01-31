@@ -10,7 +10,6 @@ import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 
 export const columns = [
-    { accessorKey: "_id", header: "ID" },
     {
       accessorKey: "username",
       header: ({ column }) => {

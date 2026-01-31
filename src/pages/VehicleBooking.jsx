@@ -51,7 +51,7 @@ export default function VehicleBooking() {
         const diffTime = end - start;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         if (start <= now) {
-            errors.startTime = "Start date/time must be greater than current time";
+            errors.startDateTime = "Start date/time must be greater than current time";
         }
         const diffHours = (end - start) / (1000 * 60 * 60);
         if (diffHours < 24) {
@@ -60,22 +60,33 @@ export default function VehicleBooking() {
         if (diffHours > 72) {
             errors.maxBooking = "Booking cannot exceed 3 days";
         }
+        const resetForm = () => {
+          setForm({
+             startDateTime: '',
+        endDateTime: '',
+        pickupLocation: '',
+        returnLocation: ''
+        });
+        }
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
         } else {
         try {
-            const bookingResponse = await dispatch(createBooking({ vehicle: vehicle._id, startDateTime: form.startDateTime, endDateTime: form.endDateTime, pickupLocation: form.pickupLocation, returnLocation: form.returnLocation }));
+            const bookingResponse = await dispatch(createBooking({ vehicle: vehicle._id, startDateTime: form.startDateTime, endDateTime: form.endDateTime, pickupLocation: form.pickupLocation, returnLocation: form.returnLocation })).unwrap();;
             const bookingId = bookingResponse._id;
             setAlert({ type: "success", message: "Vehicle available! Proceeding to payment..." });
-            // const amount = vehicle.pricePerDay * 100;
-            const amount = vehicle.pricePerDay * diffDays * 100;
+            let amount = vehicle.pricePerDay * diffDays * 100;
             const success = await handlePayment(amount, bookingId);
-            if (!success) {
+            if (success) {
+                setAlert({ type: "success", message: "Payment successful! Booking confirmed." });
+                setTimeout(() => setAlert(null), 3000);
+            } else {
                 setAlert({ type: "error", message: "Payment failed or cancelled" });
                 setTimeout(() => setAlert(null), 3000);
             }
-            setAlert({ type: "success", message: "Payment successful! Booking confirmed." });
-            setTimeout(() => setAlert(null), 3000);
+            resetForm();
+            setErrors({});
+            // setTimeout(() => setAlert(null), 3000);
             } catch(err) {
                 console.log(err);
                 setErrors("No vehicles found");

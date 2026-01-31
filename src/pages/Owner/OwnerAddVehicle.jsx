@@ -180,6 +180,7 @@ export default function OwnerAddVehicle() {
                 setAlert({ type: "success", message: "Vehicle updated successfully!" });
             } else {
                 dispatch(createVehicle({ formData: form }));
+                resetForm();
                 setErrors({});
                 setAlert({ type: "success", message: "Vehicle added successfully!" });
                 resetForm();

@@ -71,7 +71,7 @@ export default function AuthProvider(props) {
             resetForm();
             alert('logged in successfully');
             dispatch({ type: "LOGIN", payload: userResponse.data });
-            navigate('/home');
+            navigate('/vehicles');
         } catch(err) {
             console.log(err);
             dispatch({ type: 'SET_SERVER_ERROR', payload: err.response.data.error });

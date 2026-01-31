@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="bg-white border-t mt-12">
       {/* Newsletter Section */}
-<div className="max-w-7xl mx-auto px-6 py-12">
+{/* <div className="max-w-7xl mx-auto px-6 py-12">
   <div className="bg-gray-50 p-8 rounded-lg text-center flex flex-col items-center gap-4">
     <h3 className="text-xl font-bold text-gray-800">Subscribe to RideEase Updates</h3>
     <p className="text-sm text-gray-500">
@@ -21,7 +21,7 @@ export function Footer() {
       </button>
     </div>
   </div>
-</div>
+</div> */}
 
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">

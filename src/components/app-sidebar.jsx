@@ -126,22 +126,16 @@ const data = {
           url: "/dashboard/admin/bookings/approve",
         },
         {
-          title: "In-Progress",
-          url: "/dashboard/admin/bookings/in-progress",
-        },
-        {
-          title: "Complete",
-          url: "/dashboard/admin/bookings/complete",
-        },
-        {
           title: "Cancel",
           url: "/dashboard/admin/bookings/cancel",
         },
-        {
-          title: "CancelRequest",
-          url: "/dashboard/admin/bookings/cancel-request",
-        },
       ],
+    },
+    {
+      title: "Vehicle Map",
+      url: "/dashboard/admin/vehicle/tracking",
+      icon: SquareTerminal,
+      isActive: true,
     },
   ],
   navMainOwner: [
@@ -150,17 +144,6 @@ const data = {
       url: "/dashboard/owner",
       icon: SquareTerminal,
       isActive: true,
-    },
-    {
-      title: "Manage Users",
-      url: "/dashboard/owner/users",
-      icon: Bot,
-      items: [
-        {
-          title: "Users",
-          url: "/dashboard/owner/users/user/all",
-        }
-      ],
     },
     {
       title: "Vehicles",
@@ -194,21 +177,9 @@ const data = {
           title: "Approve",
           url: "/dashboard/owner/bookings/approve",
         },
-        {
-          title: "In-Progress",
-          url: "/dashboard/owner/bookings/in-progress",
-        },
-        {
-          title: "Complete",
-          url: "/dashboard/owner/bookings/complete",
-        },
          {
           title: "Cancel",
           url: "/dashboard/owner/bookings/cancel",
-        },
-        {
-          title: "CancelRequest",
-          url: "/dashboard/owner/bookings/cancel-request",
         },
       ],
     },
@@ -237,24 +208,13 @@ const data = {
       url: "/dashboard/transactions",
       icon: SquareTerminal,
       isActive: true,
-    },
-    {
-      title: "Vehilce Map",
-      url: "/dashboard/user/vehicle/map",
-      icon: SquareTerminal,
-      isActive: true,
-    },
-    {
-      title: "Logout",
-      url: "/dashboard/logout",
-      icon: SquareTerminal,
-      isActive: true,
-    },
+    }
   ]
 }
 
 export function AppSidebar(props) {
   const { user } = useContext(UserContext);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -264,7 +224,6 @@ export function AppSidebar(props) {
         { user.role == 'admin' && <NavMain items={data.navMainAdmin} />}
         { user.role == 'owner' && <NavMain items={data.navMainOwner} />}
         { user.role == 'user' && <NavMain items={data.navMainUser} />}
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         { (user.role == 'admin' || user.role == 'owner') && <NavUser user={data.user} />}

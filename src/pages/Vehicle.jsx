@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function ApprovedVehicle() {
+export default function Vehicle() {
     const navigate = useNavigate();
     const { data } = useSelector((state) => state.vehicle);
 

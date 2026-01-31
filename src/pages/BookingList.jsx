@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { useSelector, useDispatch } from "react-redux";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { bookingApprove, bookingCancel } from "../slices/bookingSlice";
-import { approveBookingCancel, rejectBookingCancel } from "../slices/bookingCancellationSlice";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
@@ -16,11 +15,13 @@ export default function BookingList({ status }) {
 
     const columns = [
       { accessorKey: "_id", header: "Booking ID" },
-      { accessorKey: "userName", header: "User Name" },
-      { accessorKey: "vehicleName", header: "Vehicle" },
+      {
+        header: "User Name",
+        cell: ({ row }) => row.original.user?.username
+      },
+      { accessorKey: "vehicle._id", header: "Vehicle" },
       { accessorKey: "pickupLocation", header: "Pickup" },
       { accessorKey: "returnLocation", header: "Return" },
-      { accessorKey: "totalAmount", header: "Amount" },
       { accessorKey: "paymentStatus", header: "Payment" },
       { accessorKey: "bookingStatus", header: "Status" },
     ]
@@ -48,11 +49,11 @@ export default function BookingList({ status }) {
           header: "Insurance",
           cell: ({ row }) => {
           const booking = row.original;
-          return booking.user?.insuranceDoc ? (
+          return booking.user?.licenceDoc ? (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.open(booking.user.insuranceDoc, "_blank")}
+              onClick={() => window.open(booking.user.licenceDoc, "_blank")}
             >
               View
             </Button>
@@ -82,30 +83,6 @@ export default function BookingList({ status }) {
           }
         }
       )
-    }
-
-    if (status === "cancelRequested") {
-      columns.push({
-        accessorKey: "action",
-        header: "Action",
-        cell: ({ row }) => {
-          const booking = row.original
-            return (
-              <NativeSelect
-                className="h-9 w-32 text-sm"
-                onChange={(e) => {
-                const value = e.target.value;
-                if (value === "approved") dispatch(approveBookingCancel({ id: booking._id }))
-                if (value === "rejected") dispatch(rejectBookingCancel({ id: booking._id }))
-              }}
-              >
-              <NativeSelectOption value="pending">Pending</NativeSelectOption>
-              <NativeSelectOption value="approved">Approve</NativeSelectOption>
-              <NativeSelectOption value="rejected">Reject</NativeSelectOption>
-            </NativeSelect>
-          )
-        }
-      })
     }
 
     return (

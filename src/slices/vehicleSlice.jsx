@@ -22,17 +22,6 @@ export const createVehicle = createAsyncThunk("vehicle/createVehicle", async({ f
     }
 })
 
-export const updateVehicle = createAsyncThunk("vehicle/updateVehicle", async ({ editId, formData }, { rejectWithValue }) => {
-    try {
-        const response = await axios.put(`/api/vehicles/${editId}`, formData, { headers: { Authorization: localStorage.getItem('token')}});
-        console.log(response.data);
-        return response.data;
-    } catch(err) {
-        console.log(err);
-        return rejectWithValue(err.message);
-    }
-})
-
 export const searchVehicle = createAsyncThunk("vehicle/searchVehicle", async (keyword, { rejectWithValue }) => {
     try {
         const response = await axios.get(`/api/vehicles/search?keyword=${keyword}`, { headers: { Authorization: localStorage.getItem('token')}});
@@ -153,19 +142,6 @@ const vehicleSlice = createSlice({
             .addCase(removeVehicle.rejected, (state, action) => {
                 state.errors = action.payload;
             })
-            .addCase(updateVehicle.pending, (state) => {
-                state.loading = true;
-                state.errors = null;
-            })
-            .addCase(updateVehicle.fulfilled, (state, action) => {
-                const idx = state.data.findIndex(ele => ele._id == action.payload._id);
-                state.data[idx] = action.payload;
-                state.editId = null;
-            })
-            .addCase(updateVehicle.rejected, (state, action) => {
-                state.errors = action.payload;
-            })
-
             .addCase(vehicleApprove.pending, (state) => {
                 state.loading = true;
                 state.errors = null;

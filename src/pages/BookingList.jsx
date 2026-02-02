@@ -11,7 +11,7 @@ export default function BookingList({ status }) {
     const dispatch = useDispatch();
     const { data } = useSelector((state) => state.booking);
 
-    const filteredData = status ? data.filter((b) => b.bookingStatus === status): data;
+    const filteredData = status ? data.filter(booking => booking.status === status) : data;
 
     const columns = [
       { accessorKey: "_id", header: "Booking ID" },
@@ -89,6 +89,13 @@ export default function BookingList({ status }) {
       <SidebarProvider>
         <AppSidebar />
           <main className="p-4">
+            <div className="flex justify-center mb-6">
+  <h2 className="text-black font-bold text-3xl text-center">
+    {status
+      ? `${status.charAt(0).toUpperCase() + status.slice(1)} Bookings`
+      : "All Bookings"}
+  </h2>
+</div>
             <DataTable columns={columns} data={filteredData} />
           </main>
       </SidebarProvider>

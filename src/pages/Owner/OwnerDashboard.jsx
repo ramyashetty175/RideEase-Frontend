@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/sidebar";
 import { useSelector } from "react-redux";
 import axios from "../../config/axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "@/context/UserContext";
 
 export default function OwnerDashboard() {
+  const { user } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const { data: bookingData } = useSelector((state) => state.booking);
   const { data: vehicleData } = useSelector((state) => state.vehicle);
@@ -61,6 +63,12 @@ export default function OwnerDashboard() {
               <p className="text-3xl mt-2">{totalUsers}</p>
             </div>
           </div>
+          {user?.status === "rejected" && user?.rejectReason && (
+            <div className="mt-4 p-4 bg-red-100 border border-red-400 rounded">
+              <strong className="text-red-700">Your account has been rejected.</strong>
+              <p className="text-red-600 mt-1">Reason: {user.rejectReason}</p>
+            </div>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

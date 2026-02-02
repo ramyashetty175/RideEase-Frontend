@@ -8,7 +8,6 @@ export default function LandingPage() {
           <div className="min-h-screen flex flex-col font-inter bg-[#fafafa]">
       <Separator />
 <section className="flex-1 flex flex-col items-center justify-center text-center px-6 md:px-12 py-32 bg-blue-50/30">
-  
   <p className="text-lg text-black mb-4 uppercase tracking-wide">
     Vehicle booking, reimagined
   </p>
@@ -21,6 +20,14 @@ export default function LandingPage() {
     Search, book, and manage rides effortlessly with real-time availability,
     secure payments, and a seamless booking experience.
   </p>
+
+   <div className="w-full max-w-md mb-10">
+          <img 
+            src="/sfff.avif"
+            alt="Bike"
+            className="w-full h-auto object-cover rounded-lg"
+          />
+    </div>
 
   <Link to="/login">
     <Button size="lg" className="px-8 py-4 text-lg bg-blue-600 hover:bg-blue-700 text-white font-bold">

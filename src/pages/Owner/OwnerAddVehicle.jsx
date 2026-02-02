@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createVehicle, updateVehicle } from "../../slices/vehicleSlice";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createVehicle } from "../../slices/vehicleSlice";
 import { SidebarProvider } from "../../components/ui/sidebar";
 import { AppSidebar } from "../../components/app-sidebar";
 import { Button } from "@/components/ui/button";
@@ -30,10 +30,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 export default function OwnerAddVehicle() {
     const dispatch = useDispatch();
-    const { data, editId } = useSelector((state) => {
-        return state.vehicle;
-    })
- 
+   
     const [formData, setFormData] = useState({
         vehicleName: "",
         brand: "",
@@ -45,6 +42,8 @@ export default function OwnerAddVehicle() {
         pricePerDay: "",
         availabilityStatus: "",
         location: "",
+        lat: "",
+        lng: "",
     })
 
     const [files, setFiles] = useState({
@@ -56,28 +55,7 @@ export default function OwnerAddVehicle() {
     const [previewImage, setPreviewImage] = useState(null);
     const [alert, setAlert] = useState(null);
     const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        if (editId && data) {
-            const vehicle = data.find((v) => v._id === editId);
-            if (vehicle) {
-                setFormData({
-                    vehicleName: vehicle.vehicleName,
-                    brand: vehicle.brand,
-                    type: vehicle.type,
-                    registrationNumber: vehicle.registrationNumber,
-                    fuelType: vehicle.fuelType,
-                    transmission: vehicle.transmission,
-                    seats: vehicle.seats,
-                    pricePerDay: vehicle.pricePerDay,
-                    availabilityStatus: vehicle.availabilityStatus,
-                    location: vehicle.location,
-                })
-                setFiles({ image: null, licenseDoc: null, insuranceDoc: null });
-                setPreviewImage(vehicle.image || null);
-            }
-        }
-    }, [editId, data])
+    const [suggestions, setSuggestions] = useState([]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -102,103 +80,203 @@ export default function OwnerAddVehicle() {
             seats: "",
             pricePerDay: "",
             availabilityStatus: "",
-            location: ""
+            location: "",
+            lat: "",
+            lng: "",
         })
         setFiles({ image: null, licenseDoc: null, insuranceDoc: null });
         setPreviewImage(null);
+        setSuggestions([]);
     };
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const errors = {};
-        if(!files.image) {
-            errors.image = "Vehicle Image is required";
-        }
-        if(!files.licenseDoc) {
-            errors.licenseDoc = "Vehicle LicenceDoc is required";
-        }
-        if(!files.insuranceDoc) {
-            errors.insuranceDoc = "Vehicle InsuranceDoc is required";
-        }
-        if(formData.vehicleName.trim().length == 0) {
-            errors.vehicleName = "Vehicle Name is required";
-        } else if (formData.vehicleName.length < 3) {
-            errors.vehicleName = "Vehicle Name is too short";
-        }
-        if(formData.brand.trim().length == 0) {
-            errors.brand = "Vehicle Brand is required";
-        }
-        if(formData.registrationNumber.trim().length == 0) {
-            errors.registrationNumber = "Vehicle Registration Number is required";
-        }else if (formData.registrationNumber.length < 4) {
-            errors.registrationNumber = "Invalid registration number";
-        }
-        if(!formData.type) {
-            errors.type = "Vehicle Type is required";
-        }
-        if(!formData.fuelType) {
-            errors.fuelType = "Vehicle Fuel Type is required";
-        }
-        if(!formData.transmission) {
-            errors.transmission = "Vehicle  Transmission is required";
-        }
-        if(!formData.availabilityStatus) {
-            errors.availabilityStatus = "Vehicle Availability Status is required";
-        }
-        if(formData.seats.trim().length == 0) {
-            errors.seats = "Vehicle Seats is required";
-        }else if (isNaN(formData.seats) || Number(formData.seats) <= 0) {
-            errors.seats = "Seats must be a valid positive number";
-        }
-        if(formData.pricePerDay.trim().length == 0) {
-            errors.pricePerDay = "Vehicle Price Per Day is required";
-        }else if (isNaN(formData.pricePerDay) || Number(formData.pricePerDay) <= 0) {
-            errors.pricePerDay = "Price per day must be a valid amount";
-        }
-        if(formData.location.trim().length == 0) {
-            errors.location = "Vehicle location is required";
-        }
-        if(Object.keys(errors).length > 0) {
-            setErrors(errors);
-        } else {
-        try {
-            const form = new FormData();
-            Object.keys(formData).forEach(key => {
-                form.append(key, formData[key]);
-            })
-            if (files.image) {
-                form.append("image", files.image);
-            }
-            if (files.licenseDoc) {
-                form.append("licenseDoc", files.licenseDoc);
-            }
-            if (files.insuranceDoc) {
-                form.append("insuranceDoc", files.insuranceDoc);
-            }
-            if (editId) {
-                dispatch(updateVehicle({ editId, formData: form }));
-                setErrors({});
-                setAlert({ type: "success", message: "Vehicle updated successfully!" });
-            } else {
-                dispatch(createVehicle({ formData: form }));
-                resetForm();
-                setErrors({});
-                setAlert({ type: "success", message: "Vehicle added successfully!" });
-                resetForm();
-            }
-            setTimeout(() => setAlert(null), 3000);
-        } catch (err) {
-            console.error(err);
-            setAlert({ type: "error", message: "Something went wrong!" });
-            setTimeout(() => setAlert(null), 3000);
-        }
+
+  const handleLocationSearch = async (e) => {
+    const query = e.target.value;
+    setFormData({ ...formData, location: query, lat: "", lng: "" });
+
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
     }
-  }
+
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+        query
+      )}&format=json&addressdetails=1&limit=5`;
+      const res = await fetch(url);
+      const data = await res.json();
+      setSuggestions(data);
+    } catch (err) {
+      console.error("Error fetching location suggestions", err);
+    }
+  };
+
+  const handleSelectLocation = (place) => {
+    setFormData({
+  ...formData,
+  location: place.display_name,
+  lat: Number(place.lat),
+  lng: Number(place.lon),
+});
+    setSuggestions([]);
+  };
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         const errors = {};
+//         if(!files.image) {
+//             errors.image = "Vehicle Image is required";
+//         }
+//         if(!files.licenseDoc) {
+//             errors.licenseDoc = "Vehicle LicenceDoc is required";
+//         }
+//         if(!files.insuranceDoc) {
+//             errors.insuranceDoc = "Vehicle InsuranceDoc is required";
+//         }
+//         if(formData.vehicleName.trim().length == 0) {
+//             errors.vehicleName = "Vehicle Name is required";
+//         } else if (formData.vehicleName.length < 3) {
+//             errors.vehicleName = "Vehicle Name is too short";
+//         }
+//         if(formData.brand.trim().length == 0) {
+//             errors.brand = "Vehicle Brand is required";
+//         }
+//         if(formData.registrationNumber.trim().length == 0) {
+//             errors.registrationNumber = "Vehicle Registration Number is required";
+//         }else if (formData.registrationNumber.length < 4) {
+//             errors.registrationNumber = "Invalid registration number";
+//         }
+//         if(!formData.type) {
+//             errors.type = "Vehicle Type is required";
+//         }
+//         if(!formData.fuelType) {
+//             errors.fuelType = "Vehicle Fuel Type is required";
+//         }
+//         if(!formData.transmission) {
+//             errors.transmission = "Vehicle  Transmission is required";
+//         }
+//         if(!formData.availabilityStatus) {
+//             errors.availabilityStatus = "Vehicle Availability Status is required";
+//         }
+//         if(formData.seats.trim().length == 0) {
+//             errors.seats = "Vehicle Seats is required";
+//         }else if (isNaN(formData.seats) || Number(formData.seats) <= 0) {
+//             errors.seats = "Seats must be a valid positive number";
+//         }
+//         if(formData.pricePerDay.trim().length == 0) {
+//             errors.pricePerDay = "Vehicle Price Per Day is required";
+//         }else if (isNaN(formData.pricePerDay) || Number(formData.pricePerDay) <= 0) {
+//             errors.pricePerDay = "Price per day must be a valid amount";
+//         }
+//         if(!formData.lat || !formData.lng) { 
+//             errors.location = "Valid coordinates are required";
+//         }
+//         if(Object.keys(errors).length > 0) {
+//             setErrors(errors);
+//             return;
+//         } 
+//         try {
+//             const form = new FormData();
+//             Object.keys(formData).forEach(key => {
+//     if (key === "lat" || key === "lng") return;
+//     form.append(key, formData[key]);
+// });
+// form.append(
+//     "location",
+//     JSON.stringify({
+//         type: "Point",
+//         coordinates: [Number(formData.lng), Number(formData.lat)]
+//     })
+// );
+//             if (files.image) {
+//                 form.append("image", files.image);
+//             }
+//             if (files.licenseDoc) {
+//                 form.append("licenseDoc", files.licenseDoc);
+//             }
+//             if (files.insuranceDoc) {
+//                 form.append("insuranceDoc", files.insuranceDoc);
+//             }
+//             dispatch(createVehicle({ formData: form }));
+//                 resetForm();
+//                 setErrors({});
+//                 setAlert({ type: "success", message: "Vehicle added successfully!" });
+//             setTimeout(() => setAlert(null), 3000);
+//         } catch (err) {
+//             console.error(err);
+//             setAlert({ type: "error", message: "Something went wrong!" });
+//             setTimeout(() => setAlert(null), 3000);
+//         }
+//   }
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    const errors = {};
+
+    // Validate files
+    if (!files.image) errors.image = "Vehicle Image is required";
+    if (!files.licenseDoc) errors.licenseDoc = "Vehicle LicenceDoc is required";
+    if (!files.insuranceDoc) errors.insuranceDoc = "Vehicle InsuranceDoc is required";
+
+    // Validate text fields
+    if (formData.vehicleName.trim().length === 0) errors.vehicleName = "Vehicle Name is required";
+    else if (formData.vehicleName.length < 3) errors.vehicleName = "Vehicle Name is too short";
+
+    if (formData.brand.trim().length === 0) errors.brand = "Vehicle Brand is required";
+
+    if (formData.registrationNumber.trim().length === 0) errors.registrationNumber = "Vehicle Registration Number is required";
+    else if (formData.registrationNumber.length < 4) errors.registrationNumber = "Invalid registration number";
+
+    if (!formData.type) errors.type = "Vehicle Type is required";
+    if (!formData.fuelType) errors.fuelType = "Vehicle Fuel Type is required";
+    if (!formData.transmission) errors.transmission = "Vehicle Transmission is required";
+    if (!formData.availabilityStatus) errors.availabilityStatus = "Vehicle Availability Status is required";
+
+    if (formData.seats.trim().length === 0) errors.seats = "Vehicle Seats is required";
+    else if (isNaN(formData.seats) || Number(formData.seats) <= 0) errors.seats = "Seats must be a valid positive number";
+
+    if (formData.pricePerDay.trim().length === 0) errors.pricePerDay = "Vehicle Price Per Day is required";
+    else if (isNaN(formData.pricePerDay) || Number(formData.pricePerDay) <= 0) errors.pricePerDay = "Price per day must be a valid amount";
+
+    if (!formData.lat || !formData.lng) errors.location = "Valid coordinates are required";
+
+    if (Object.keys(errors).length > 0) {
+        setErrors(errors);
+        return;
+    }
+    try {
+        const form = new FormData();
+        Object.keys(formData).forEach(key => {
+            if (key === "lat" || key === "lng") return;
+            form.append(key, formData[key]);
+        });
+        form.append("lat", formData.lat);
+        form.append("lng", formData.lng);
+        // Append files
+        if (files.image) form.append("image", files.image);
+        if (files.licenseDoc) form.append("licenseDoc", files.licenseDoc);
+        if (files.insuranceDoc) form.append("insuranceDoc", files.insuranceDoc);
+
+        // Dispatch to Redux
+        dispatch(createVehicle({ formData: form }));
+
+        // Reset form & alerts
+        resetForm();
+        setErrors({});
+        setAlert({ type: "success", message: "Vehicle added successfully!" });
+        setTimeout(() => setAlert(null), 3000);
+
+    } catch (err) {
+        console.error(err);
+        setAlert({ type: "error", message: "Something went wrong!" });
+        setTimeout(() => setAlert(null), 3000);
+    }
+};    
+
     return(
             <SidebarProvider>
             <AppSidebar />
                   <main className="p-4 w-full">
                   <h1 className="text-xl font-semibold mb-4">
-                     {editId ? "Edit Vehicle" : "Add Vehicle"}
+                     Add Vehicle
                   </h1>
                   {alert && (
                       <Alert
@@ -248,19 +326,6 @@ export default function OwnerAddVehicle() {
                               type="file" 
                               onChange={handleFileChange}
                           />
-                          { files.licenseDoc ? (
-                              <span className="text-gray-500 truncate max-w-xs">{files.licenseDoc.name}</span>
-                          ) : formData.licenseDoc ? (
-                          <a
-                            href={formData.licenseDoc}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 underline truncate max-w-xs"
-                            title={formData.licenseDoc.split("/").pop()}
-                          >
-                            {formData.licenseDoc.split("/").pop()}
-                          </a>
-                          ) : null}
                           </div>
                       </div>
                       {errors.insuranceDoc && (
@@ -270,19 +335,6 @@ export default function OwnerAddVehicle() {
                           <Label htmlFor="insuranceDoc">InsuranceDoc</Label>
                           <div className="flex items-center gap-3 w-full">
                           <Input id="insuranceDoc" name="insuranceDoc" type="file" onChange={handleFileChange}/>
-                          { files.insuranceDoc ? (
-                            <span className="text-gray-500 truncate max-w-xs">{files.insuranceDoc.name}</span>
-                          ) : formData.insuranceDoc ? (
-                          <a
-                            href={formData.insuranceDoc}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 underline truncate max-w-xs"
-                            title={formData.insuranceDoc.split("/").pop()}
-                          >
-                            {formData.insuranceDoc.split("/").pop()}
-                          </a>
-                          ) : null}
                           </div>
                       </div>
                       </div>
@@ -491,42 +543,36 @@ export default function OwnerAddVehicle() {
                     >
                     <NativeSelectOption value="">Select Availability</NativeSelectOption>
                       <NativeSelectOption value="Available">Available</NativeSelectOption>
-                      <NativeSelectOption value="Booked">Booked</NativeSelectOption>
                       <NativeSelectOption value="Maintainance">Maintainance</NativeSelectOption>
                       <NativeSelectOption value="unAvailable">Unavailable</NativeSelectOption>
                    </NativeSelect>
                     {errors.location && (
                       <span style={{ color: "red" }}>{errors.location}</span>
                     )}
-                    <InputGroup>
-                    <InputGroupAddon align="block-start">
-                    <Label htmlFor="location" className="text-foreground">
-                      Location
-                    </Label>
-                    <Tooltip>
-                   <TooltipTrigger asChild>
-                    <InputGroupButton
-                      variant="ghost"
-                      aria-label="Help"
-                      className="ml-auto rounded-full"
-                      size="icon-xs"
-                    >
-                    <InfoIcon />
-                    </InputGroupButton>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Location</p>
-                    </TooltipContent>
-                    </Tooltip>
-                    </InputGroupAddon>
-                    <InputGroupInput id="location" 
-                      name="location"
-                      value={formData.location}
-                      placeholder="Enter Location"
-                      onChange={handleChange}
-                    />
-                    </InputGroup>
-                  </div>
+                    {errors.location && <span className="text-red-500">{errors.location}</span>}
+              <div className="relative">
+                <Input
+                  type="text"
+                  value={formData.location}
+                  onChange={handleLocationSearch}
+                  placeholder="Search location"
+                  className={`border p-2 rounded w-full ${errors.location ? "border-red-500" : ""}`}
+                />
+                {suggestions.length > 0 && (
+                  <ul className="absolute top-full left-0 w-full bg-white border mt-1 rounded z-10 max-h-52 overflow-y-auto shadow-lg">
+                    {suggestions.map((place) => (
+                      <li
+                        key={place.place_id}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSelectLocation(place)}
+                      >
+                        {place.display_name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+                 </div>
                   </div>
                   <div className="flex justify-start mt-18 gap-4">
                      <Button type="submit">Submit</Button>

@@ -1,13 +1,10 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
-import { bookingStartTrip, bookingEndTrip } from "../slices/bookingSlice";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 
 export default function UserBookings() {
-    const dispatch = useDispatch();
     const { data } = useSelector((state) => state.booking);
 
     const columns = [
@@ -20,35 +17,8 @@ export default function UserBookings() {
       { accessorKey: "returnLocation", header: "Return" },
       { accessorKey: "totalAmount", header: "Amount" },
       { accessorKey: "paymentStatus", header: "Payment" },
-      { accessorKey: "bookingStatus", header: "Status" },
-    //   {
-    //     id: "action",
-    //     header: "Action",
-    //     cell: ({ row }) => {
-    //     const booking = row.original;
-    //     if (!["approved", "in-progress"].includes(booking.bookingStatus)) return null;
-    //       return (
-    //         <NativeSelect
-    //         defaultValue="pending"
-    //         className="h-9 w-32 text-sm"
-    //         onChange={(e) => {
-    //         const action = e.target.value;
-    //           if (action === "start") {
-    //             dispatch(bookingStartTrip({ editId: booking._id }))};
-    //           if (action === "end") {
-    //             dispatch(bookingEndTrip({ editId: booking._id }))};
-    //         }}
-    //         >
-    //         <NativeSelectOption value="">
-    //           Select Action
-    //         </NativeSelectOption>
-    //         <NativeSelectOption value="start">Start Trip</NativeSelectOption>
-    //         <NativeSelectOption value="end">End Trip</NativeSelectOption>
-    //       </NativeSelect>
-    //     )
-    //   }
-    // }
-  ]
+      { accessorKey: "bookingStatus", header: "Status" }
+    ]
 
   return (
     <SidebarProvider>

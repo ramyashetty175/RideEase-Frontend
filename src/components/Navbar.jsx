@@ -23,6 +23,11 @@ export function Navbar() {
 
   return (
     <div className="w-full flex justify-center">
+      <div className="absolute left-15">
+      <Link to="/" className="text-2xl font-bold text-black">
+          RideEase
+      </Link>
+      </div>
     <NavigationMenu viewport={isMobile}>
       {/* <NavigationMenuList className="flex-wrap"> */}
       <NavigationMenuList className="flex flex-wrap justify-center items-center gap-x-4">

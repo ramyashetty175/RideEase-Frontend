@@ -31,15 +31,6 @@ export default function MyBookings() {
             <p className="text-sm">Status: {booking.bookingStatus}</p>
             <p className="font-semibold mt-1">{booking.totalAmount}</p>
           </div>
-          {/* {(booking.bookingStatus === "pending" || booking.bookingStatus === "confirmed") && (
-            <Button
-              variant="destructive"
-              disabled={booking.bookingStatus === "cancelRequested"}
-              onClick={() => dispatch(requestBookingCancel(booking._id))}
-            >
-              Cancel
-           </Button>
-          )} */}
         </div>
       ))}
     </div>

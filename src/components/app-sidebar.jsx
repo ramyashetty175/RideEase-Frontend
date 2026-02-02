@@ -131,12 +131,6 @@ const data = {
         },
       ],
     },
-    {
-      title: "Vehicle Map",
-      url: "/dashboard/admin/vehicle/tracking",
-      icon: SquareTerminal,
-      isActive: true,
-    },
   ],
   navMainOwner: [
     {
@@ -222,7 +216,9 @@ export function AppSidebar(props) {
       </SidebarHeader>
       <SidebarContent>
         { user.role == 'admin' && <NavMain items={data.navMainAdmin} />}
-        { user.role == 'owner' && <NavMain items={data.navMainOwner} />}
+        {user.role == 'owner' && user.status === 'approved' && (
+          <NavMain items={data.navMainOwner} />
+        )}
         { user.role == 'user' && <NavMain items={data.navMainUser} />}
       </SidebarContent>
       <SidebarFooter>

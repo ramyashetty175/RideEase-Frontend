@@ -15,10 +15,9 @@ import { useFormik } from "formik";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../context/UserContext";
-import VehicleTracking from "./VehicleTracking";
 
 export default function Login() {
-    const { handleLogin } = useContext(UserContext);
+    const { handleLogin, serverErrorMsg } = useContext(UserContext);
     const formik = useFormik({
         initialValues: {
            email: "",
@@ -48,8 +47,8 @@ export default function Login() {
                 <CardDescription>
                   Login with your Email and Password
                 </CardDescription>
-                {formik.status && (
-                    <span style={{ color: "red" }}>{formik.status}</span>
+                {serverErrorMsg && (
+                    <span style={{ color: "red" }}>{serverErrorMsg}</span>
                 )}
             </CardHeader>
             <CardContent>

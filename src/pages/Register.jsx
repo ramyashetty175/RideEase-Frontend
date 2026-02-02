@@ -12,13 +12,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 import { useFormik } from "formik";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import UserContext from "../context/UserContext";
 import { Link } from "react-router-dom";
 import { emailFormat, passwordFormat } from "../utils/Format";
 
 export default function Register() {
-    const { handleRegister } = useContext(UserContext);
+    const { handleRegister, serverErrorMsg } = useContext(UserContext);
     const formik = useFormik({
         initialValues: {
             username: "",
@@ -67,6 +67,9 @@ export default function Register() {
                     <CardDescription>
                         Start your journey with easy and reliable vehicle rentals.
                     </CardDescription>
+                    {serverErrorMsg && (
+                       <span style={{ color: "red" }}>{serverErrorMsg}</span>
+                    )}
                </CardHeader>
                <CardContent>
                 <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">

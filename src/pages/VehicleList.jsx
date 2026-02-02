@@ -6,7 +6,7 @@ import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { assignEditId, vehicleApprove, vehicleReject } from "../slices/vehicleSlice";
+import { vehicleApprove, vehicleReject } from "../slices/vehicleSlice";
 import { useContext } from "react";
 import UserContext from "@/context/UserContext";
 
@@ -89,6 +89,13 @@ export default function VehicleList({ status }) {
       <SidebarProvider>
         <AppSidebar />
         <main className="p-4">
+          <div className="flex justify-center mb-6">
+        <h2 className="text-black font-bold text-3xl text-center">
+          {status
+            ? `${status.charAt(0).toUpperCase() + status.slice(1)} Vehicles`
+            : "All Vehicles"}
+        </h2>
+      </div>
           <DataTable columns={columns} data={filteredData} />
         </main>
       </SidebarProvider>

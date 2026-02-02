@@ -68,6 +68,11 @@ export default function UsersList() {
         <SidebarProvider>
           <AppSidebar />
           <main className="p-4">
+               <div className="flex justify-center mb-6">
+        <h2 className="text-black font-bold text-4xl text-center">
+           All Users
+        </h2>
+      </div>
               <DataTable columns={columns} data={users} />
           </main>
         </SidebarProvider>

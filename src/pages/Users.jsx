@@ -29,24 +29,6 @@ export default function Users() {
         return <p>loading...</p>
     }
     
-    // const handleRemove = async (id, email) => {
-    //     const userConfirm = window.confirm("Are you sure?");
-    //     if(userConfirm) {
-    //         const userEmail = window.prompt("Enter email of your user");
-    //         if(userEmail == email) {
-    //             try {
-    //                 const response = await axios.delete(`/users/profile/${id}`, { headers: { Authorization: localStorage.getItem('token')}});
-    //                 const newArr = users.filter(ele => ele._id != response.data._id);
-    //                 setUsers(newArr);
-    //             } catch(err) {
-    //                 console.log(err);
-    //             }
-    //         } else {
-    //             alert("Email is incorrect");
-    //         }
-    //     }
-    // }
-    
     const columns = [
       { accessorKey: "_id", header: "ID" },
       {
@@ -79,65 +61,18 @@ export default function Users() {
           )
         }
       },
-      { accessorKey: "role", header: "Role" },
-      // {
-      //   accessorKey: "licenceVerified",
-      //   header: "License",
-      //   cell: ({ row }) => {
-      //     const owner = row.original;
-      //       return (
-      //         <Button
-      //           variant="outline"
-      //           size="sm"
-      //           onClick={() => window.open(owner.licenceDoc, "_blank")}
-      //         >
-      //           View
-      //         </Button>
-      //       )
-      //   }
-      // },
-      // {
-      //   accessorKey: "insuranceVerified",
-      //   header: "Insurance",
-      //   cell: ({ row }) => {
-      //     const owner = row.original
-      //       return (
-      //         <Button
-      //           variant="outline"
-      //           size="sm"
-      //           onClick={() => window.open(owner.insuranceDoc, "_blank")}
-      //         >
-      //           View
-      //         </Button>
-      //       )
-      //   }
-      // },
-      // {
-      //   id: "action",
-      //   header: "Action",
-      //   cell: ({ row }) => {
-      //     const user = row.original;
-      //       return (
-      //         <Button
-      //           variant="destructive"
-      //           size="sm"
-      //           onClick={() => {
-      //           if (confirm("Remove this user?")) {
-      //             handleRemove(user._id);
-      //           }
-      //         }}
-      //         >
-      //           Remove
-      //         </Button>
-      //       )
-      //   }
-      // }
+      { accessorKey: "role", header: "Role" }
     ]
    
     return(
         <SidebarProvider>
           <AppSidebar />
           <main className="p-4">
+            <div className="flex justify-center mb-6">
+        <h2 className="text-black font-bold text-4xl text-center">
+           Users
+        </h2>
+      </div>
               <DataTable columns={columns} data={users} />
           </main>
         </SidebarProvider>

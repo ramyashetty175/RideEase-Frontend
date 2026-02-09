@@ -140,25 +140,7 @@ export default function Vehicle() {
                       {(vehicle.distance / 1000).toFixed(2)} km
                     </p>
                   )}
-                   {/* ⭐ Rating */}
-<div className="flex justify-center items-center gap-1 mt-2">
-  {[1,2,3,4,5].map((star) => (
-    <span
-      key={star}
-      className={`text-2xl ${
-        star <= (vehicle.ratings?.reduce((a,b) => a+b.rating,0)/vehicle.ratings?.length || 0)
-          ? "text-yellow-400"
-          : "text-gray-300"
-      }`}
-    >
-      ★
-    </span>
-  ))}
-  <span className="ml-2 text-sm text-gray-500">({vehicle.ratings?.length || 0})</span>
-</div>
-         
                 </div>
-
                 <Button
                   className="mt-2 w-full bg-black text-white hover:bg-black"
                   onClick={() => navigate(`view/${vehicle._id}`)}

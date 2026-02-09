@@ -1,5 +1,5 @@
 "use client";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { DataTable } from "@/components/data-table";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { AppSidebar } from "../components/app-sidebar";

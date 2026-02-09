@@ -8,7 +8,7 @@ export default function MyBookings() {
     if (data.length == 0) {
         return <p className="text-center mt-10">No bookings found</p>;
     }
-
+ 
     return (
       <div className="max-w-4xl mx-auto mt-10 space-y-4">
         <h2 className="text-2xl font-semibold">My Bookings</h2>

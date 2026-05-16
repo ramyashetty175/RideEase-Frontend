@@ -12,7 +12,7 @@ export default function useRazorpayPayment() {
                 alert("Minimum amount is ₹1");
                 return resolve(false);
             }
-            const { data } = await axios.post("http://localhost:3020/api/payments/createOrder", {
+            const { data } = await axios.post("/api/payments/createOrder", {
                 amount: amount,
                 bookingId: bookingId
             },
@@ -40,7 +40,7 @@ export default function useRazorpayPayment() {
                 },
                 handler: async function (response) {
                     try {
-                        const verifyRes = await axios.post("http://localhost:3020/api/payments/verify", {
+                        const verifyRes = await axios.post("/api/payments/verify", {
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,
                         razorpay_signature: response.razorpay_signature

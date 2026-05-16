@@ -18,7 +18,7 @@ export default function SearchPage() {
             setError(errors);
         } else {
         try {
-            const response = await axios.get('http://localhost:3020/api/vehicles/search', { params: { keyword }, headers: { Authorization: localStorage.getItem("token")}});
+            const response = await axios.get('/api/vehicles/search', { params: { keyword }, headers: { Authorization: localStorage.getItem("token")}});
             console.log(response.data);
             setError({});
             setVehicles(response.data.vehicles);

@@ -20,7 +20,7 @@ export default function Transactions() {
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const response = await axios.get('http://localhost:3020/api/payments', { headers: { Authorization: localStorage.getItem('token')}});
+                const response = await axios.get('/api/payments', { headers: { Authorization: localStorage.getItem('token')}});
                 setTransactions(response.data);
             } catch (err) {
                 console.log(err);

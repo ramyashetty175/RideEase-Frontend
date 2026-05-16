@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ownerReducer from "../slices/ownerSlice";
+import ownerReducer from "../slices/ownerSlice.jsx";
 import bookingReducer from "../slices/bookingSlice";
 import vehicleReducer from "../slices/vehicleSlice";
 

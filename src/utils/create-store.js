@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ownerReducer from "../slices/ownerSlice.jsx";
-import bookingReducer from "../slices/bookingSlice";
-import vehicleReducer from "../slices/vehicleSlice";
+import ownerReducer from "../reducers/ownerReducer";
+import bookingReducer from "../reducers/bookingReducer";
+import vehicleReducer from "../reducers/vehicleReducer";
 
 const createStore = () => {
     return configureStore({

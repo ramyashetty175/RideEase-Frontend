@@ -1,4 +1,4 @@
-export default function bookingSlice(state, action) {
+export default function bookingReducer(state, action) {
     switch(action.type) {
         case "SET_BOOKING": {
             return { ...state, booking: action.payload }

@@ -33,6 +33,7 @@ import VehicleBooking from "./pages/VehicleBooking";
 import MyBookings from "./pages/MyBookings";
 import UserBookings from "./pages/UserBookings";
 import OwnerDetailsTable from "./pages/Admin/OwnerDetailsTable";
+import VehicleTracking from "./pages/VehicleTracking";
 
 function App() {
   const dispatch = useDispatch();
@@ -131,6 +132,8 @@ useEffect(() => {
         <Route path="/bookings" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><MyBookings /></PrivateRoute>} />
 
         <Route path="vehicles/view/:id" element={<PrivateRoute allowedRoles={['admin', 'owner', 'user']}><VehicleBooking /></PrivateRoute>} />
+
+        <Route path="/dashboard/owner/vehicle-tracking" element={<PrivateRoute allowedRoles={['admin', 'owner']}><VehicleTracking /></PrivateRoute>} />
        
       </Routes>
     </div>

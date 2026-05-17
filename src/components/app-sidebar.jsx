@@ -177,6 +177,12 @@ const data = {
         },
       ],
     },
+    {
+      title: "Vehicle Tracking",
+      url: "/dashboard/owner/vehicle-tracking",
+      icon: SquareTerminal,
+      isActive: true,
+    },
   ],
   navMainUser: [
     {

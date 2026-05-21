@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import axios from "axios";
+import axios from "../config/axios";
 
 export default function SearchPage() {
     const [keyword, setKeyword] = useState("");

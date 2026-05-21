@@ -71,7 +71,6 @@ import { io } from "socket.io-client";
 import "leaflet/dist/leaflet.css";
 
 export default function VehicleTracking() {
-
   const mapRef = useRef(null);
   const markersRef = useRef({});
   const mapInitialized = useRef(false);

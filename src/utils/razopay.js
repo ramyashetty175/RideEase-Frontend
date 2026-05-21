@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../config/axios";
 import UserContext from "@/context/UserContext";
 import { useContext } from "react";
 

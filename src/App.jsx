@@ -11,6 +11,9 @@ import SearchPage from "./pages/SearchPage";
 import PrivateRoute from "./components/PrivateRoute";
 import Vehicle from "./pages/Vehicle";
 import VehicleList from "./pages/VehicleList";
+import AdminHome from "./pages/Admin/AdminHome";
+import OwnerHome from "./pages/Owner/OwnerHome";
+import UserHome from "./pages/UserHome";
 import BookingList from "./pages/BookingList";
 import { Navbar }  from "./components/Navbar";
 import { useContext, useEffect } from "react";
@@ -91,6 +94,10 @@ useEffect(() => {
         <Route path="/dashboard/admin" element={<PrivateRoute allowedRoles={['admin']}><AdminDashboard /></PrivateRoute>} />
         <Route path="/dashboard/owner" element={<PrivateRoute allowedRoles={['owner']}><OwnerDashboard /></PrivateRoute>} />
          
+        <Route path="/admin/home" element={<PrivateRoute allowedRoles={['admin']}><AdminHome /></PrivateRoute>} />
+        <Route path="/owner/home" element={<PrivateRoute allowedRoles={['owner']}><OwnerHome /></PrivateRoute>} />
+        <Route path="/user/home" element={<PrivateRoute allowedRoles={['owner']}><UserHome /></PrivateRoute>} />
+
         <Route path="/dashboard/admin/profile" element={<PrivateRoute allowedRoles={['admin']}><AdminProfile /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/all" element={<PrivateRoute allowedRoles={['admin']}><UsersList /></PrivateRoute>} />
         <Route path="/dashboard/admin/users/user" element={<PrivateRoute allowedRoles={['admin']}><Users /></PrivateRoute>} />
